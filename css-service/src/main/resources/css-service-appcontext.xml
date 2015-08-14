@@ -13,54 +13,10 @@
  http://www.loukou.com/schema/messaging http://www.loukou.com/schema/messaging/messaging.xsd">
 
   <jconsul:configuration />
-  <jconsul:property-placeholder location="classpath*:css-service-service.properties"
+  <jconsul:property-placeholder location="classpath*:css-service.properties"
     fallbackToFileWhenNotExists="true" />
   <context:annotation-config />
   <context:component-scan base-package="com.loukou.css.service" />
-
-  <!-- 使用其他 service，在 pom 里添加其他 service 的 api 项目依赖，将需要的 interface 加入下面的配置
-   name 和 其他 service 里 配置的保持一致
-
-  <thrift:clients>
-    <thrift:client name="sample"
-      class="com.loukou.service.core.thrift.TestEcho" />
-  </thrift:clients>
-  -->
-
-  <!-- 发送消息
-  配置下面以后既可以在 代码里通过注解发送消息
-
-  @Messaging(topic = "test", group = "rabbitmq-g01", keyFormat = "key.{0}",response=true)
-  public String echo(@MessagingKey String key, @MessagingParameter("arg1") String value) {
-      ...
-  }
-
-  keyFormat 使用 java.text.MessageFormat 来处理
-
-  发出的消息格式内容 {"topic":"test","key":"key.111","parameters":{"arg1":"22"},"result":"11122"}
-
-  注解里的 group 要和 client id 对应起来。keyFormat 对应
-
-  或者直接通过 bean id "rabbitmq-g01" 注入 com.loukou.service.core.message.MessageClient 手动发送消息
-
-  <messaging:annotation-driven>
-    <messaging:rabbitmq-client id="rabbitmq-g01"
-      addresses="#{jconsul.serviceAllAddress('rabbitmq-g01')}" />
-  </messaging:annotation-driven>
-  -->
-
-  <!-- 消费消息
-  消费逻辑是现在 com.loukou.service.core.message.MessageConsumer 接口里面
-  当处理成功后，框架会自动 commit 消息，如果当前处理失败，直接抛出异常即可
-
-  consumer 的 exchange 和 routingkey 参数会在启动是自动去 binding，目前只支持单个 binding, 可以找 mq 管理员手动添加
-
-  <messaging:rabbitmq-consumers addresses="#{jconsul.serviceAllAddress('rabbitmq-g01')}">
-    <messaging:consumer queue="QUEUE_NAME">
-      <bean class="com.loukou.service.core.message.rabbitmq.TestConsumer" />
-    </messaging:consumer>
-  </messaging:rabbitmq-consumers>
-  -->
 
   <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
     init-method="init" destroy-method="close">
@@ -94,18 +50,18 @@
       <bean
         class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
         <property name="showSql"
-          value="${css-service-service/hibernate/showsql:false}" />
+          value="${css-service/hibernate/showsql:false}" />
         <property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect" />
       </bean>
     </property>
-    <property name="packagesToScan" value="com.loukou.css.service.service.entity" />
+    <property name="packagesToScan" value="com.loukou.css.service.entity" />
   </bean>
 
   <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
     <property name="entityManagerFactory" ref="entityManagerFactory" />
   </bean>
 
-  <jpa:repositories base-package="com.loukou.css.service.service.dao"
+  <jpa:repositories base-package="com.loukou.css.service.dao"
     entity-manager-factory-ref="entityManagerFactory"
     transaction-manager-ref="transactionManager" />
   <tx:annotation-driven transaction-manager="transactionManager" />
