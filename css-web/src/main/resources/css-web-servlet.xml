@@ -14,7 +14,7 @@
     <mvc:resources mapping="/resources/**" location="/resources/" />
     
     <mvc:annotation-driven />
-  	<context:component-scan base-package="org.css.web" />
+  	<context:component-scan base-package="com.loukou.css.web" />
 
     <!-- Only needed because we require file upload in the org.springframework.samples.mvc.fileupload 
         package -->
