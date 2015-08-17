@@ -1,0 +1,12 @@
+.DS_Store
+*.swp
+*.class
+*.jar
+/bin
+.eclipse
+.project
+.classpath
+/.settings
+/data
+target/
+*.settings
