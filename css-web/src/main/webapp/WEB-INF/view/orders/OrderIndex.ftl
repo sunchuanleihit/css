@@ -1,4 +1,3 @@
-<#import "spring.ftl" as s />
 <!DOCTYPE html>
 <html lang="en">
   <head>

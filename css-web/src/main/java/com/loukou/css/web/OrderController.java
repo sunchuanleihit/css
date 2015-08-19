@@ -6,10 +6,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/order")
 public class OrderController {
-	@RequestMapping("allOrder")
+	@RequestMapping("/allOrder")
 	public String allOrder(){
-		return "allOrder";
+		return "orders/OrderIndex";
 	}
 	
-
+//	public String orderDetail(){
+//		
+//	}
 }
