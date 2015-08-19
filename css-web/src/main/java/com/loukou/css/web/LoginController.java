@@ -37,7 +37,6 @@ public class LoginController extends BaseController {
         return PageUrls.LOGIN_URL;
 	}
 	
-	
 	@RequestMapping(value="/checklogin",method = RequestMethod.POST)
 	@ResponseBody
 	public LoginUser CheckLogin(String userCode, String userPwd,ModelMap modelMap) {
