@@ -158,6 +158,12 @@
 			<version>9.2.4.v20141103</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.loukou</groupId>
+			<artifactId>css-service</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	
 	<build>
