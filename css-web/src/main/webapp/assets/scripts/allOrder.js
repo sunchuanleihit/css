@@ -1,32 +1,32 @@
 //订单列表页，所有字段
 var fields=[[
-			{field:'order_id',title:'订单号',width:80,styler:ordersn_style,sortable:true,hidden:true},
-			{field:'order_sn_main',title:'订单编号',width:120,sortable:true},
-			{field:'city_name',title:'城市',width:120,sortable:true},
+			{field:'orderId',title:'订单号',width:80,styler:ordersn_style,sortable:true,hidden:true},
+			{field:'orderSnMain',title:'订单编号',width:120,sortable:true},
+			{field:'cityName',title:'城市',width:120,sortable:true},
 			{field:'source',title:'订单来源',width:120,sortable:true},
-			{field:'need_shiptime',title:'期望送货时间',width:140,sortable:true},
+			{field:'needShiptime',title:'期望送货时间',width:140,sortable:true},
 			{field:'status',title:'订单状态',width:80,formatter:order_status,sortable:true},
-			{field:'need_invoice',title:'是否开票',width:80,formatter:need_invoice,sortable:true},
+			{field:'needInvoice',title:'是否开票',width:80,formatter:need_invoice,sortable:true},
 			{field:'invoice_no',title:'开票号码',width:80,sortable:true},
-			{field:'buyer_name',title:'注册用户名',width:80,sortable:true},
-			{field:'pay_names',title:'付款方式',width:80,sortable:false},
-			{field:'order_amount',title:'订单总额',width:80,sortable:true},
-			{field:'goods_amount',title:'商品总额',width:80,sortable:true},
-			{field:'has_paid',title:'已付金额',width:80,sortable:true},
+			{field:'buyerName',title:'注册用户名',width:80,sortable:true},
+			{field:'payNames',title:'付款方式',width:80,sortable:false},
+			{field:'orderAmount',title:'订单总额',width:80,sortable:true},
+			{field:'goodsAmount',title:'商品总额',width:80,sortable:true},
+			{field:'hasPaid',title:'已付金额',width:80,sortable:true},
 			{field:'balance',title:'未付金额',width:80,sortable:true},
 			{field:'consignee',title:'收件人姓名',width:80,sortable:true},
-			{field:'region_name',title:'地区',width:80,sortable:true},
+			{field:'regionName',title:'地区',width:80,sortable:true},
 			{field:'address',title:'详细地址',width:80,sortable:true},
-			{field:'phone_mob',title:'电话',width:80,sortable:true},
-			{field:'is_print',title:'是否打单',width:80,sortable:true},
-			{field:'pay_status',title:'是否付款',width:80,sortable:true,formatter:f_pay_status},
-			{field:'finished_time',title:'完成时间',width:130,formatter:fromtimestamp,sortable:true},
-			{field:'is_shipped',title:'是否发货',width:80,sortable:true},
+			{field:'phoneMob',title:'电话',width:80,sortable:true},
+			{field:'isPrint',title:'是否打单',width:80,sortable:true},
+			{field:'payStatus',title:'是否付款',width:80,sortable:true,formatter:f_pay_status},
+			{field:'finishedTime',title:'完成时间',width:130,formatter:fromtimestamp,sortable:true},
+			{field:'isShipped',title:'是否发货',width:80,sortable:true},
 			{field:'shipper',title:'发货人',width:80,sortable:true},
-			{field:'ship_time',title:'发货时间',width:130,formatter:fromtimestamp,sortable:true},
-			{field:'add_time',title:'订单时间',width:130,formatter:fromtimestamp,sortable:true},
-			{field:'post_script',title:'物流提示',width:80,sortable:true},
-			{field:'pay_message',title:'订单备注',width:80,sortable:true}
+			{field:'shipTime',title:'发货时间',width:130,formatter:fromtimestamp,sortable:true},
+			{field:'addTime',title:'订单时间',width:130,formatter:fromtimestamp,sortable:true},
+			{field:'postScript',title:'物流提示',width:80,sortable:true},
+			{field:'payMessage',title:'订单备注',width:80,sortable:true}
 		]];
 $(document).ready(function(){
 	$('#table').datagrid({
@@ -74,7 +74,7 @@ $(document).ready(function(){
 	
 	$("#search_submit").bind({
 		click: function(){
-			var orderSn = $("#order_sn").val();
+			var orderSnMain = $("#order_sn_main").val();
 			var consignee = $("#consignee").val();
 			var startTime = $("#start_time").datebox("getValue");
 			var endTime = $("#end_time").datebox("getValue");
@@ -82,7 +82,7 @@ $(document).ready(function(){
 			var queryType = $("#query_type").val();
 			var queryContent = $("#query_content").val();
 			var params = {
-					"orderSn":orderSn,
+					"orderSnMain":orderSnMain,
 					"consignee":consignee,
 					"startTime":startTime,
 					"endTime":endTime,
