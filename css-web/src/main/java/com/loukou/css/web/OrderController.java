@@ -12,8 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.loukou.css.annotation.AuthPassport;
 import com.loukou.css.bo.BaseRes;
-import com.loukou.css.bo.OrderDetailBo;
-import com.loukou.css.enums.OperateVoucherTypeEnum;
 
 @Controller
 @RequestMapping("/order")

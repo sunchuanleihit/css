@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.loukou.css.bo.PageListEntity;
-import com.loukou.css.bo.PurchaseListBo;
 import com.loukou.css.entity.UserRoleEntity;
 import com.loukou.css.service.UserRoleService;
 
