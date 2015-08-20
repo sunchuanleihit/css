@@ -9,7 +9,7 @@
 			<form id="search_form">
 				<table>
                 	<tr>
-						<td>订单号</td><td><input type="text" name="order_sn" id="order_sn"/></td>
+						<td>订单号</td><td><input type="text" name="order_sn_main" id="order_sn_main"/></td>
 						<td>收货人</td><td><input type="text" name="consignee" id="consignee"/></td>
 						<td>单据日期</td><td><input type="text" id="start_time" name="start_time"/>--</td><td><input type="text" id="end_time" name="end_time"/></td>
 						<td>订单状态</td>
