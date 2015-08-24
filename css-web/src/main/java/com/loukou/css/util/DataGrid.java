@@ -6,6 +6,7 @@ import java.util.List;
 public class DataGrid {
     
     private long total = 0L;
+    
     private List rows = new ArrayList();
     public long getTotal() {
         return total;

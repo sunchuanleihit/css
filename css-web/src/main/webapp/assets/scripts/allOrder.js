@@ -1,30 +1,28 @@
 //订单列表页，所有字段
 var fields=[[
-			{field:'orderId',title:'订单号',width:80,styler:ordersn_style,sortable:true,hidden:true},
+			{field:'orderId',hidden:true},
 			{field:'orderSnMain',title:'订单编号',width:120,sortable:true},
 			{field:'cityName',title:'城市',width:120,sortable:true},
 			{field:'source',title:'订单来源',width:120,sortable:true},
 			{field:'needShiptime',title:'期望送货时间',width:140,sortable:true},
-			{field:'status',title:'订单状态',width:80,formatter:order_status,sortable:true},
-			{field:'needInvoice',title:'是否开票',width:80,formatter:need_invoice,sortable:true},
-			{field:'invoice_no',title:'开票号码',width:80,sortable:true},
+			{field:'status',title:'订单状态',width:80,sortable:true},
+			{field:'needInvoice',title:'是否开票',formatter:yesOrNoFormat,width:80,sortable:true},
+			{field:'invoiceNo',title:'开票号码',width:80,sortable:true},
 			{field:'buyerName',title:'注册用户名',width:80,sortable:true},
 			{field:'payNames',title:'付款方式',width:80,sortable:false},
-			{field:'orderAmount',title:'订单总额',width:80,sortable:true},
-			{field:'goodsAmount',title:'商品总额',width:80,sortable:true},
-			{field:'hasPaid',title:'已付金额',width:80,sortable:true},
-			{field:'balance',title:'未付金额',width:80,sortable:true},
+			{field:'orderAmount',title:'订单总额',formatter:doubleFormat,width:80,sortable:true},
+			{field:'goodsAmount',title:'商品总额',formatter:doubleFormat,width:80,sortable:true},
+			{field:'orderPaid',title:'已付金额',formatter:doubleFormat,width:80,sortable:true},
+			{field:'orderNotPaid',title:'未付金额',formatter:doubleFormat,width:80,sortable:true},
 			{field:'consignee',title:'收件人姓名',width:80,sortable:true},
 			{field:'regionName',title:'地区',width:80,sortable:true},
 			{field:'address',title:'详细地址',width:80,sortable:true},
 			{field:'phoneMob',title:'电话',width:80,sortable:true},
-			{field:'isPrint',title:'是否打单',width:80,sortable:true},
-			{field:'payStatus',title:'是否付款',width:80,sortable:true,formatter:f_pay_status},
-			{field:'finishedTime',title:'完成时间',width:130,formatter:fromtimestamp,sortable:true},
-			{field:'isShipped',title:'是否发货',width:80,sortable:true},
-			{field:'shipper',title:'发货人',width:80,sortable:true},
-			{field:'shipTime',title:'发货时间',width:130,formatter:fromtimestamp,sortable:true},
-			{field:'addTime',title:'订单时间',width:130,formatter:fromtimestamp,sortable:true},
+			{field:'isPrint',title:'是否打单',formatter:yesOrNoFormat,width:80,sortable:true},
+			{field:'payStatus',title:'是否付款',formatter:f_pay_status,width:80,sortable:true,},
+			{field:'finishedTime',title:'完成时间',width:130,sortable:true},
+			{field:'shipTime',title:'发货时间',width:130,sortable:true},
+			{field:'addTime',title:'订单时间',width:130,sortable:true},
 			{field:'postScript',title:'物流提示',width:80,sortable:true},
 			{field:'payMessage',title:'订单备注',width:80,sortable:true}
 		]];
@@ -79,8 +77,10 @@ $(document).ready(function(){
 			var startTime = $("#start_time").datebox("getValue");
 			var endTime = $("#end_time").datebox("getValue");
 			var status = $("#status").val();
-			var queryType = $("#query_type").val();
-			var queryContent = $("#query_content").val();
+			var queryType = $("#queryType").val();
+			var queryContent = $("#queryContent").val();
+			var payStatus = $("#payStatus").val();
+			var buyerName = $("#buyerName").val();
 			var params = {
 					"orderSnMain":orderSnMain,
 					"consignee":consignee,
@@ -88,7 +88,9 @@ $(document).ready(function(){
 					"endTime":endTime,
 					"status":status,
 					"queryType":queryType,
-					"queryContent":queryContent
+					"queryContent":queryContent,
+					"payStatus":payStatus,
+					"buyerName":buyerName
 			};
 			$("#table").datagrid('load',params);
 		}
@@ -100,46 +102,14 @@ function ordersn_style(value,data,index){
 		return "background-color:yellow;";
 	}
 }
-//订单状态，根据数字，返回相应的中文
-function order_status(num){
-	num=parseInt(num);
-	switch(num){
-		case 0:
-			return "初始状态";
-			break;
-		case 1:
-			return "取消";
-			break;
-		case 2:
-			return "无效";
-			break;
-		case 3:
-			return "已审核";
-			break;
-		case 5:
-			return "已提货";
-			break;
-		case 6:
-			return "已拣货";
-			break;
-		case 8:
-			return "已打包";
-			break;  
-		case 13:
-			return "已发货";
-			break;	
-		case 14:
-			return "已发货";
-			break;
-		case 15:
-			return "回单";
-			break;
-		case 16:
-			return "拒收";
-			break;
-	}		
-
+function yesOrNoFormat(yesOrNo){
+	if(yesOrNo){
+		return "是";
+	}else{
+		return "否";
+	}
 }
+
 //是否需要开票
 function need_invoice(rs){
 	rs=parseInt(rs);
@@ -160,8 +130,14 @@ function need_invoice(rs){
 }
 
 function f_pay_status(vari){
-	if(vari==1) return "已支付";
-	return "未支付";
+	if(vari==1){
+		return "已支付";
+	}else if(vari==0){
+		return "未支付";
+	}else if(vari==2){
+		return "部分支付";
+	}
+	
 }
 //将PHP的unix时间戳转换成开如yyyy/mm/dd的时间
 function fromtimestamp(timestamp){
@@ -269,4 +245,7 @@ function formatDate(date){
 	var m = date.getMonth()+1;
 	var d = date.getDate();
 	return y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d);
+}
+function doubleFormat(num){
+	return num.toFixed(2);
 }
