@@ -8,8 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.loukou.css.resp.CssOrderShow;
 import com.loukou.css.util.DataGrid;
@@ -21,6 +25,8 @@ import com.loukou.order.service.resp.dto.BkOrderListDto;
 import com.loukou.order.service.resp.dto.BkOrderListRespDto;
 import com.loukou.order.service.resp.dto.OrderListBaseDto;
 import com.loukou.order.service.resp.dto.OrderListDto;
+import com.loukou.order.service.resp.dto.CssOrderRespDto;
+import com.loukou.order.service.resp.dto.OrderListRespDto;
 
 @Controller
 @RequestMapping("/order")
@@ -32,10 +38,19 @@ public class OrderController {
 	public String allOrder(){
 		return "orders/OrderIndex";
 	}
+	@RequestMapping(value = "/orderDetail/{orderSnMain}", method = RequestMethod.GET)
+	public ModelAndView orderDetail(@PathVariable String orderSnMain,
+			ModelMap modelMap) {
+		ModelAndView mv = new ModelAndView("orders/OrderDetail");
+		BkOrderListRespDto orderDetail = bkOrderService.orderDetail(orderSnMain);
+		
+		if(orderDetail.getCode()==200){			
+			List<BkOrderListDto> orderDetailMsgs = orderDetail.getResult().getOrderList();
+			modelMap.put("operateInfo", orderDetailMsgs);
+		}
+		return mv;
+	}
 	
-//	public String orderDetail(){
-//		
-//	}
 	@RequestMapping("/findOrder")
 	@ResponseBody
 	public DataGrid queryOrder(HttpServletRequest request,int page, int rows, CssOrderReqDto cssOrderReqDto){
