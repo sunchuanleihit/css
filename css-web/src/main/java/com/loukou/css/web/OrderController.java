@@ -12,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -23,13 +24,11 @@ import com.loukou.order.service.resp.dto.BkExtmMsgDto;
 import com.loukou.order.service.resp.dto.BkOrderListBaseDto;
 import com.loukou.order.service.resp.dto.BkOrderListDto;
 import com.loukou.order.service.resp.dto.BkOrderListRespDto;
-import com.loukou.order.service.resp.dto.OrderListBaseDto;
-import com.loukou.order.service.resp.dto.OrderListDto;
-import com.loukou.order.service.resp.dto.CssOrderRespDto;
-import com.loukou.order.service.resp.dto.OrderListRespDto;
+import com.loukou.order.service.resp.dto.GoodsListDto;
 
 @Controller
 @RequestMapping("/order")
+//@AuthPassport
 public class OrderController {
 	@Autowired
 	private BkOrderService bkOrderService;
@@ -44,9 +43,9 @@ public class OrderController {
 		ModelAndView mv = new ModelAndView("orders/OrderDetail");
 		BkOrderListRespDto orderDetail = bkOrderService.orderDetail(orderSnMain);
 		
-		if(orderDetail.getCode()==200){			
+		if(orderDetail.getCode()==200){
 			List<BkOrderListDto> orderDetailMsgs = orderDetail.getResult().getOrderList();
-			modelMap.put("operateInfo", orderDetailMsgs);
+			mv.addObject("orderDetailMsgs", orderDetailMsgs);
 		}
 		return mv;
 	}
@@ -68,6 +67,7 @@ public class OrderController {
 		grid.setRows(cssOrderShowList);
 		return grid;
 	}
+	
 	private CssOrderShow createCssOrderShow(BkOrderListDto bkOrder){
 		CssOrderShow cssOrderShow = new CssOrderShow();
 		BkOrderListBaseDto base = bkOrder.getBase();
@@ -97,5 +97,13 @@ public class OrderController {
 		cssOrderShow.setPostScript(base.getPostscript());
 		cssOrderShow.setPayMessage(base.getPayMessage());
 		return cssOrderShow;
+	}
+	
+	//获取包裹商品列表
+	@RequestMapping(value = "/getOrderGoodsList", method = RequestMethod.GET)
+	@ResponseBody
+	public List<GoodsListDto> getOrderGoodsList(@RequestParam(value = "orderId", required = false, defaultValue = "") int orderId){
+		List<GoodsListDto> purchaseAllList = bkOrderService.getOrderGoodsList(orderId);
+		return purchaseAllList;
 	}
 }
