@@ -23,11 +23,26 @@ public class CssOrderShow {
 	private Integer payStatus;//是否付款
 	private String finishedTime;//完成时间
 	private String isShipped;//是否发货
+	private Double shippingFee;//运费
 	private String shipper;//发货人
 	private String shipTime;//发货时间
 	private String addTime;//订单时间
 	private String postScript;//物流提示
 	private String payMessage;//订单备注 
+	private String sellerName;//商家名称
+	
+	public Double getShippingFee() {
+		return shippingFee;
+	}
+	public void setShippingFee(Double shippingFee) {
+		this.shippingFee = shippingFee;
+	}
+	public String getSellerName() {
+		return sellerName;
+	}
+	public void setSellerName(String sellerName) {
+		this.sellerName = sellerName;
+	}
 	public Integer getOrderId() {
 		return orderId;
 	}

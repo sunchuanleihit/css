@@ -2,29 +2,29 @@
 var fields=[[
 			{field:'orderId',hidden:true},
 			{field:'orderSnMain',title:'订单编号',width:120,sortable:true},
-			{field:'cityName',title:'城市',width:120,sortable:true},
-			{field:'source',title:'订单来源',width:120,sortable:true},
-			{field:'needShiptime',title:'期望送货时间',width:140,sortable:true},
-			{field:'status',title:'订单状态',width:80,sortable:true},
-			{field:'needInvoice',title:'是否开票',formatter:yesOrNoFormat,width:80,sortable:true},
-			{field:'invoiceNo',title:'开票号码',width:80,sortable:true},
-			{field:'buyerName',title:'注册用户名',width:80,sortable:true},
+			{field:'cityName',title:'城市',width:120,sortable:false},
+			{field:'source',title:'订单来源',width:120,sortable:false},
+			{field:'needShiptime',title:'期望送货时间',width:140,sortable:false},
+			{field:'status',title:'订单状态',width:80,sortable:false},
+			{field:'needInvoice',title:'是否开票',formatter:yesOrNoFormat,width:80,sortable:false},
+			{field:'invoiceNo',title:'开票号码',width:80,sortable:false},
+			{field:'buyerName',title:'注册用户名',width:80,sortable:false},
 			{field:'payNames',title:'付款方式',width:80,sortable:false},
-			{field:'orderAmount',title:'订单总额',formatter:doubleFormat,width:80,sortable:true},
-			{field:'goodsAmount',title:'商品总额',formatter:doubleFormat,width:80,sortable:true},
-			{field:'orderPaid',title:'已付金额',formatter:doubleFormat,width:80,sortable:true},
-			{field:'orderNotPaid',title:'未付金额',formatter:doubleFormat,width:80,sortable:true},
-			{field:'consignee',title:'收件人姓名',width:80,sortable:true},
-			{field:'regionName',title:'地区',width:80,sortable:true},
-			{field:'address',title:'详细地址',width:80,sortable:true},
-			{field:'phoneMob',title:'电话',width:80,sortable:true},
-			{field:'isPrint',title:'是否打单',formatter:yesOrNoFormat,width:80,sortable:true},
-			{field:'payStatus',title:'是否付款',formatter:f_pay_status,width:80,sortable:true,},
-			{field:'finishedTime',title:'完成时间',width:130,sortable:true},
-			{field:'shipTime',title:'发货时间',width:130,sortable:true},
-			{field:'addTime',title:'订单时间',width:130,sortable:true},
-			{field:'postScript',title:'物流提示',width:80,sortable:true},
-			{field:'payMessage',title:'订单备注',width:80,sortable:true}
+			{field:'orderAmount',title:'订单总额',formatter:doubleFormat,width:80,sortable:false},
+			{field:'goodsAmount',title:'商品总额',formatter:doubleFormat,width:80,sortable:false},
+			{field:'orderPaid',title:'已付金额',formatter:doubleFormat,width:80,sortable:false},
+			{field:'orderNotPaid',title:'未付金额',formatter:doubleFormat,width:80,sortable:false},
+			{field:'consignee',title:'收件人姓名',width:80,sortable:false},
+			{field:'regionName',title:'地区',width:80,sortable:false},
+			{field:'address',title:'详细地址',width:80,sortable:false},
+			{field:'phoneMob',title:'电话',width:80,sortable:false},
+			{field:'isPrint',title:'是否打单',formatter:yesOrNoFormat,width:80,sortable:false},
+			{field:'payStatus',title:'是否付款',formatter:f_pay_status,width:80,sortable:false},
+			{field:'finishedTime',title:'完成时间',width:130,sortable:false},
+			{field:'shipTime',title:'发货时间',width:130,sortable:false},
+			{field:'addTime',title:'订单时间',width:130,sortable:false},
+			{field:'postScript',title:'物流提示',width:80,sortable:false},
+			{field:'payMessage',title:'订单备注',width:80,sortable:false}
 		]];
 $(document).ready(function(){
 	$('#table').datagrid({
@@ -38,28 +38,7 @@ $(document).ready(function(){
 		striped:false,
 		rownumbers:true,
 		columns:fields,
-		onDblClickRow:order_detail,//查看订单详情
-		toolbar:[
-			{
-				id:'refresh',
-				text:'刷新列表',
-				iconCls:'icon-reload',
-				handler:refresh_orders
-		
-			},
-			{
-				id:'edit',
-				text:'修改订单',
-				iconCls:'icon-edit',
-				handler:edit_order
-			},
-            {
-                id:'confirm',
-                text:'发货',
-                iconCls:'icon-edit',
-                handler:confirm_order
-            }
-		]
+		onDblClickRow:order_detail//查看订单详情
 	});
 	//$("#status").combobox();
 	//$("#type").combobox();
@@ -132,11 +111,8 @@ function need_invoice(rs){
 function f_pay_status(vari){
 	if(vari==1){
 		return "已支付";
-	}else if(vari==0){
-		return "未支付";
-	}else if(vari==2){
-		return "部分支付";
 	}
+	return "未支付"
 	
 }
 //将PHP的unix时间戳转换成开如yyyy/mm/dd的时间
@@ -240,7 +216,6 @@ function confirm_order(){
 }
 //将日期格式化成YY-MM-dd
 function formatDate(date){
-
 	var y = date.getFullYear();
 	var m = date.getMonth()+1;
 	var d = date.getDate();

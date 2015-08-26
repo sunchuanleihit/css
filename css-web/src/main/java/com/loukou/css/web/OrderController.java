@@ -23,10 +23,7 @@ import com.loukou.order.service.resp.dto.BkExtmMsgDto;
 import com.loukou.order.service.resp.dto.BkOrderListBaseDto;
 import com.loukou.order.service.resp.dto.BkOrderListDto;
 import com.loukou.order.service.resp.dto.BkOrderListRespDto;
-import com.loukou.order.service.resp.dto.OrderListBaseDto;
-import com.loukou.order.service.resp.dto.OrderListDto;
-import com.loukou.order.service.resp.dto.CssOrderRespDto;
-import com.loukou.order.service.resp.dto.OrderListRespDto;
+import com.loukou.order.service.resp.dto.BkOrderReturnListRespDto;
 
 @Controller
 @RequestMapping("/order")
@@ -50,7 +47,14 @@ public class OrderController {
 		}
 		return mv;
 	}
-	
+	/**
+	 * 所有订单的查询
+	 * @param request
+	 * @param page
+	 * @param rows
+	 * @param cssOrderReqDto
+	 * @return
+	 */
 	@RequestMapping("/findOrder")
 	@ResponseBody
 	public DataGrid queryOrder(HttpServletRequest request,int page, int rows, CssOrderReqDto cssOrderReqDto){
@@ -68,6 +72,86 @@ public class OrderController {
 		grid.setRows(cssOrderShowList);
 		return grid;
 	}
+	
+	/**
+	 * 未生成退款单页面
+	 * @return
+	 */
+	@RequestMapping("/noreturn")
+	public String noreturn(){
+		return "orders/noReturnOrder";
+	}
+	
+	/**
+	 * 查找未生成退款单
+	 * @param request
+	 * @param page
+	 * @param rows
+	 * @param cssOrderReqDto
+	 * @return
+	 */
+	@RequestMapping("/findNoreturn")
+	@ResponseBody
+	public DataGrid queryNoreturnOrder(HttpServletRequest request,int page, int rows,CssOrderReqDto cssOrderReqDto){
+		String sort = request.getParameter("sort");
+		String order = request.getParameter("order");
+		BkOrderListRespDto bkOrderListRespDto = bkOrderService.queryBkOrderNoReturnList(sort, order, page, rows, cssOrderReqDto);
+		DataGrid grid = new DataGrid();
+		
+		grid.setTotal(bkOrderListRespDto.getResult().getOrderCount());
+		List<BkOrderListDto> bkOrderListDto = bkOrderListRespDto.getResult().getOrderList();
+		List<CssOrderShow> cssOrderShowList = new ArrayList<CssOrderShow>();
+		for(BkOrderListDto dto: bkOrderListDto){
+			CssOrderShow cssOrderShow = createCssOrderShow(dto);
+			cssOrderShowList.add(cssOrderShow);
+		}
+		grid.setRows(cssOrderShowList);
+		return grid;
+	}
+	/**
+	 * 待退款订单列表
+	 * @return
+	 */
+	@RequestMapping("/toReturn")
+	public String toReturn(){
+		return "orders/toReturn";
+	}
+	/**
+	 * 查找待退款单
+	 * @param request
+	 * @param page
+	 * @param rows
+	 * @param cssOrderReqDto
+	 * @return
+	 */
+	@RequestMapping("/findToReturn")
+	@ResponseBody
+	public DataGrid queryToReturnOrder(HttpServletRequest request,int page, int rows,CssOrderReqDto cssOrderReqDto){
+		DataGrid grid = new DataGrid();
+		String sort = request.getParameter("sort");
+		String order = request.getParameter("order");
+		BkOrderReturnListRespDto orderReturnRespDto = bkOrderService.queryBkOrderToReturn(sort, order, page, rows, cssOrderReqDto);
+		grid.setTotal(orderReturnRespDto.getResult().getCount());
+		grid.setRows(orderReturnRespDto.getResult().getOrderReturnList());
+		return grid;
+	}
+	/**
+	 * 取消反向订单
+	 * @param orderIdR
+	 * @return
+	 */
+	@RequestMapping(value="/cancelOrderReturn",  method = RequestMethod.GET)
+	@ResponseBody
+	public String cancelOrderReturn(Integer orderIdR){
+		String result = bkOrderService.cancelOrderReturn(orderIdR);
+		return result;
+	}
+	
+	/**
+	 * 将返回订单信息组装成前台显示的对象
+	 * @param bkOrder
+	 * @return
+	 */
 	private CssOrderShow createCssOrderShow(BkOrderListDto bkOrder){
 		CssOrderShow cssOrderShow = new CssOrderShow();
 		BkOrderListBaseDto base = bkOrder.getBase();
@@ -96,6 +180,8 @@ public class OrderController {
 		cssOrderShow.setAddTime(base.getAddTimeStr());
 		cssOrderShow.setPostScript(base.getPostscript());
 		cssOrderShow.setPayMessage(base.getPayMessage());
+		cssOrderShow.setSellerName(base.getSellerName());
+		cssOrderShow.setShippingFee(base.getShippingFee());
 		return cssOrderShow;
 	}
 }

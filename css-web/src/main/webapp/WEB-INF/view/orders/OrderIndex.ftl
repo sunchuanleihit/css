@@ -36,15 +36,15 @@
                       	  		<option value="">所有</option>
                       	  		<option value="0">未支付</option>
                       	  		<option value="1">已支付</option>
-                      	  		<option value="2">部分付款</option>
                       	  	</select>
                       	  </td>
-                      	  <td>收货人信息</td>
+                      	  <td>查询类型</td>
                       	  <td>
                       	  	<select id="queryType">
                       	  		<option value="consignee">收货人姓名</option>
                       	  		<option value="phoneMob">收货人手机</option>
                       	  		<option value="phoneTel">收货人电话</option>
+                      	  		<option value="city">城市</option>
                       	  	</select>
                       	  </td>
                       	  <td><input type="text" id="queryContent"></td>
