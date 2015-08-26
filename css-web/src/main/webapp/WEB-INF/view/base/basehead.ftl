@@ -4,8 +4,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <meta charset="utf-8" />
         <title></title>
-        <link href="${request.getContextPath()}/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="${request.getContextPath()}/assets/scripts/bootstrap/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
+        <link href="/assets/scripts/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/scripts/bootstrap/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
         <meta name="viewport" content="width=device-width" />
         <script type="text/javascript">
             document.onkeydown = function() {
