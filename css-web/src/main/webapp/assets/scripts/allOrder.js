@@ -1,7 +1,7 @@
 //订单列表页，所有字段
 var fields=[[
 			{field:'orderId',hidden:true},
-			{field:'orderSnMain',title:'订单编号',width:120,sortable:true},
+			{field:'orderSnMain',title:'订单编号',width:120,sortable:false},
 			{field:'cityName',title:'城市',width:120,sortable:false},
 			{field:'source',title:'订单来源',width:120,sortable:false},
 			{field:'needShiptime',title:'期望送货时间',width:140,sortable:false},

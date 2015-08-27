@@ -21,12 +21,12 @@ $(document).ready(function(){
 		{field:'sellerId',title:'商家ID',width:80},
 		{field:'returnAmount',title:'退款金额',width:80},
 		{field:'addTime',title:'添加时间',width:140},
-		{field:'goodsType',title:'商家类型',formatter:return_goods_type,width:80},
-		{field:'orderType',title:'订单类型',formatter:return_order_type,width:80},
-		{field:'orderStatus',title:'订单状态',formatter:order_status,width:80},
-		{field:'goodsStatus',title:'商品状态',formatter:return_goods_status,width:80},
-		{field:'refundStatus',title:'退款状态',formatter:return_refund_status,width:80},
-		{field:'statementStatus',title:'对账状态',formatter:return_statement_status,width:80},
+		{field:'goodsType',title:'商家类型',formatter:returnGoodsTypeFormatter,width:80},
+		{field:'orderType',title:'订单类型',formatter:orderTypeFormatter,width:80},
+		{field:'orderStatus',title:'订单状态',formatter:orderStatusFormatter,width:80},
+		{field:'goodsStatus',title:'商品状态',formatter:returnGoodsStatusFormatter,width:80},
+		{field:'refundStatus',title:'退款状态',formatter:returnRefundStatusFormatter,width:80},
+		{field:'statementStatus',title:'对账状态',formatter:returnStatementStatusFormatter,width:80},
 		{field:'postscript',title:'备注',width:120}
 	]];
 	$("#table").datagrid({
@@ -34,6 +34,7 @@ $(document).ready(function(){
 		title:"待退款订单列表",
 		pagination:true,
 		pageSize:20,
+		pageList:[10,20,30,40,50,100],
 		rownumbers:true,
 		nowrap:false,
 		url:"/order/findToReturn",
@@ -79,17 +80,6 @@ $(document).ready(function(){
 		});
 	}
 
-	function invoice_status(num){
-		num=parseInt(num);
-		if(num==0) return "未开票";
-		return "已开票";
-	}
-	
-	function take_invoice_status(num){
-		num=parseInt(num);
-		if(num==2) return "已取票";
-		return "未取票"; 
-	}
 	$("#search_submit").bind({
 		click:function(){
 			var orderSnMain = $("#orderSnMain").val();
@@ -109,72 +99,16 @@ $(document).ready(function(){
 			$("#table").datagrid("load",params);
 		}
 	});
-	function confirm_take_invoice(){
-		var temp=$("#wait_take_invoice").datagrid("getSelections");
-		var size=temp.length;
-		if(size==0){
-			__alert("未先择任何订单");
-			return false;
+	$("#exportExcel").bind({
+		click:function(){
+			toExportExcel();
 		}
-		if(size>=1){
-			$.messager.confirm('确认','确定要确认取票么?',function(r){  
-			    if (r){  
-			    	var sns=new Array();
-			        for(var i=0;i<size;i++){
-			        	sns[i]=temp[i].order_sn_main;
-			        }
-			        $.get("index.php?app=logistics.logistics&act=confirm_take_invoice",{sns:sns},function(rs){
-			        	switch(rs){
-			        		case "success":
-			        			__alert("确认开票成功");
-			        			$("#wait_take_invoice").datagrid("reload");
-			        			break;
-			        		case "failed":
-			        			__alert("确认开票失败");
-			        			break;
-			        	}
-			        });
-			    }  
-			}); 
-		}
-	
-	}
-	
-	function confirm_get_goods(){
-		var temp=$("#wait_get_goods").datagrid("getSelections");
-		var size=temp.length;
-		if(size==0){
-			__alert("未先择任何订单");
-			return false;
-		}
-		if(size>=1){
-			$.messager.confirm('确认','确定要确认取货么?',function(r){  
-			    if (r){  
-			    	var sns=new Array();
-			        for(var i=0;i<size;i++){
-			        	sns[i]=temp[i].order_id_r;
-			        }
-			        $.get("index.php?app=logistics.logistics&act=confirm_get_goods",{sns:sns},function(rs){
-			        	switch(rs){
-			        		case "success":
-			        			__alert("确认取货成功");
-			        			$("#wait_get_goods").datagrid("reload");
-			        			break;
-			        		case "failed":
-			        			__alert("确认取货失败");
-			        			break;
-			        	}
-			        });
-			    }  
-			}); 
-		}
-	
-	}
+	});
 	
 	/*———————————————————————下面为一系列反向订单，格式化函数——————————————————————————————————*/
 	
 	//商家类型格式化
-	function return_goods_type(value,row,index){
+	function returnGoodsTypeFormatter(value,row,index){
 		if(value==0){
 			return "普通商家";
 		
@@ -182,15 +116,21 @@ $(document).ready(function(){
 		return "服务商家";
 	}
 	//订单类型格式化
-	function return_order_type(value,row,index){
-		if(value==0){
-			return "退货单";
-		
+	function orderTypeFormatter(num){
+		var map = {
+				0:"退货订单",
+				1:"拒收订单",
+				2:"多付款退款",
+				3:"退运费",
+				4:"客户赔偿",
+				5:"其他退款",
+				6:"客户自己取消订单退款",
+				7:"特殊退款"
 		}
-		return "拒收单";
+		return map[num];
 	}
 	//订单状态格式化
-	function return_order_status(value,row,index){
+	function returnOrderStatusFormatter(value,row,index){
 		if(value==0){
 			return "正常";
 		}
@@ -198,7 +138,7 @@ $(document).ready(function(){
 	}
 	
 	//物品状态格式化
-	function return_goods_status(value,row,index){
+	function returnGoodsStatusFormatter(value,row,index){
 		var res="";
 		value=parseInt(value);
 		switch(value){
@@ -217,64 +157,30 @@ $(document).ready(function(){
 			case 4:
 				res= "已退商家";
 				break;
-		
-		
 		}
 		return res;
 	
 	}
 	
 	//对账状态格式化
-	function return_statement_status(value,row,index){
+	function returnStatementStatusFormatter(value,row,index){
 		if(value==0){
 			return "未对账";
 		
 		}
 		return "已对账";
-	
-	
 	}
 	
 	//退款状态格式化
-	function return_refund_status(value,row,index){
+	function returnRefundStatusFormatter(value,row,index){
 		if(value==0){
 			return "未退款";
-		
 		}
 		return "已退款";
 	
 	}
-	//右下角提示信息，封装$.messager.show
-	function __show(content,title){
-		if(!title){
-			$.messager.show({
-				title:'提示',
-				msg:content
-			});
-			return;
-		}
-		$.messager.show({
-			title:title,
-			msg:content
-		
-		});
-		return ;
-	}
-	//获取当前框架的宽度
-	function __get_frame_width(){
-		return $(window).width();
-	}
-	//提示信息,封装$.messager
-	function __alert(content,title){
-		
-		if(!title){
-			$.messager.alert("提示",content);
-			return;
-		}
-		$.messager.alert(title,content);
-	}
 	//订单状态，根据数字，返回相应的中文
-	function order_status(num){
+	function orderStatusFormatter(num){
 		num=parseInt(num);
 		switch(num){
 			case 0:
@@ -302,6 +208,23 @@ $(document).ready(function(){
 				return "拒收";
 				break;
 		}
+	}
+	
+	function toExportExcel(){
+		var selections=$("#table").datagrid("getSelections");
+		var size=selections.length;
+		var ids = "";
+		if(size==0){
+			alert("至少选择一项进行导出");
+			return false;
+		}
+		for(var i=0; i<size; i++){
+			var orderIdR=selections[i].orderIdR;
+			ids += "," + orderIdR;
+		}
+		var params = {"orderIdRs":ids}
+		$("#orderIds").val(ids);
+		$("#exportExcelForm").submit();
 	}
 	function return_order_detail(){
 		alert(1);

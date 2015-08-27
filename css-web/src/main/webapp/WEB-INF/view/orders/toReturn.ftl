@@ -6,8 +6,8 @@
   </head>
   <body>
   	<div id="order_return_manage">
-	<div title="待退款订单" closable="true" style="padding:20px;">  
-		<div id="order_return_search" style="padding:20px;border:1px solid #dadada;">
+		<div title="待退款订单" closable="true" style="padding:20px;">  
+			<div id="order_return_search" style="padding:20px;border:1px solid #dadada;">
 				<form id="order_return_form">
 					<table>
 					  <tr>
@@ -37,17 +37,19 @@
 						<td>
 							<input type="button" id="search_submit" value="查询" class="formbtn"/>&nbsp;&nbsp;&nbsp;
 							<input type="reset" value="重置" class="formbtn" onclick="order_return_reset()"/>&nbsp;&nbsp;
-							<input type="button" value="导出" class="formbtn" onclick="alert('待定')"/>
+							<input type="button" value="导出" id="exportExcel"/>
 						</td>
 					</tr>
 				 </table>
 				</form>
-		</div>
-		<div style="height:5px;"></div>
-        <div id="table"></div>
-    </div>
-</div>
-
+			</div>
+			<div style="height:5px;"></div>
+	        <div id="table"></div>
+    	</div>
+	</div>
+	<form action="exportExcel" method="post" id="exportExcelForm">
+		<input type="hidden" name="orderIdRs" id="orderIds">
+	</form>
   </body>
   <script type="text/javascript" src="../../assets/scripts/jquery-1.7.1.min.js"></script>
   <script type="text/javascript" src="../../assets/scripts/jquery.easyui/jquery.easyui.min.js"></script>
