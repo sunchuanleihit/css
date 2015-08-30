@@ -77,4 +77,15 @@ function OrderDetailController($scope, $http) {
 		GetDetailTab("stockorderdetail",
 				"/web/StockinOrder/StockinOrderDetail/" + index, "采购进货单详情");
 	}
+	$scope.showOrderAction = function(orderSnMain){
+		alert(1);
+		jQuery("#orderAction").dialog();
+	}
+}
+function showOrderAction(orderSnMain){
+	
+//	$("#orderAction").dialog({
+//		title: "操作详情",
+//		href: "orderAction?orderSnMain="+orderSnMain
+//	});
 }

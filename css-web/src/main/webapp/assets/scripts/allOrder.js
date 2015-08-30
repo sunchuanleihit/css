@@ -113,7 +113,6 @@ function f_pay_status(vari){
 		return "已支付";
 	}
 	return "未支付"
-	
 }
 //将PHP的unix时间戳转换成开如yyyy/mm/dd的时间
 function fromtimestamp(timestamp){
@@ -223,4 +222,13 @@ function formatDate(date){
 }
 function doubleFormat(num){
 	return num.toFixed(2);
+}
+function showOrderAction(){
+	$("#dialog").dialog({
+		title:"订单详情",
+		width:600,
+		autoOpen:false,
+		height:500,
+		href:"orderAction?orderSnMain=150827183843417"
+	});
 }

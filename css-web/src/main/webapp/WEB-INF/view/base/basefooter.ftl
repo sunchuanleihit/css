@@ -13,6 +13,8 @@
     <script src="/assets/scripts/ColorBox/jquery.colorbox-min.js"></script>
     <link href="/assets/scripts/ColorBox/colorbox.css" rel="stylesheet"/>
     <script src="/assets/scripts/My97DatePicker/WdatePicker.js"></script>
+      <script type="text/javascript" src="/assets/scripts/jquery.easyui/jquery.easyui.min.js"></script>
+  <script type="text/javascript" src="/assets/scripts/jquery.easyui/locale/easyui-lang-zh_CN.js"></script>
  
         <script>
             //详情页作为tab

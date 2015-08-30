@@ -3,6 +3,7 @@ package com.loukou.css.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -30,6 +32,7 @@ import com.loukou.css.util.DataGrid;
 import com.loukou.order.service.api.BkOrderService;
 import com.loukou.order.service.req.dto.CssOrderReqDto;
 import com.loukou.order.service.resp.dto.BkExtmMsgDto;
+import com.loukou.order.service.resp.dto.BkOrderActionRespDto;
 import com.loukou.order.service.resp.dto.BkOrderListBaseDto;
 import com.loukou.order.service.resp.dto.BkOrderListDto;
 import com.loukou.order.service.resp.dto.BkOrderListRespDto;
@@ -71,9 +74,10 @@ public class OrderController {
 	@RequestMapping("/findOrder")
 	@ResponseBody
 	public DataGrid queryOrder(HttpServletRequest request,int page, int rows, CssOrderReqDto cssOrderReqDto){
-		String sort = request.getParameter("sort");
-		String order = request.getParameter("order");
-		BkOrderListRespDto bkOrderListRespDto = bkOrderService.queryBkOrderList(sort,order,page, rows, cssOrderReqDto);
+		cssOrderReqDto.setIsDel(0);
+		Integer timeLimit = (int)(new Date().getTime()/1000) - 10368000;
+		cssOrderReqDto.setTimeLimit(timeLimit);
+		BkOrderListRespDto bkOrderListRespDto = bkOrderService.queryBkOrderList(page, rows, cssOrderReqDto);
 		DataGrid grid = new DataGrid();
 		grid.setTotal(bkOrderListRespDto.getResult().getOrderCount());
 		List<BkOrderListDto> bkOrderListDto = bkOrderListRespDto.getResult().getOrderList();
@@ -301,5 +305,12 @@ public class OrderController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@RequestMapping(value="/orderAction")
+	public ModelAndView orderAction(HttpServletRequest request, HttpServletResponse response){
+		String orderSnMain = request.getParameter("orderSnMain");
+		List<BkOrderActionRespDto> resultList = bkOrderService.getOrderActions(orderSnMain);
+		return new ModelAndView("orders/orderAction","resultList",resultList);
 	}
 }

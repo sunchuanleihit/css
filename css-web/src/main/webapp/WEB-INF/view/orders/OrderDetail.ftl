@@ -16,6 +16,7 @@
 				<button type="button" class="btn btn-primary" id="examine" ng-click="examine(${orderDetailMsgs[0].base.orderSnMain});">详细</button>
 				<button type="button" class="btn btn-primary" id="examine" ng-click="examine(${orderDetailMsgs[0].base.orderSnMain});">作废</button>
 				<button type="button" class="btn btn-primary" id="examine" ng-click="examine(${orderDetailMsgs[0].base.orderSnMain});">客户信息</button>
+				<button ng-click="showOrderAction(${orderDetailMsgs[0].base.orderSnMain})">详情</button>
 			</div>
 			  <div class="panel-body">
 			  	 <table style="width:100%">
@@ -189,6 +190,7 @@
 	</div>
 	</#if>
 </div>
+<div id="orderAction">aaaa</div>
 <script type="text/javascript" src="../../../assets/viewjs/orderdetail.js"></script>
-<script type="text/javascript" src="../../../assets/scripts/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../../assets/scripts/jquery-1.7.1.min.js"></script>
 <#include "/base/basefooter.ftl">

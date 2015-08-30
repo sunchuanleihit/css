@@ -51,7 +51,8 @@
                       	  <td></td>
                       	  <td>
                       	  	<input type="button" id="search_submit" value="查询" class="formbtn"/>&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="formbtn"/>
-                      	  </td>
+                      	  	<input type="button" value="操作详情" onclick="showOrderAction()">
+                      	  </td> 
                   	</tr>
 				</table>
 			</form>
@@ -60,6 +61,7 @@
         <div id="table"></div>
     </div>
   </body>
+  <div id="dialog">aaa</div>
   <script type="text/javascript" src="../../assets/scripts/jquery-1.7.1.min.js"></script>
   <script type="text/javascript" src="../../assets/scripts/jquery.easyui/jquery.easyui.min.js"></script>
   <script type="text/javascript" src="../../assets/scripts/jquery.easyui/locale/easyui-lang-zh_CN.js"></script>

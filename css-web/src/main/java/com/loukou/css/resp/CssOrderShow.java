@@ -2,6 +2,7 @@ package com.loukou.css.resp;
 
 public class CssOrderShow {
 	private Integer orderId;//订单号
+	private String taoOrderSn;//包裹号
 	private String orderSnMain;//订单编号
 	private String cityName;//城市
 	private String source;//订单来源
@@ -30,7 +31,12 @@ public class CssOrderShow {
 	private String postScript;//物流提示
 	private String payMessage;//订单备注 
 	private String sellerName;//商家名称
-	
+	public String getTaoOrderSn() {
+		return taoOrderSn;
+	}
+	public void setTaoOrderSn(String taoOrderSn) {
+		this.taoOrderSn = taoOrderSn;
+	}
 	public Double getShippingFee() {
 		return shippingFee;
 	}

@@ -6,6 +6,8 @@
         <title></title>
         <link href="/assets/scripts/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="/assets/scripts/bootstrap/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
+          	<link href="/assets/scripts/jquery.easyui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+	<link href="/assets/scripts/jquery.easyui/themes/icon.css" rel="stylesheet" type="text/css" />
         <meta name="viewport" content="width=device-width" />
         <script type="text/javascript">
             document.onkeydown = function() {
