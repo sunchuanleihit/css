@@ -1,8 +1,13 @@
-<#include "/base/basehead.ftl">
-<table>
-<tr><th>操作时间</th><th>操作信息</th><th>操作人</th></tr>
-<#list resultList as result>
-<tr><td>${result.actionTime}</td><td>${result.note}</td><td>${result.actor}</td></tr>
-</#list>
-</table>
-<#include "/base/basefooter.ftl">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  	<link href="../../assets/scripts/jquery.easyui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+	<link href="../../assets/scripts/jquery.easyui/themes/icon.css" rel="stylesheet" type="text/css" />
+  </head>
+  <div id="table"></div>
+  </body>
+  <script type="text/javascript" src="../../assets/scripts/jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="../../assets/scripts/jquery.easyui/jquery.easyui.min.js"></script>
+  <script type="text/javascript" src="../../assets/scripts/jquery.easyui/locale/easyui-lang-zh_CN.js"></script>
+  <script type="text/javascript" src="../../assets/viewjs/orderAction.js"></script>
+</html>

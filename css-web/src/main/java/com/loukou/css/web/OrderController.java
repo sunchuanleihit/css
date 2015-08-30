@@ -306,11 +306,19 @@ public class OrderController {
 			e.printStackTrace();
 		}
 	}
-	
 	@RequestMapping(value="/orderAction")
-	public ModelAndView orderAction(HttpServletRequest request, HttpServletResponse response){
+	public String orderAction(){
+		return "orders/orderAction";
+	}
+	
+	@RequestMapping(value="/findOrderAction")
+	@ResponseBody
+	public DataGrid orderAction(HttpServletRequest request, HttpServletResponse response){
 		String orderSnMain = request.getParameter("orderSnMain");
 		List<BkOrderActionRespDto> resultList = bkOrderService.getOrderActions(orderSnMain);
-		return new ModelAndView("orders/orderAction","resultList",resultList);
+		DataGrid grid = new DataGrid();
+		grid.setRows(resultList);
+		grid.setTotal(resultList.size());
+		return grid;
 	}
 }
