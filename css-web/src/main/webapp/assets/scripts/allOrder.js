@@ -223,12 +223,28 @@ function formatDate(date){
 function doubleFormat(num){
 	return num.toFixed(2);
 }
-function showOrderAction(){
+function showOrderAction(orderSnMain){
+	orderSnMain = "150827183843417";
+	$("#actionTable").datagrid({
+		url:"findOrderAction",  
+        height:500,
+        queryParams:{
+			"orderSnMain":orderSnMain
+		},
+        nowrap:false,
+        onDblClickRow:order_detail,
+        columns:[[
+			{field:'actionTime',title:'操作时间',width:120,sortable:false},
+			{field:'note',title:'操作信息',width:200,sortable:false},
+			{field:'source',title:'订单来源',width:120,sortable:false},
+			{field:'actor',title:'操作人',width:140,sortable:false}			
+        ]]
+	});
+	
 	$("#dialog").dialog({
 		title:"订单详情",
 		width:600,
 		autoOpen:false,
-		height:500,
-		href:"orderAction?orderSnMain=150827183843417"
+		height:500
 	});
 }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.loukou.css.resp.CssOrderShow;
-import com.loukou.css.service.TxkService;
 import com.loukou.css.util.DataGrid;
 import com.loukou.order.service.api.BkOrderService;
 import com.loukou.order.service.req.dto.CssOrderReqDto;
@@ -25,9 +24,6 @@ import com.loukou.order.service.resp.dto.BkOrderListRespDto;
 import com.loukou.order.service.resp.dto.BkTxkDto;
 import com.loukou.order.service.resp.dto.BkTxkRecordListRespDto;
 import com.loukou.order.service.resp.dto.BkVaccountListResultRespDto;
-import com.loukou.pos.client.txk.processor.AccountTxkProcessor;
-import com.loukou.pos.client.txk.req.TxkCardRowRespVO;
-import com.loukou.pos.client.txk.req.TxkMemberCardsRespVO;
 
 @Controller
 @RequestMapping("/customer")

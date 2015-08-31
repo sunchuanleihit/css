@@ -61,7 +61,9 @@
         <div id="table"></div>
     </div>
   </body>
-  <div id="dialog">aaa</div>
+  <div id="dialog">
+  	 <div id="actionTable"></div>
+  </div>
   <script type="text/javascript" src="../../assets/scripts/jquery-1.7.1.min.js"></script>
   <script type="text/javascript" src="../../assets/scripts/jquery.easyui/jquery.easyui.min.js"></script>
   <script type="text/javascript" src="../../assets/scripts/jquery.easyui/locale/easyui-lang-zh_CN.js"></script>

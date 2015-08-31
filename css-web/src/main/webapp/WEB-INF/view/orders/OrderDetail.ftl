@@ -190,7 +190,7 @@
 	</div>
 	</#if>
 </div>
-<div id="orderAction">aaaa</div>
+<div id="orderAction"></div>
 <script type="text/javascript" src="../../../assets/viewjs/orderdetail.js"></script>
 <script type="text/javascript" src="../../assets/scripts/jquery-1.7.1.min.js"></script>
 <#include "/base/basefooter.ftl">
