@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.loukou.css.resp.CssOrderShow;
 import com.loukou.css.util.DataGrid;
@@ -36,8 +37,13 @@ public class CustomerController {
 	 * @return
 	 */
 	@RequestMapping(value="/customerInfo")
-	public String customerInfo(){
-		return "customer/customerInfo";
+	public ModelAndView customerInfo(HttpServletRequest request,HttpServletResponse response){
+		ModelAndView mv = new ModelAndView("customer/customerInfo");
+		String buyerId = request.getParameter("buyerId");
+		if(!StringUtils.isBlank(buyerId)){
+			mv.addObject("buyerId",buyerId);
+		}
+		return mv;
 	}
 	
 	@RequestMapping(value="/customerOrders")

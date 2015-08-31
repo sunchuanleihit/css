@@ -1,5 +1,5 @@
 $(function(){
-    var uid = 1032752;//会员ID
+    var uid = $("#buyerId").val();//会员ID
     $("#custom_tabs").tabs({  
         cache : false,
         onSelect:function(){  

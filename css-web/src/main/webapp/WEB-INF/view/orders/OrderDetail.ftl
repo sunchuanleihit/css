@@ -21,7 +21,7 @@
 				<#if orderDetailMsgs[0].base.status==1 || orderDetailMsgs[0].base.status==2>
 				<button type="button" class="btn btn-primary" id="examine" ng-click="resetCancel(${orderDetailMsgs[0].base.orderSnMain});">取消作废[操作优惠券]</button>
 				</#if>
-				<button type="button" class="btn btn-primary" id="examine" ng-click="examine(${orderDetailMsgs[0].base.orderSnMain});">客户信息</button>
+				<button type="button" class="btn btn-primary" id="examine" ng-click="showCustomInfo(${orderDetailMsgs[0].base.buyerId});">客户信息</button>
 				<button type="button" class="btn btn-primary" id="examine" ng-click="complaintMsg(${orderDetailMsgs[0].base.orderSnMain});">投诉</button>
 			</div>
 			  <div class="panel-body">

@@ -8,6 +8,7 @@
 <style>
 	#custom_tabs{margin:8px 15px 15px 15px;}
 </style>
+<input type="hidden" id="buyerId" value="${buyerId}">
 <!--Tabs-->
 <div id="custom_tabs" class="easyui-tabs" style="height:600px;">  
     <div title="客户订单" style="padding:20px;">  

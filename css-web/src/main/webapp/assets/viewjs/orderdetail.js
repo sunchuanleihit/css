@@ -192,12 +192,24 @@ function OrderDetailController($scope, $http) {
 			}
 		});
 	}
-<<<<<<< HEAD
-}
-=======
+	
+	//订单操作详细
 	$scope.showOrderAction = function(orderSnMain){
-		alert(1);
-		jQuery("#orderAction").dialog();
+		$.colorbox({
+            href: "/order/orderAction?orderSnMain=" + orderSnMain,
+            iframe: true,
+            width: "800px",
+            height: "420px",
+            top: "100px",
+            opacity: 0,
+            overlayClose: false,
+            scrolling: true
+        });
+	}
+	
+	//获取客户详细信息
+	$scope.showCustomInfo = function(buyerId){
+		GetDetailTab("customerInfo","/customer/customerInfo?buyerId=" + buyerId, "客户详细信息");
 	}
 	
 	//跳转投诉
@@ -205,4 +217,3 @@ function OrderDetailController($scope, $http) {
 		GetDetailTab("complaintMsg","/order/complaintMsg/" + index, index+"退货");
 	}
 }
->>>>>>> branch 'css_dev' of http://10.11.1.13/bos/css.git
