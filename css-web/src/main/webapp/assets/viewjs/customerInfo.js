@@ -26,7 +26,7 @@ $(function(){
 			{field:'source',title:'订单来源',width:120,sortable:false},
 			{field:'needShiptime',title:'期望送货时间',width:140,sortable:false},
 			{field:'status',title:'订单状态',width:80,sortable:false},
-			{field:'isDel',title:'是否删除',width:80,sortable:false},
+			{field:'isDel',title:'是否删除',formatter:yesOrNoFormat,width:80,sortable:false},
 			{field:'needInvoice',title:'是否开票',formatter:yesOrNoFormat,width:80,sortable:false},
 			{field:'invoiceNo',title:'开票号码',width:80,sortable:false},
 			{field:'buyerName',title:'注册用户名',width:80,sortable:false},

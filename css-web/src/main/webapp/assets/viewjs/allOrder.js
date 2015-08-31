@@ -40,8 +40,6 @@ $(document).ready(function(){
 		columns:fields,
 		onDblClickRow:order_detail//查看订单详情
 	});
-	//$("#status").combobox();
-	//$("#type").combobox();
 	$("#start_time").datebox({
 		formatter:formatDate
 	});
@@ -114,20 +112,6 @@ function f_pay_status(vari){
 	}
 	return "未支付"
 }
-//将PHP的unix时间戳转换成开如yyyy/mm/dd的时间
-function fromtimestamp(timestamp){
-	if(!!!timestamp || timestamp==0){
-		return " ";
-	}
-	var date= new Date(parseInt(timestamp) * 1000);
-	var y = date.getFullYear();
-	var m = date.getMonth()+1;
-	var d = date.getDate();
-	var h = date.getHours();
-	var i = date.getMinutes();
-	var s = date.getSeconds();
-	return y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d)+" "+(h<10?('0'+h):h)+':'+(i<10?('0'+i):i)+":"+(s<10?('0'+s):s);
-}
 
 function OrderIndexController($scope, $http) {
 	//跳转退货页面
@@ -148,83 +132,7 @@ function order_detail(index,rowData){
 function refresh_orders(){
 	$("#table").datagrid("reload");
 }
-//修改订单
-function edit_order(){
-	var rs=$("#table").datagrid("getSelections");
-	var size=(rs.length);
-	if(!!size==false){
-		__alert("未选中任何订单");
-		return false;
-	}
-	else if(size>1){
-		__alert("一次只能修改一个订单！");
-		return false;
-	}
-	var i=0;
-	var ids=new Array();
-	$.each(rs,function(index,value){
-		ids[i]=value.order_sn_main;
-		i++;	
-	
-	});
-	var order_id=ids[0]+"";
-	var flag=$("#tabs").tabs("exists","订单详情");
-	if(!flag){
-		$.get("index.php?app=callcenter.check_order&act=change_order_form",{"order_id":order_id},function(rs){
-			$("#tabs").tabs("add",{
-				title:"订单详情",
-				content:rs,
-				closable:true
-			});
-			
-		});
-		
-	}
-	else{
-		$("#tabs").tabs("select","订单详情");
-		var stab=$("#tabs").tabs("getSelected");
-		$.get("index.php?app=callcenter.check_order&act=change_order_form",{"order_id":order_id},function(rs){
-			$("#tabs").tabs("update",{
-				tab:stab,
-				options:{
-					title:"订单详情",
-					content:rs,
-					closable:true
-				}
-			});
-		});
-	}
-}
-//确认订单
-function confirm_order(){
-    var rs=$("#table").datagrid("getSelections");
-    var size=(rs.length);
-	if(!!size==false){
-		__alert("未选中任何订单");
-		return false;
-	}
-	else if(size>1){
-		__alert("一次只能修改一个订单！");
-		return false;
-	}
-        
-	var i=0;
-	var ids=new Array();
-	$.each(rs,function(index,value){
-		ids[i]=value.order_id;
-		i++;	
-	
-	});
-	var order_id=ids[0]+"";
-        $.get("index.php?app=callcenter.check_order&act=confirm_order",{"order_id":order_id},function(rs){
-               if(rs == 'success'){
-                   __alert("发货成功");
-                   refresh_orders();
-               }else{
-                   __alert("未能成功发货");
-               }
-		});
-}
+
 //将日期格式化成YY-MM-dd
 function formatDate(date){
 	var y = date.getFullYear();
@@ -234,29 +142,4 @@ function formatDate(date){
 }
 function doubleFormat(num){
 	return num.toFixed(2);
-}
-function showOrderAction(orderSnMain){
-	orderSnMain = "150827183843417";
-	$("#actionTable").datagrid({
-		url:"findOrderAction",  
-        height:500,
-        queryParams:{
-			"orderSnMain":orderSnMain
-		},
-        nowrap:false,
-        onDblClickRow:order_detail,
-        columns:[[
-			{field:'actionTime',title:'操作时间',width:120,sortable:false},
-			{field:'note',title:'操作信息',width:200,sortable:false},
-			{field:'source',title:'订单来源',width:120,sortable:false},
-			{field:'actor',title:'操作人',width:140,sortable:false}			
-        ]]
-	});
-	
-	$("#dialog").dialog({
-		title:"订单详情",
-		width:600,
-		autoOpen:false,
-		height:500
-	});
 }

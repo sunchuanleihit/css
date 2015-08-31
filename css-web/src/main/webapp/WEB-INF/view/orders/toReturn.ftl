@@ -54,7 +54,7 @@
   <script type="text/javascript" src="../../assets/scripts/jquery-1.7.1.min.js"></script>
   <script type="text/javascript" src="../../assets/scripts/jquery.easyui/jquery.easyui.min.js"></script>
   <script type="text/javascript" src="../../assets/scripts/jquery.easyui/locale/easyui-lang-zh_CN.js"></script>
-  <script type="text/javascript" src="../../assets/scripts/toReturn.js"></script>
+  <script type="text/javascript" src="../../assets/viewjs/toReturn.js"></script>
   <script src="/assets/scripts/angularjs/angular.js"></script>
   <script src="/assets/scripts/CustomizeAngularjs.js"></script>
   <script>
