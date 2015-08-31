@@ -4,7 +4,7 @@
   	<link href="../../assets/scripts/jquery.easyui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
 	<link href="../../assets/scripts/jquery.easyui/themes/icon.css" rel="stylesheet" type="text/css" />
   </head>
-  <body>
+  <body ng-app="myapp" ng-controller="OrderToReturnController">
   	<div id="order_return_manage">
 		<div title="待退款订单" closable="true" style="padding:20px;">  
 			<div id="order_return_search" style="padding:20px;border:1px solid #dadada;">
@@ -55,4 +55,12 @@
   <script type="text/javascript" src="../../assets/scripts/jquery.easyui/jquery.easyui.min.js"></script>
   <script type="text/javascript" src="../../assets/scripts/jquery.easyui/locale/easyui-lang-zh_CN.js"></script>
   <script type="text/javascript" src="../../assets/scripts/toReturn.js"></script>
+  <script src="/assets/scripts/angularjs/angular.js"></script>
+  <script src="/assets/scripts/CustomizeAngularjs.js"></script>
+  <script>
+    //详情页作为tab
+	function GetDetailTab(id,url,tabTxt){
+        window.parent.addTab(id, url, tabTxt, true);
+	}
+</script>
 </html>
