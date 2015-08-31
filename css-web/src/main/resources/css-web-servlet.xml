@@ -42,8 +42,8 @@
 	    <prop key="locale">zh_CN</prop> 
 	    <prop key="datetime_format">yyyy-MM-dd</prop> 
 	    <prop key="date_format">yyyy-MM-dd</prop> 
-	    <prop key="number_format">\#.\#\#</prop> 
-	   </props> 
+	    <prop key="number_format">#.##</prop> 
+	   </props>
 	  </property> 
 	 </bean> 
 	 <!-- FreeMarker视图解析   如返回student。。在这里配置后缀名ftl和视图解析器。。--> 
