@@ -2,15 +2,6 @@ function opershow() {
 	$("#oper").toggle();
 }
 
-$("#seller_name").live("click",function(){
-	alert("aaaa");
-	var rs=$(this).parents("tr").find("#goods_name");
-	var checked=$(this).attr("checked");
-	$.each(rs,function(i,e){
-		$(e).attr("checked",!!checked);
-	});
-});
-
 function OrderDetailController($scope, $http) {
 	//获取包裹商品列表
 	$scope.getordergoodslist = function(orderId) {
@@ -94,7 +85,7 @@ function OrderDetailController($scope, $http) {
 	
 	//跳转多付款退款页面
 	$scope.multiplePaymentRefund = function(index) {
-		GetDetailTab("returngoods","/order/multiplePaymentRefund/" + index, index+"多付款退款");
+		GetDetailTab("multiplePaymentRefund","/order/multiplePaymentRefund/" + index, index+"多付款退款");
 	}
 	
 	//多付款退款
@@ -191,11 +182,9 @@ function OrderDetailController($scope, $http) {
 		alert(1);
 		jQuery("#orderAction").dialog();
 	}
-}
-function showOrderAction(orderSnMain){
 	
-//	$("#orderAction").dialog({
-//		title: "操作详情",
-//		href: "orderAction?orderSnMain="+orderSnMain
-//	});
+	//跳转投诉
+	$scope.complaintMsg = function(index) {
+		GetDetailTab("complaintMsg","/order/complaintMsg/" + index, index+"退货");
+	}
 }

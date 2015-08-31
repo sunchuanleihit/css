@@ -1,8 +1,7 @@
 <#include "/base/basehead.ftl">
 <div ng-controller="OrderDetailController" style="width:90%;margin:0 auto;">
 	<div class="row">
-		<strong><p style="font-size:20px">订单 - ${orderDetailMsgs[0].base.orderSnMain?default("")}<font style="color:red"></font></p>
-		</strong>
+		<strong><p style="font-size:20px">订单 - ${orderDetailMsgs[0].base.orderSnMain?default("")}<font style="color:red"></font></p></strong>
 	</div>
 	
 	<div class="row">
@@ -16,7 +15,7 @@
 				<#if orderDetailMsgs[0].base.status==2>
 				<button type="button" class="btn btn-primary" id="examine" ng-click="multiplePaymentRefund(${orderDetailMsgs[0].base.orderSnMain});">多付款退款</button>
 				</#if>
-				<button type="button" class="btn btn-primary" id="examine" ng-click="examine(${orderDetailMsgs[0].base.orderSnMain});">详细</button>
+				<button type="button" class="btn btn-primary" id="examine" ng-click="showOrderAction(${orderDetailMsgs[0].base.orderSnMain});">详细</button>
 				<#if orderDetailMsgs[0].base.status!=1 && orderDetailMsgs[0].base.status!=2>
 				<button type="button" class="btn btn-primary" id="examine" ng-click="cancel(${orderDetailMsgs[0].base.orderSnMain});">作废[操作优惠券]</button>
 				</#if>
@@ -24,11 +23,7 @@
 				<button type="button" class="btn btn-primary" id="examine" ng-click="resetCancel(${orderDetailMsgs[0].base.orderSnMain});">取消作废[操作优惠券]</button>
 				</#if>
 				<button type="button" class="btn btn-primary" id="examine" ng-click="examine(${orderDetailMsgs[0].base.orderSnMain});">客户信息</button>
-<<<<<<< Upstream, based on branch 'css_dev' of git@10.11.1.13:bos/css.git
-				<button ng-click="showOrderAction(${orderDetailMsgs[0].base.orderSnMain})">详情</button>
-=======
-				<button type="button" class="btn btn-primary" id="examine" ng-click="examine(${orderDetailMsgs[0].base.orderSnMain});">投诉</button>
->>>>>>> e46704b 客服系统：退货、多付款退款、特殊退款
+				<button type="button" class="btn btn-primary" id="examine" ng-click="complaintMsg(${orderDetailMsgs[0].base.orderSnMain});">投诉</button>
 			</div>
 			  <div class="panel-body">
 			  	 <table style="width:100%">
@@ -160,20 +155,6 @@
 					  <td>{{purchase.pricePurchase*purchase.quantity}}</td>
 					  <td>{{purchase.specification}}</td>
 					</tr>
-					<#--
-					<#list orderDetailMsgs[0].goodsList as goods>
-						<tr>
-							<td class="text-left">${goods.bn}</td>
-							<td class="text-left">${goods.taosku}</td>
-							<td class="text-left">${goods.quantity?string.number}</td>
-							<td class="text-left">${goods.goodsName}</td>
-							<td class="text-left">${goods.pricePurchase?string.number}</td>
-							<td class="text-left">${goods.pricePurchase?string.number}</td>
-							<td class="text-left">${(goods.pricePurchase*goods.quantity)?string.number}</td>
-							<td class="text-left">${goods.specification}</td>
-						</tr>
-				    </#list>
-				    -->
 				  </tbody>
 				</table>
 			  </div>

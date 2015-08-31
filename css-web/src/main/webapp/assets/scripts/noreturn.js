@@ -100,9 +100,6 @@ $(document).ready(function(){
 	function refresh_orders(){
 		$("#table").datagrid("reload");
 	}
-	function order_detail(){
-		alert(1);
-	}
 	$("#startTime").datebox({
 		formatter:formatDate
 	});
@@ -134,3 +131,19 @@ $(document).ready(function(){
 		}
 	}
 });
+
+function OrderReturnController($scope, $http) {
+	//跳转退货页面
+	$scope.orderDetail = function(index) {
+		GetDetailTab("orderDetail","/order/orderDetail/" + index, index+"订单详情");
+	}
+}
+
+//查看订单详情
+function order_detail(index,rowData){
+	var appElement = document.querySelector('[ng-controller=OrderReturnController]');
+
+	var $scope = angular.element(appElement).scope(); 
+	
+	$scope.orderDetail(rowData['orderSnMain']);
+}

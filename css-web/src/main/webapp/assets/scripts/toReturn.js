@@ -226,7 +226,20 @@ $(document).ready(function(){
 		$("#orderIds").val(ids);
 		$("#exportExcelForm").submit();
 	}
-	function return_order_detail(){
-		alert(1);
-	}
 });
+
+function OrderToReturnController($scope, $http) {
+	//跳转退货页面
+	$scope.orderDetail = function(index) {
+		GetDetailTab("orderDetail","/order/orderDetail/" + index, index+"订单详情");
+	}
+}
+
+//查看订单详情
+function return_order_detail(index,rowData){
+	var appElement = document.querySelector('[ng-controller=OrderToReturnController]');
+
+	var $scope = angular.element(appElement).scope(); 
+	
+	$scope.orderDetail(rowData['orderSnMain']);
+}

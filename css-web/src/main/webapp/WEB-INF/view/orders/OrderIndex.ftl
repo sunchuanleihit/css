@@ -4,8 +4,8 @@
   	<link href="../../assets/scripts/jquery.easyui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
 	<link href="../../assets/scripts/jquery.easyui/themes/icon.css" rel="stylesheet" type="text/css" />
   </head>
-  <body>
-		<div id="panel" style="padding:20px;border:1px solid #dadada;">
+  <body ng-app="myapp">
+		<div id="panel" style="padding:20px;border:1px solid #dadada;" ng-controller="OrderIndexController">
 			<form id="search_form">
 				<table>
                 	<tr>
@@ -61,9 +61,17 @@
         <div id="table"></div>
     </div>
   </body>
-  <div id="dialog">aaa</div>
   <script type="text/javascript" src="../../assets/scripts/jquery-1.7.1.min.js"></script>
   <script type="text/javascript" src="../../assets/scripts/jquery.easyui/jquery.easyui.min.js"></script>
   <script type="text/javascript" src="../../assets/scripts/jquery.easyui/locale/easyui-lang-zh_CN.js"></script>
   <script type="text/javascript" src="../../assets/scripts/allOrder.js"></script>
+  <script src="/assets/scripts/angularjs/angular.js"></script>
+  <script src="/assets/scripts/CustomizeAngularjs.js"></script>
+  <script type="text/javascript" src="/assets/scripts/jquery.easyui/locale/easyui-lang-zh_CN.js"></script>
+	<script>
+	    //详情页作为tab
+		function GetDetailTab(id,url,tabTxt){
+	        window.parent.addTab(id, url, tabTxt, true);
+		}
+	</script>
 </html>

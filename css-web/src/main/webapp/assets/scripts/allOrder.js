@@ -128,10 +128,23 @@ function fromtimestamp(timestamp){
 	var s = date.getSeconds();
 	return y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d)+" "+(h<10?('0'+h):h)+':'+(i<10?('0'+i):i)+":"+(s<10?('0'+s):s);
 }
+
+function OrderIndexController($scope, $http) {
+	//跳转退货页面
+	$scope.orderDetail = function(index) {
+		GetDetailTab("orderDetail","/order/orderDetail/" + index, index+"订单详情");
+	}
+}
+
 //查看订单详情
 function order_detail(index,rowData){
-	alert(1);
+	var appElement = document.querySelector('[ng-controller=OrderIndexController]');
+
+	var $scope = angular.element(appElement).scope(); 
+	
+	$scope.orderDetail(rowData['orderSnMain']);
 }
+
 //刷新订单列表
 function refresh_orders(){
 	$("#table").datagrid("reload");
