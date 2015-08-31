@@ -123,6 +123,7 @@ function OrderDetailController($scope, $http) {
 	
 	//获取特殊退款页面
 	$scope.specialPaymentRefundBox = function(){
+		alert(1);
 		var orderSnMain=$('#orderSnMain').val();
 		if(!orderSnMain){
 			jAlert("请输入订单号");
@@ -140,6 +141,19 @@ function OrderDetailController($scope, $http) {
 		}
     }
 	
+	//订单操作详细
+	$scope.showOrderAction = function(orderSnMain){
+		$.colorbox({
+            href: "/order/orderAction?orderSnMain=" + orderSnMain,
+            iframe: true,
+            width: "800px",
+            height: "420px",
+            top: "100px",
+            opacity: 0,
+            overlayClose: false,
+            scrolling: true
+        });
+	}
 	//多付款退款
 	$scope.generateSpecialPaymentRefund = function() {
 		jConfirm('确认要退款吗？', '退款确认', function(r) {
@@ -187,15 +201,4 @@ function OrderDetailController($scope, $http) {
 			}
 		});
 	}
-	$scope.showOrderAction = function(orderSnMain){
-		alert(1);
-		jQuery("#orderAction").dialog();
-	}
-}
-function showOrderAction(orderSnMain){
-	
-//	$("#orderAction").dialog({
-//		title: "操作详情",
-//		href: "orderAction?orderSnMain="+orderSnMain
-//	});
 }

@@ -314,13 +314,16 @@ public class OrderController extends  BaseController{
 		}
 	}
 	@RequestMapping(value="/orderAction")
-	public String orderAction(){
-		return "orders/orderAction";
+	public ModelAndView orderAction(HttpServletRequest request, HttpServletResponse response){
+		String orderSnMain = request.getParameter("orderSnMain");
+		ModelAndView mv = new ModelAndView("orders/orderAction");
+		mv.addObject("orderSnMain", orderSnMain);
+		return mv;
 	}
 	
 	@RequestMapping(value="/findOrderAction")
 	@ResponseBody
-	public DataGrid orderAction(HttpServletRequest request, HttpServletResponse response){
+	public DataGrid findOrderAction(HttpServletRequest request, HttpServletResponse response){
 		String orderSnMain = request.getParameter("orderSnMain");
 		List<BkOrderActionRespDto> resultList = bkOrderService.getOrderActions(orderSnMain);
 		DataGrid grid = new DataGrid();

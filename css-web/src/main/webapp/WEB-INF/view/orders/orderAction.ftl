@@ -10,4 +10,9 @@
   <script type="text/javascript" src="../../assets/scripts/jquery.easyui/jquery.easyui.min.js"></script>
   <script type="text/javascript" src="../../assets/scripts/jquery.easyui/locale/easyui-lang-zh_CN.js"></script>
   <script type="text/javascript" src="../../assets/viewjs/orderAction.js"></script>
+  <script>
+  	$(function(){
+  		showOrderAction("${orderSnMain}");
+  	});
+  </script>
 </html>

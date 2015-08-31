@@ -130,7 +130,7 @@ function fromtimestamp(timestamp){
 }
 //查看订单详情
 function order_detail(index,rowData){
-	alert(1);
+	alert("订单编号 "+rowData['orderSnMain']);
 }
 //刷新订单列表
 function refresh_orders(){
