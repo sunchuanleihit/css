@@ -1,10 +1,10 @@
 <#import "/spring.ftl" as s />
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-  	<link href="<@s.url '/assets/scripts/jquery.easyui/themes/default/easyui.css' />" rel="stylesheet">
-  	<link href="<@s.url '/assets/scripts/jquery.easyui/themes/icon.css' />" rel="stylesheet">
-  </head>
+	<head>
+		<link rel="stylesheet" type="text/css" href="<@s.url '/assets/scripts/jquery.easyui/themes/default/easyui.css' />">
+		<link rel="stylesheet" type="text/css" href="<@s.url '/assets/scripts/jquery.easyui/themes/icon.css' />">
+	</head>
   <body ng-app="myapp" ng-controller="OrderReturnController">
 		<div id="tabs" style="border:1px solid #dadada;">
 			<div title="订单列表" closable="true" style="padding:20px;">  

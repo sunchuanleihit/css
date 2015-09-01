@@ -1,3 +1,4 @@
+<#import "spring.ftl" as s />
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en">
 <head>
@@ -13,20 +14,21 @@
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 	<![endif]-->
-	<link rel="stylesheet" type="text/css" href="../../../assets/main/css/cloud-admin.css" >
-	<link href="../../../assets/main/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="<@s.url '/assets/main/css/cloud-admin.css' />">
+	<link rel="stylesheet" type="text/css" href="<@s.url '/assets/main/font-awesome/css/font-awesome.min.css' />">
 	<!-- DATE RANGE PICKER -->
-	<link rel="stylesheet" type="text/css" href="../../../assets/main/js/bootstrap-daterangepicker/daterangepicker-bs3.css" />
+	<link rel="stylesheet" type="text/css" href="<@s.url '/assets/main/js/bootstrap-daterangepicker/daterangepicker-bs3.css' />">
 	<!-- UNIFORM -->
-	<link rel="stylesheet" type="text/css" href="../../../assets/main/js/uniform/css/uniform.default.min.css" />
+	<link rel="stylesheet" type="text/css" href="<@s.url '/assets/main/js/uniform/css/uniform.default.min.css' />">
 	<!-- ANIMATE -->
-	<link rel="stylesheet" type="text/css" href="../../../assets/main/css/animatecss/animate.min.css" />
+	<link rel="stylesheet" type="text/css" href="<@s.url '/assets/main/css/animatecss/animate.min.css' />">
 	<!-- FONTS -->
-    <script type="text/javascript" src="../../../assets/scripts/myValidate.js"></script>
-    <script type="text/javascript" src="../../../assets/scripts/jquery-1.10.2.js"></script>
-    <script type="text/javascript" src="../../../assets/scripts/jalert/jquery.alerts.js"></script>
-    <script type="text/javascript" src="../../../assets/scripts/jalert/jquery.ui.draggable.js"></script>
-    <link rel="stylesheet" type="text/css" href="../../../assets/scripts/jalert/jquery.alerts.css" />
+	
+    <script type="text/javascript" src="<@s.url '/assets/scripts/myValidate.js' />"></script>
+    <script type="text/javascript" src="<@s.url '/assets/scripts/jquery-1.10.2.js' />"></script>
+    <script type="text/javascript" src="<@s.url '/assets/scripts/jalert/jquery.alerts.js' />"></script>
+    <script type="text/javascript" src="<@s.url '/assets/scripts/jalert/jquery.ui.draggable.js' />"></script>
+	<link rel="stylesheet" type="text/css" href="<@s.url '/assets/scripts/jalert/jquery.alerts.css' />">
     <script type="text/javascript">
         //ie浏览器，并且版本低于ie9
         function IsLessThanIE9() {
@@ -88,7 +90,9 @@
 					<div class="row">
 						<div class="col-md-4 col-md-offset-4">
 							<div id="logo">
-								<a href="#"><img src="../../../assets/main/img/2_login_logo.png")"   alt="logo name" /></a>
+								<a href="#">
+									<img src="<@s.url '/assets/main/img/2_login_logo.png' />" alt="logo name" />
+								</a>
 							</div>
 						</div>
 					</div>
@@ -133,11 +137,11 @@
 	<!-- Placed at the end of the document so the pages load faster -->
 	<!-- JQUERY -->
 	<!-- BOOTSTRAP -->
-	<script src="../../../assets/main/bootstrap-dist/js/bootstrap.min.js")"></script>
+	<script type="text/javascript" src="<@s.url '/assets/main/bootstrap-dist/js/bootstrap.min.js' />"></script>
 	<!-- UNIFORM -->
-	<script type="text/javascript" src="../../../assets/main/js/uniform/jquery.uniform.min.js")"></script>
+	<script type="text/javascript" src="<@s.url '/assets/main/js/uniform/jquery.uniform.min.js' />"></script>
 	<!-- CUSTOM SCRIPT -->
-	<script src="../../../assets/main/js/script.js")"></script>
+	<script type="text/javascript" src="<@s.url '/assets/main/js/script.js' />"></script>
 	<script>
 	    jQuery(document).ready(function () {
 	        App.setPage("login");  //Set current page
