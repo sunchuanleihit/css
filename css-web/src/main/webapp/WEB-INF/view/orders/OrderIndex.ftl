@@ -66,7 +66,6 @@
   <script src="<@s.url '/assets/viewjs/allOrder.js' />"></script>
   <script src="<@s.url '/assets/scripts/angularjs/angular.js' />"></script>
   <script src="<@s.url '/assets/scripts/CustomizeAngularjs.js' />"></script>
-  <script src="<@s.url '/assets/scripts/jquery.easyui/locale/easyui-lang-zh_CN.js' />"></script>
 	<script>
 	    //详情页作为tab
 		function GetDetailTab(id,url,tabTxt){

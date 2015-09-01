@@ -33,6 +33,7 @@ import com.loukou.css.service.redis.entity.SessionEntity;
 import com.loukou.css.util.DataGrid;
 import com.loukou.order.service.api.BkOrderService;
 import com.loukou.order.service.bo.BaseRes;
+import com.loukou.order.service.req.dto.BkOrderHandoverReqDto;
 import com.loukou.order.service.req.dto.CssOrderReqDto;
 import com.loukou.order.service.resp.dto.BkExtmMsgDto;
 import com.loukou.order.service.resp.dto.BkOrderActionRespDto;
@@ -239,30 +240,6 @@ public class OrderController extends  BaseController{
 		for(int i=0; i<titleArr.length; i++){
 			header.createCell(i).setCellValue(titleArr[i]);
 		}
-		Map<Integer,String> orderTypeMap = new HashMap<Integer, String>();
-		orderTypeMap.put(0, "退货订单");
-		orderTypeMap.put(1, "拒收订单");
-		orderTypeMap.put(2, "多付款退款");
-		orderTypeMap.put(3, "退运费");
-		orderTypeMap.put(4, "客户赔偿");
-		orderTypeMap.put(5, "其他退款");
-		orderTypeMap.put(6, "客户自己取消订单退款");
-		orderTypeMap.put(7, "特殊退款");
-		Map<Integer, String> goodsStatusMap = new HashMap<Integer, String>();
-		goodsStatusMap.put(0, "未取货");
-		goodsStatusMap.put(1, "已取货");
-		goodsStatusMap.put(2, "损耗");
-		goodsStatusMap.put(3, "待退商家");
-		goodsStatusMap.put(4, "已退商家");
-		Map<Integer, String> orderStatusMap = new HashMap<Integer, String>();
-		orderStatusMap.put(0, "初始状态");
-		orderStatusMap.put(1, "取消");
-		orderStatusMap.put(2, "无效");
-		orderStatusMap.put(3, "已审核");
-		orderStatusMap.put(5, "已提货");
-		orderStatusMap.put(14, "已发货");
-		orderStatusMap.put(15, "回单");
-		orderStatusMap.put(16, "拒单");
 		
 		for(int i=0; i<list.size(); i++){
 			HSSFRow row = sheet.createRow(i+1);
@@ -278,21 +255,9 @@ public class OrderController extends  BaseController{
 				goodsType = "服务商家";
 			}
 			row.createCell(6).setCellValue(goodsType);
-			String orderType = "";
-			if(orderTypeMap.get(dto.getOrderType())!=null){
-				orderType = orderTypeMap.get(dto.getOrderType());
-			}
-			row.createCell(7).setCellValue(orderType);
-			String orderStatus = "";
-			if(orderStatusMap.get(dto.getOrderStatus())!=null){
-				orderStatus = orderStatusMap.get(dto.getOrderStatus());
-			}
-			row.createCell(8).setCellValue(orderStatus);
-			String goodsStatus = "";
-			if(goodsStatusMap.get(dto.getGoodsStatus())!=null){
-				goodsStatus = goodsStatusMap.get(dto.getGoodsStatus());
-			}
-			row.createCell(9).setCellValue(goodsStatus);
+			row.createCell(7).setCellValue(dto.getOrderTypeStr());
+			row.createCell(8).setCellValue(dto.getOrderStatusStr());
+			row.createCell(9).setCellValue(dto.getGoodsStatusStr());
 			String statementStatus = "已退款";
 			if(dto.getStatementStatus() == 0){
 				statementStatus = "未退款";
@@ -534,4 +499,21 @@ public class OrderController extends  BaseController{
 		BaseRes<String> res=bkOrderService.generateComplaint(actor,orderSnMain,content1,addTime,userName,mobile,type,status,content2,sellerNameList,goodsNameList);
 		return res;
 	}
+	
+	@RequestMapping("/handover")
+	public String orderRemark(){
+		return "orders/orderHandover";
+	}
+	
+	@RequestMapping("/findHandover")
+	@ResponseBody
+	public DataGrid findHandover(HttpServletRequest request, int page, int rows, BkOrderHandoverReqDto reqDto){
+		DataGrid grid = new DataGrid();
+		
+		
+		
+		return grid;
+	}
+	
+	
 }
