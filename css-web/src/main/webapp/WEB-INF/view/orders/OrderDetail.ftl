@@ -7,7 +7,19 @@
 		<div class="panel panel-default"  class="text-center">
 			<div class="panel-heading">基本信息</div>
 			<div class="panel-heading">
-				<button type="button" class="btn btn-primary" id="examine" ng-click="examine(${orderDetailMsgs[0].base.orderSnMain});">保存</button>
+			<form method="post" id="orderForm">
+				<input type="hidden" name="orderSnMain" value="${orderDetailMsgs[0].base.orderSnMain}">
+				<input type="hidden" id="needShipTime" value="${orderDetailMsgs[0].base.needShipTime}">
+				<input type="text" name="needShiptime" class="form-control" placeholder="" ng-model="planArrivetime1" my97datepicker="{ dateFmt: 'yyyy-MM-dd', readOnly: true }" style="width:120px;float: left;">
+				<select name="needShiptimeSlot" class="form-control ng-pristine ng-valid" style="width:130px;float: left;margin-left: 10px;">
+				<#list timeList as time>
+				<option value="${time}">${time}</option>
+				</#list>
+				</select>
+				<button style="margin-top: 1px;" type="button" class="btn btn-primary" id="examine" ng-click="examine(${orderDetailMsgs[0].base.orderSnMain});">保存</button>
+			</form>
+			</div>
+			<div class="panel-heading">
 				<#if orderDetailMsgs[0].base.status==15>
 				<button type="button" class="btn btn-primary" id="examine" ng-click="returnGoods(${orderDetailMsgs[0].base.orderSnMain});">退货</button>
 				</#if>
@@ -182,7 +194,6 @@
 	</div>
 	</#if>
 </div>
-<script src="<@s.url '/assets/viewjs/orderdetail.js' />"></script>
 <script src="<@s.url '/assets/scripts/jquery-1.7.1.min.js' />"></script>
 <script src="<@s.url '/assets/viewjs/orderdetail.js' />"></script>
 <#include "/base/basefooter.ftl">

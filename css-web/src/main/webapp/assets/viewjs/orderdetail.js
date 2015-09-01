@@ -2,6 +2,10 @@ function opershow() {
 	$("#oper").toggle();
 }
 
+$(document).ready(function(){
+	$("#needShipTime").val("2015-09-21");
+});
+
 function OrderDetailController($scope, $http) {
 	//获取包裹商品列表
 	$scope.getordergoodslist = function(orderId) {
@@ -177,6 +181,30 @@ function OrderDetailController($scope, $http) {
 				type : "POST",
 				url : "/order/generateComplaint", 
 				data : $('#returnForm').serializeArray(),
+				dataType: "json",
+				success : function(data) {
+					if(data.code==200){
+						jAlert(data.message);
+					}else{
+						jAlert(data.message);
+					}
+				},   
+				error :function(data){
+					jAlert("系统错误");
+				}
+			});
+			}
+		});
+	}
+	
+	//修改订单期望送货时间
+	$scope.changeOrder = function() {
+		jConfirm('确认要退款吗？', '退款确认', function(r) {
+			if (r) {
+			$.ajax( {
+				type : "POST",
+				url : "/order/changeOrder", 
+				data : $('#orderForm').serializeArray(),
 				dataType: "json",
 				success : function(data) {
 					if(data.code==200){

@@ -59,6 +59,7 @@ public class OrderController extends  BaseController{
 	public String allOrder(){
 		return "orders/OrderIndex";
 	}
+	
 	@RequestMapping(value = "/orderDetail/{orderSnMain}", method = RequestMethod.GET)
 	public ModelAndView orderDetail(@PathVariable String orderSnMain,
 			ModelMap modelMap) {
@@ -69,8 +70,25 @@ public class OrderController extends  BaseController{
 			List<BkOrderListDto> orderDetailMsgs = orderDetail.getResult().getOrderList();
 			mv.addObject("orderDetailMsgs", orderDetailMsgs);
 		}
+		
+		String[] timeList = {"08:00~11:00","13:30~16:30","17:00~20:00","09:00~14:00","14:30~20:00","10:00~17:00"};
+		mv.addObject("timeList", timeList);
 		return mv;
 	}
+	
+	//修改订单期望送货时间
+	@RequestMapping(value = "/changeOrder", method = RequestMethod.POST)
+	@ResponseBody
+	public BaseRes<String> changeOrder(
+			@RequestParam(value = "orderSnMain", required = false, defaultValue = "") String orderSnMain,
+			@RequestParam(value = "needShiptime", required = false, defaultValue = "") String needShiptime,
+			@RequestParam(value = "needShiptimeSlot", required = false, defaultValue = "") String needShiptimeSlot
+			){
+		
+		BaseRes<String> res=bkOrderService.changeOrder(orderSnMain, needShiptime, needShiptimeSlot);
+		return res;
+	}
+	
 	/**
 	 * 所有订单的查询
 	 * @param request
@@ -141,6 +159,7 @@ public class OrderController extends  BaseController{
 	public String toReturn(){
 		return "orders/toReturn";
 	}
+	
 	/**
 	 * 查找待退款单
 	 * @param request
@@ -160,6 +179,7 @@ public class OrderController extends  BaseController{
 		grid.setRows(orderReturnRespDto.getResult().getOrderReturnList());
 		return grid;
 	}
+	
 	/**
 	 * 取消反向订单
 	 * @param orderIdR

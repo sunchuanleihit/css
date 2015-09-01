@@ -11,8 +11,8 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<properties>
-		<dubbo-ext.version>0.1.0</dubbo-ext.version>
-		<cat-ext.version>0.1.0</cat-ext.version>
+		<dubbo-ext.version>0.2.0</dubbo-ext.version>
+		<cat-ext.version>0.2.0</cat-ext.version>
 	</properties>
 	<dependencies>
 		<!-- dubbo -->
