@@ -68,6 +68,9 @@ public class OrderController extends  BaseController{
 			List<BkOrderListDto> orderDetailMsgs = orderDetail.getResult().getOrderList();
 			mv.addObject("orderDetailMsgs", orderDetailMsgs);
 		}
+		
+		String[] timeList = {"08:00~11:00","13:30~16:30","17:00~20:00","09:00~14:00","14:30~20:00","10:00~17:00"};
+		mv.addObject("timeList", timeList);
 		return mv;
 	}
 	/**

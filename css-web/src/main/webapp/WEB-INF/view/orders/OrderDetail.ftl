@@ -7,7 +7,15 @@
 		<div class="panel panel-default"  class="text-center">
 			<div class="panel-heading">基本信息</div>
 			<div class="panel-heading">
-				<button type="button" class="btn btn-primary" id="examine" ng-click="examine(${orderDetailMsgs[0].base.orderSnMain});">保存</button>
+				<input type="text" name="addTime" class="form-control" placeholder="" ng-model="planArrivetime1" my97datepicker="{ dateFmt: 'yyyy-MM-dd', readOnly: true }" style="width:120px;float: left;">
+				<select name="reason">
+				<#list timeList as time>
+				<option value="${time}">${time}</option>
+				</#list>
+				</select>
+				<button style="margin-top: 1px;" type="button" class="btn btn-primary" id="examine" ng-click="examine(${orderDetailMsgs[0].base.orderSnMain});">保存</button>
+			</div>
+			<div class="panel-heading">
 				<#if orderDetailMsgs[0].base.status==15>
 				<button type="button" class="btn btn-primary" id="examine" ng-click="returnGoods(${orderDetailMsgs[0].base.orderSnMain});">退货</button>
 				</#if>
