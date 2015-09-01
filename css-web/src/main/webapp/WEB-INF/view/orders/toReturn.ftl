@@ -38,7 +38,6 @@
 						<td colspan=2>
 							<input type="button" id="search_submit" value="查询" class="formbtn"/>&nbsp;&nbsp;&nbsp;
 							<input type="reset" value="重置" class="formbtn" onclick="order_return_reset()"/>&nbsp;&nbsp;
-							<input type="button" value="导出" id="exportExcel"/>
 						</td>
 					</tr>
 				 </table>

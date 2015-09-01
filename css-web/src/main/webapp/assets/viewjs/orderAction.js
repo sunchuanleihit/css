@@ -1,7 +1,6 @@
 function showOrderAction(orderSnMain){
 	$("#table").datagrid({
 		url:"findOrderAction",  
-        height:500,
         queryParams:{
 			"orderSnMain":orderSnMain
 		},

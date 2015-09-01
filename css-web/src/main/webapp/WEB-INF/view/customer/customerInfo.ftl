@@ -21,9 +21,8 @@
         <div id="_couponsn_"></div>
     </div>  
     <div title="淘心卡" data-options="iconCls:'icon-reload',closable:true" style="padding:20px;">  
-        <div>客户淘心卡</div>
         <div id="_txk_"></div>
-        <div>淘心卡支付明细</div>
+		<div style="height:30px;"></div>
         <div id="_txk_details"></div>
     </div>  
 </div>

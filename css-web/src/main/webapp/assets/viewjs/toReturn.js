@@ -34,7 +34,7 @@ $(document).ready(function(){
 		title:"待退款订单列表",
 		pagination:true,
 		pageSize:20,
-		pageList:[10,20,30,40,50,100],
+		pageList:[20,30,40,50,100],
 		rownumbers:true,
 		nowrap:false,
 		url:"/order/findToReturn",
@@ -42,12 +42,16 @@ $(document).ready(function(){
 			"refundStatus":0
 		},
 		onDblClickRow:return_order_detail,
-		toolbar:[
-				{
+		toolbar:[{
 					id:'cancelReturn',
 					text:'取消反向订单',
 					iconCls:'icon-cancel',
 					handler:cancelOrderReturn
+				},{
+					id:'exportReturn',
+					text:'导出',
+					iconCls:'icon-save',
+					handler:toExportExcel
 				}
 			]
 	});
@@ -97,11 +101,6 @@ $(document).ready(function(){
 					"refundStatus":refundStatus
 			};
 			$("#table").datagrid("load",params);
-		}
-	});
-	$("#exportExcel").bind({
-		click:function(){
-			toExportExcel();
 		}
 	});
 	

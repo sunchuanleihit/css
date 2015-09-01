@@ -24,7 +24,6 @@ $(document).ready(function(){
 		width: 'auto',
 		pagination:true,
 		pageSize:20,
-		height: 500,
 		striped:false,
 		rownumbers:true,
 		columns:noreturnfields,

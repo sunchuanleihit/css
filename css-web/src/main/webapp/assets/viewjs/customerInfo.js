@@ -8,8 +8,7 @@ $(function(){
     });
     $("#_custom_orders_").datagrid({
         url:"customerOrders",  
-        width:2600,
-        height:500,
+        title:"客户订单",
         pagination:true,
         rownumbers:true,
         singleSelect:true,
@@ -49,7 +48,7 @@ $(function(){
     });
     $("#_dummy_acct_").datagrid({
         url:"virtualAccount",
-        height:500,
+        title:"虚拟账户",
         pagination:true,
         rownumbers:true,
         singleSelect:true,
@@ -70,7 +69,7 @@ $(function(){
     });
     $("#_couponsn_").datagrid({
         url:"couponList",
-        height:500,
+        title:"优惠券",
         pagination:true,
         rownumbers:true,
         singleSelect:true,
@@ -112,7 +111,7 @@ $(function(){
     }
     $("#_txk_").datagrid({
         url:"txkList",
-        height:100,
+        title:"客户淘心卡",
         queryParams:{
 			"buyerId":uid
 		},
@@ -128,7 +127,7 @@ $(function(){
     });
     $("#_txk_details").datagrid({
         url:"txkRecord",
-        height:400,
+        title:"淘心卡支付明细",
         queryParams:{
 			"buyerId":uid
 		},
