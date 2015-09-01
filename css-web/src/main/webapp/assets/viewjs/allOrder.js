@@ -6,7 +6,7 @@ var fields=[[
 			{field:'source',title:'订单来源',width:120,sortable:false},
 			{field:'needShiptime',title:'期望送货时间',width:140,sortable:false},
 			{field:'status',title:'订单状态',width:80,sortable:false},
-			{field:'needInvoice',title:'是否开票',formatter:yesOrNoFormat,width:80,sortable:false},
+			{field:'needInvoice',title:'是否开票',formatter:needInvoice,width:80,sortable:false},
 			{field:'invoiceNo',title:'开票号码',width:80,sortable:false},
 			{field:'buyerName',title:'注册用户名',width:80,sortable:false},
 			{field:'payNames',title:'付款方式',width:80,sortable:false},
@@ -40,19 +40,19 @@ $(document).ready(function(){
 		columns:fields,
 		onDblClickRow:order_detail//查看订单详情
 	});
-	$("#start_time").datebox({
+	$("#startTime").datebox({
 		formatter:formatDate
 	});
-	$("#end_time").datebox({
+	$("#endTime").datebox({
 		formatter:formatDate
 	});
 	
 	$("#search_submit").bind({
 		click: function(){
-			var orderSnMain = $("#order_sn_main").val();
+			var orderSnMain = $("#orderSnMain").val();
 			var consignee = $("#consignee").val();
-			var startTime = $("#start_time").datebox("getValue");
-			var endTime = $("#end_time").datebox("getValue");
+			var startTime = $("#startTime").datebox("getValue");
+			var endTime = $("#endTime").datebox("getValue");
 			var status = $("#status").val();
 			var queryType = $("#queryType").val();
 			var queryContent = $("#queryContent").val();
@@ -73,12 +73,6 @@ $(document).ready(function(){
 		}
 	});
 });
-//设置不同状态下订单编号的样式
-function ordersn_style(value,data,index){
-	if(data.status==0){
-		return "background-color:yellow;";
-	}
-}
 function yesOrNoFormat(yesOrNo){
 	if(yesOrNo){
 		return "是";
@@ -88,7 +82,7 @@ function yesOrNoFormat(yesOrNo){
 }
 
 //是否需要开票
-function need_invoice(rs){
+function needInvoice(rs){
 	rs=parseInt(rs);
 	switch(rs){
 		case 0:

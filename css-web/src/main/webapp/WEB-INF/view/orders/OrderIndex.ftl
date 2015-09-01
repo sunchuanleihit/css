@@ -1,17 +1,18 @@
+<#import "/spring.ftl" as s />
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  	<link href="../../assets/scripts/jquery.easyui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-	<link href="../../assets/scripts/jquery.easyui/themes/icon.css" rel="stylesheet" type="text/css" />
+  	<link href="<@s.url '/assets/scripts/jquery.easyui/themes/default/easyui.css' />" rel="stylesheet">
+  	<link href="<@s.url '/assets/scripts/jquery.easyui/themes/icon.css' />" rel="stylesheet">
   </head>
   <body ng-app="myapp">
 		<div id="panel" style="padding:20px;border:1px solid #dadada;" ng-controller="OrderIndexController">
-			<form id="search_form">
+			<form>
 				<table>
                 	<tr>
-						<td>订单号</td><td><input type="text" name="order_sn_main" id="order_sn_main"/></td>
+						<td>订单号</td><td><input type="text" id="orderSnMain"/></td>
 						<td>会员用户名</td><td><input type="text" id="buyerName"/></td>
-						<td>单据日期</td><td><input type="text" id="start_time" name="start_time"/>--</td><td><input type="text" id="end_time" name="end_time"/></td>
+						<td>单据日期</td><td><input type="text" id="startTime"/>--</td><td><input type="text" id="endTime"/></td>
 						<td>订单状态</td>
                         <td>
                         	<select id="status" name="status" style="100px;">  
@@ -39,18 +40,17 @@
                       	  	</select>
                       	  </td>
                       	  <td>查询类型</td>
-                      	  <td>
+                      	  <td colspan=2>
                       	  	<select id="queryType">
                       	  		<option value="consignee">收货人姓名</option>
                       	  		<option value="phoneMob">收货人手机</option>
                       	  		<option value="phoneTel">收货人电话</option>
                       	  		<option value="city">城市</option>
                       	  	</select>
+                      	  	<input type="text" id="queryContent">
                       	  </td>
-                      	  <td><input type="text" id="queryContent"></td>
-                      	  <td></td>
-                      	  <td>
-                      	  	<input type="button" id="search_submit" value="查询" class="formbtn"/>&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="formbtn"/>
+                      	  <td colspan=2>&nbsp;&nbsp;
+                      	  	<input type="button" id="search_submit" value="查询" class="btn"/>&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="formbtn"/>
                       	  </td> 
                   	</tr>
 				</table>
@@ -60,13 +60,13 @@
         <div id="table"></div>
     </div>
   </body>
-  <script type="text/javascript" src="../../assets/scripts/jquery-1.7.1.min.js"></script>
-  <script type="text/javascript" src="../../assets/scripts/jquery.easyui/jquery.easyui.min.js"></script>
-  <script type="text/javascript" src="../../assets/scripts/jquery.easyui/locale/easyui-lang-zh_CN.js"></script>
-  <script type="text/javascript" src="../../assets/viewjs/allOrder.js"></script>
-  <script src="/assets/scripts/angularjs/angular.js"></script>
-  <script src="/assets/scripts/CustomizeAngularjs.js"></script>
-  <script type="text/javascript" src="/assets/scripts/jquery.easyui/locale/easyui-lang-zh_CN.js"></script>
+  <script src="<@s.url '/assets/scripts/jquery-1.7.1.min.js' />"></script>
+  <script src="<@s.url '/assets/scripts/jquery.easyui/jquery.easyui.min.js' />"></script>
+  <script src="<@s.url '/assets/scripts/jquery.easyui/locale/easyui-lang-zh_CN.js' />"></script>
+  <script src="<@s.url '/assets/viewjs/allOrder.js' />"></script>
+  <script src="<@s.url '/assets/scripts/angularjs/angular.js' />"></script>
+  <script src="<@s.url '/assets/scripts/CustomizeAngularjs.js' />"></script>
+  <script src="<@s.url '/assets/scripts/jquery.easyui/locale/easyui-lang-zh_CN.js' />"></script>
 	<script>
 	    //详情页作为tab
 		function GetDetailTab(id,url,tabTxt){

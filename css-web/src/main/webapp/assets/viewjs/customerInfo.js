@@ -19,7 +19,6 @@ $(function(){
         nowrap:false,
         pageSize:20,
         pageList:[20,40,60],
-        onDblClickRow:order_detail,
         columns:[[
 			{field:'orderSnMain',title:'订单编号',width:120,sortable:false},
 			{field:'cityName',title:'城市',width:120,sortable:false},
@@ -60,7 +59,6 @@ $(function(){
         pageNumber:1,
         pageSize:20,
         pageList:[20,40,60],
-        onDblClickRow:order_detail,
         columns:[[
             {field:'orderSnMain',title:'订单号',width:150},
             {field:'buyerName',title:'用户名',width:150},
@@ -140,7 +138,6 @@ $(function(){
         pageNumber:1,
         pageSize:20,
         pageList:[20,40,60],
-        onDblClickRow:order_detail,
         columns:[[
             {field:'orderCode',title:'订单号',width:130},
             {field:'useTime',title:'消费时间',width:150},

@@ -1,14 +1,15 @@
+<#import "/spring.ftl" as s />
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  	<link href="../../assets/scripts/jquery.easyui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-	<link href="../../assets/scripts/jquery.easyui/themes/icon.css" rel="stylesheet" type="text/css" />
+  	<link href="<@s.url '/assets/scripts/jquery.easyui/themes/default/easyui.css' />" rel="stylesheet">
+  	<link href="<@s.url '/assets/scripts/jquery.easyui/themes/icon.css' />" rel="stylesheet">
   </head>
   <body ng-app="myapp" ng-controller="OrderToReturnController">
   	<div id="order_return_manage">
 		<div title="待退款订单" closable="true" style="padding:20px;">  
 			<div id="order_return_search" style="padding:20px;border:1px solid #dadada;">
-				<form id="order_return_form">
+				<form>
 					<table>
 					  <tr>
 						<td>订单号:</td><td><input type="text" id="orderSnMain" /></td>
@@ -34,7 +35,7 @@
 								<option value="1">已退款</option>
 							</select>
 						</td>
-						<td>
+						<td colspan=2>
 							<input type="button" id="search_submit" value="查询" class="formbtn"/>&nbsp;&nbsp;&nbsp;
 							<input type="reset" value="重置" class="formbtn" onclick="order_return_reset()"/>&nbsp;&nbsp;
 							<input type="button" value="导出" id="exportExcel"/>
@@ -51,12 +52,12 @@
 		<input type="hidden" name="orderIdRs" id="orderIds">
 	</form>
   </body>
-  <script type="text/javascript" src="../../assets/scripts/jquery-1.7.1.min.js"></script>
-  <script type="text/javascript" src="../../assets/scripts/jquery.easyui/jquery.easyui.min.js"></script>
-  <script type="text/javascript" src="../../assets/scripts/jquery.easyui/locale/easyui-lang-zh_CN.js"></script>
-  <script type="text/javascript" src="../../assets/viewjs/toReturn.js"></script>
-  <script src="/assets/scripts/angularjs/angular.js"></script>
-  <script src="/assets/scripts/CustomizeAngularjs.js"></script>
+  <script src="<@s.url '/assets/scripts/jquery-1.7.1.min.js' />"></script>
+  <script src="<@s.url '/assets/scripts/jquery.easyui/jquery.easyui.min.js' />"></script>
+  <script src="<@s.url '/assets/scripts/jquery.easyui/locale/easyui-lang-zh_CN.js' />"></script>
+  <script src="<@s.url '/assets/viewjs/toReturn.js' />"></script>
+  <script src="<@s.url '/assets/scripts/angularjs/angular.js' />"></script>
+  <script src="<@s.url '/assets/scripts/CustomizeAngularjs.js' />"></script>
   <script>
     //详情页作为tab
 	function GetDetailTab(id,url,tabTxt){
