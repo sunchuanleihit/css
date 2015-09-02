@@ -12,7 +12,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -39,9 +38,9 @@ import com.loukou.order.service.resp.dto.BkOrderActionRespDto;
 import com.loukou.order.service.resp.dto.BkOrderListBaseDto;
 import com.loukou.order.service.resp.dto.BkOrderListDto;
 import com.loukou.order.service.resp.dto.BkOrderListRespDto;
+import com.loukou.order.service.resp.dto.BkOrderPayDto;
 import com.loukou.order.service.resp.dto.BkOrderReturnDto;
 import com.loukou.order.service.resp.dto.BkOrderReturnListRespDto;
-import com.loukou.order.service.resp.dto.BkOrderPayDto;
 import com.loukou.order.service.resp.dto.GoodsListDto;
 
 @Controller
@@ -83,8 +82,7 @@ public class OrderController extends  BaseController{
 			@RequestParam(value = "needShiptime", required = false, defaultValue = "") String needShiptime,
 			@RequestParam(value = "needShiptimeSlot", required = false, defaultValue = "") String needShiptimeSlot
 			){
-		
-		BaseRes<String> res=bkOrderService.changeOrder(orderSnMain, needShiptime, needShiptimeSlot);
+		BaseRes<String> res=bkOrderService.changeOrder(orderSnMain,needShiptime,needShiptimeSlot);
 		return res;
 	}
 	
@@ -553,5 +551,48 @@ public class OrderController extends  BaseController{
 		
 		BaseRes<String> res=bkOrderService.generateComplaint(actor,orderSnMain,content1,addTime,userName,mobile,type,status,content2,sellerNameList,goodsNameList);
 		return res;
+	}
+	
+	//作废订单
+	@RequestMapping(value = "/cancelSubOrder", method = RequestMethod.GET)
+	@ResponseBody
+	public BaseRes<String> cancelSubOrder(@RequestParam int orderId){
+		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
+		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
+		
+		BaseRes<String> res=bkOrderService.cancelSubOrder(orderId,actor);
+		return res;
+	}
+	
+	//取消作废订单
+	@RequestMapping(value = "/resetCancelSubOrder", method = RequestMethod.GET)
+	@ResponseBody
+	public BaseRes<String> resetCancelSubOrder(@RequestParam int orderId){
+		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
+		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
+		
+		BaseRes<String> res=bkOrderService.resetCancelSubOrder(orderId,actor);
+		return res;
+	}
+	
+	//支付订单
+	@RequestMapping(value = "/paySubOrder", method = RequestMethod.GET)
+	@ResponseBody
+	public BaseRes<String> paySubOrder(@RequestParam String orderSnMain,@RequestParam int payId){
+		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
+		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
+		
+		BaseRes<String> res=bkOrderService.paySubOrder(orderSnMain,actor,payId);
+		return res;
+	}
+	
+	@RequestMapping(value="/orderPayList")
+	public ModelAndView orderPayList(HttpServletRequest request, HttpServletResponse response){
+		String orderSnMain = request.getParameter("orderSnMain");
+		ModelAndView mv = new ModelAndView("orders/orderPayList");
+		List<BkOrderPayDto> AllOrderPayList = bkOrderService.getPaymentList();
+		mv.addObject("AllOrderPayList", AllOrderPayList);
+		mv.addObject("orderSnMain", orderSnMain);
+		return mv;
 	}
 }

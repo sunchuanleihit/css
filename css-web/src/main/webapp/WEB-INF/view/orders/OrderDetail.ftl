@@ -16,25 +16,25 @@
 				<option value="${time}">${time}</option>
 				</#list>
 				</select>
-				<button style="margin-top: 1px;" type="button" class="btn btn-primary" id="examine" ng-click="examine(${orderDetailMsgs[0].base.orderSnMain});">保存</button>
+				<button style="margin-top: 1px;" type="button" class="btn btn-primary" ng-click="changeOrder(${orderDetailMsgs[0].base.orderSnMain});">保存</button>
 			</form>
 			</div>
 			<div class="panel-heading">
 				<#if orderDetailMsgs[0].base.status==15>
-				<button type="button" class="btn btn-primary" id="examine" ng-click="returnGoods(${orderDetailMsgs[0].base.orderSnMain});">退货</button>
+				<button type="button" class="btn btn-primary" ng-click="returnGoods(${orderDetailMsgs[0].base.orderSnMain});">退货</button>
 				</#if>
 				<#if orderDetailMsgs[0].base.status==2>
-				<button type="button" class="btn btn-primary" id="examine" ng-click="multiplePaymentRefund(${orderDetailMsgs[0].base.orderSnMain});">多付款退款</button>
+				<button type="button" class="btn btn-primary" ng-click="multiplePaymentRefund(${orderDetailMsgs[0].base.orderSnMain});">多付款退款</button>
 				</#if>
-				<button type="button" class="btn btn-primary" id="examine" ng-click="showOrderAction(${orderDetailMsgs[0].base.orderSnMain});">详细</button>
+				<button type="button" class="btn btn-primary" ng-click="showOrderAction(${orderDetailMsgs[0].base.orderSnMain});">详细</button>
 				<#if orderDetailMsgs[0].base.status!=1 && orderDetailMsgs[0].base.status!=2>
-				<button type="button" class="btn btn-primary" id="examine" ng-click="cancel(${orderDetailMsgs[0].base.orderSnMain});">作废[操作优惠券]</button>
+				<button type="button" class="btn btn-primary" ng-click="cancel(${orderDetailMsgs[0].base.orderSnMain});">作废[操作优惠券]</button>
 				</#if>
 				<#if orderDetailMsgs[0].base.status==1 || orderDetailMsgs[0].base.status==2>
-				<button type="button" class="btn btn-primary" id="examine" ng-click="resetCancel(${orderDetailMsgs[0].base.orderSnMain});">取消作废[操作优惠券]</button>
+				<button type="button" class="btn btn-primary" ng-click="resetCancel(${orderDetailMsgs[0].base.orderSnMain});">取消作废[操作优惠券]</button>
 				</#if>
-				<button type="button" class="btn btn-primary" id="examine" ng-click="showCustomInfo(${orderDetailMsgs[0].base.buyerId});">客户信息</button>
-				<button type="button" class="btn btn-primary" id="examine" ng-click="complaintMsg(${orderDetailMsgs[0].base.orderSnMain});">投诉</button>
+				<button type="button" class="btn btn-primary" ng-click="showCustomInfo(${orderDetailMsgs[0].base.buyerId});">客户信息</button>
+				<button type="button" class="btn btn-primary" ng-click="complaintMsg(${orderDetailMsgs[0].base.orderSnMain});">投诉</button>
 			</div>
 			  <div class="panel-body">
 			  	 <table style="width:100%">
@@ -91,30 +91,36 @@
 	<div class="row">
 		<div class="panel panel-default"  class="text-center">
 			<div class="panel-heading">订单信息</div>
+			<div class="panel-heading">
+				<button type="button" class="btn btn-primary" ng-click="cancelSubOrder();">子订单作废[不操作优惠券]</button>
+				<button type="button" class="btn btn-primary" ng-click="resetCancelSubOrder();">子订单取消作废[不操作优惠券]</button>
+				<button type="button" class="btn btn-primary" ng-click="paySubOrderHtml(${orderDetailMsgs[0].base.orderSnMain});">支付订单</button>
+				<input type="hidden" name="subOrderId" id="subOrderId">
+			</div>
 			  <div class="panel-body">
 			  <table class="table table-hover">
-	  			  <thead>
-	  				<tr>
-	  					<th class="text-center">订单编号</th>
-	  					<th class="text-center">商家名称</th>
-	  					<th class="text-center">订单状态</th>
-	  					<th class="text-center">付款方式</th>
-	  					<th class="text-center">支付状态</th>
-	  					<th class="text-center">商品金额</th>
-	  					<th class="text-center">折扣金额</th>
-	  					<th class="text-center">物流费</th>
-	  					<th class="text-center">订单总额</th>		
-	  					<th class="text-center">开票方</th> 
-	  					<th class="text-center">配送方式</th>
-	  					<th class="text-center">快递公司</th>
-	  					<th class="text-center">快递单号</th>
-	  					<th class="text-center">送货日期</th>
-	  					<th class="text-center">送货时间段</th>			
-	  				</tr>
-	  			  </thead>
-	  			  <tbody>
-	  			  	<#list orderDetailMsgs as order>
-					<tr style="cursor:pointer" ng-click="getordergoodslist(${order.base.orderId?c});">
+				  <thead>
+					<tr>
+						<th class="text-center">订单编号</th>
+						<th class="text-center">商家名称</th>
+						<th class="text-center">订单状态</th>
+						<th class="text-center">付款方式</th>
+						<th class="text-center">支付状态</th>
+						<th class="text-center">商品金额</th>
+						<th class="text-center">折扣金额</th>
+						<th class="text-center">物流费</th>
+						<th class="text-center">订单总额</th>		
+						<th class="text-center">开票方</th> 
+						<th class="text-center">配送方式</th>
+						<th class="text-center">快递公司</th>
+						<th class="text-center">快递单号</th>
+						<th class="text-center">送货日期</th>
+						<th class="text-center">送货时间段</th>			
+					</tr>
+				  </thead>
+				  <tbody>
+				  	<#list orderDetailMsgs as order>
+					<tr style="cursor:pointer" ng-click="getordergoodslist(${order.base.orderId});">
 					  <td class="text-center">${order.base.taoOrderSn?default("")}</td>
 					  <td class="text-center">${order.base.sellerName}</td>
 					  <td class="text-center">${order.base.statusName?default("")}</td>
@@ -173,24 +179,21 @@
 	</div>
 	<#if orderDetailMsgs[0].base.orderCode??>
 	<div class="row">
-			<table style="width:100%;">
-				<tr>
-					<td align="center">
-						<#if order.base.orderState==0>
-						<button type="button" class="btn btn-primary" id="examine" ng-click="examine(${orderDetailMsgs[0].base.orderId});">审核</button>
-						</#if>
-						<#if order.base.orderState==1 || order.base.orderState==0>
-						<button type="button" class="btn btn-primary" id="cancel" ng-click="cancel(${orderDetailMsgs[0].base.orderId});">作废</button>
-						</#if>
-						<#if order.base.orderState==2>
-						<button type="button" class="btn btn-primary" id="close" ng-click="close(${orderDetailMsgs[0].base.orderId});">关闭</button>
-						</#if>
-						<#if order.base.orderState==9>
-						<button type="button" class="btn btn-primary" id="btnDelete">删除</button>
-						</#if>
-					</td>
-				</tr>
-			</table>
+		<table style="width:100%;">
+			<tr>
+				<td align="center">
+					<#if order.base.orderState==1 || order.base.orderState==0>
+					<button type="button" class="btn btn-primary" id="cancel" ng-click="cancel(${orderDetailMsgs[0].base.orderId});">作废</button>
+					</#if>
+					<#if order.base.orderState==2>
+					<button type="button" class="btn btn-primary" id="close" ng-click="close(${orderDetailMsgs[0].base.orderId});">关闭</button>
+					</#if>
+					<#if order.base.orderState==9>
+					<button type="button" class="btn btn-primary" id="btnDelete">删除</button>
+					</#if>
+				</td>
+			</tr>
+		</table>
 	</div>
 	</#if>
 </div>
