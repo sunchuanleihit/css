@@ -11,11 +11,10 @@ $(function(){
         title:"客户订单",
         pagination:true,
         rownumbers:true,
-        singleSelect:true,
         queryParams:{
 			"buyerId":uid
 		},
-        nowrap:false,
+        nowrap:true,
         pageSize:20,
         pageList:[20,40,60],
         columns:[[
@@ -35,7 +34,7 @@ $(function(){
 			{field:'orderNotPaid',title:'未付金额',formatter:doubleFormat,width:80,sortable:false},
 			{field:'consignee',title:'收件人姓名',width:80,sortable:false},
 			{field:'regionName',title:'地区',width:80,sortable:false},
-			{field:'address',title:'详细地址',width:80,sortable:false},
+			{field:'address',title:'详细地址',width:180,sortable:false},
 			{field:'phoneMob',title:'电话',width:80,sortable:false},
 			{field:'isPrint',title:'是否打单',formatter:yesOrNoFormat,width:80,sortable:false},
 			{field:'payStatus',title:'是否付款',formatter:f_pay_status,width:80,sortable:false},
@@ -50,8 +49,8 @@ $(function(){
         url:"virtualAccount",
         title:"虚拟账户",
         pagination:true,
+        nowrap:true,
         rownumbers:true,
-        singleSelect:true,
         queryParams:{
 			"buyerId":uid
 		},
@@ -72,7 +71,7 @@ $(function(){
         title:"优惠券",
         pagination:true,
         rownumbers:true,
-        singleSelect:true,
+        nowrap:true,
         queryParams:{
 			"buyerId":uid
 		},
@@ -116,7 +115,7 @@ $(function(){
 			"buyerId":uid
 		},
         rownumbers:true,
-        singleSelect:true,
+        nowrap:true,
         columns:[[
             {field:'cardnum',title:'淘心卡卡号',width:130},
             {field:'amount',title:'面额',width:80},

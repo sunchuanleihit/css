@@ -73,6 +73,15 @@ public class OrderController extends  BaseController{
 		
 		String[] timeList = {"08:00~11:00","13:30~16:30","17:00~20:00","09:00~14:00","14:30~20:00","10:00~17:00"};
 		mv.addObject("timeList", timeList);
+		
+		//判断订单下是否有留言
+		List<BkOrderRemarkDto> remarkList = bkOrderService.queryOrderRemark(orderSnMain, 0);
+		if(remarkList!=null && remarkList.size()>0){
+			mv.addObject("remarkCount", remarkList.size());
+		}else{
+			mv.addObject("remarkCount",	0);
+		}
+		
 		return mv;
 	}
 	
@@ -579,14 +588,18 @@ public class OrderController extends  BaseController{
 		bkOrderService.addOrderRemark(userName, orderSnMain, content, type);
 		return "success";
 	}
-	@RequestMapping("/getOrderHandover")
+	@RequestMapping("/getOrderRemark")
 	@ResponseBody
 	public List<BkOrderRemarkDto> getOrderHanderover(HttpServletRequest request, HttpServletResponse response){
 		String orderSnMain = request.getParameter("orderSnMain");
-		List<BkOrderRemarkDto> resultList = bkOrderService.queryHandoverByOrderSnMain(orderSnMain);
+		String typeStr = request.getParameter("type");
+		if(StringUtils.isBlank(orderSnMain) || StringUtils.isBlank(typeStr)){
+			return new ArrayList<BkOrderRemarkDto>();
+		}
+		Integer type = Integer.parseInt(typeStr);
+		List<BkOrderRemarkDto> resultList = bkOrderService.queryOrderRemark(orderSnMain,type);
 		return resultList;
 	}
-	
 	
 	//作废订单
 	@RequestMapping(value = "/cancelSubOrder", method = RequestMethod.GET)
@@ -628,6 +641,16 @@ public class OrderController extends  BaseController{
 		ModelAndView mv = new ModelAndView("orders/orderPayList");
 		List<BkOrderPayDto> AllOrderPayList = bkOrderService.getPaymentList();
 		mv.addObject("AllOrderPayList", AllOrderPayList);
+		mv.addObject("orderSnMain", orderSnMain);
+		return mv;
+	}
+	
+	@RequestMapping(value="/showOrderRemark")
+	public ModelAndView showOrderRemark(HttpServletRequest request, HttpServletResponse response){
+		String orderSnMain = request.getParameter("orderSnMain");
+		ModelAndView mv = new ModelAndView("orders/showOrderRemarks");
+//		List<BkOrderRemarkDto> resultList = bkOrderService.queryOrderRemark(orderSnMain,type);
+//		mv.addObject("resultList", resultList);
 		mv.addObject("orderSnMain", orderSnMain);
 		return mv;
 	}

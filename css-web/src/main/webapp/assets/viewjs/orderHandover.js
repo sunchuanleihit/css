@@ -223,9 +223,14 @@ function show(){
 	}
 	var orderSnMain = selections[0].orderSnMain;
 	$("#handoverOrderSnMain").val(orderSnMain);
-	var param = {"orderSnMain":orderSnMain};
+	$("#handoverInfo").html("");
+	$("#handoverContent").val("");
+	var param = {
+			"orderSnMain":orderSnMain,
+			"type":1
+	};
 	$.ajax({
-		url:"getOrderHandover",
+		url:"getOrderRemark",
 		data:param,
 		success: function(result){
 			var divs = "";

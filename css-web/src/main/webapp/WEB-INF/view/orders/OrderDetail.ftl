@@ -35,6 +35,11 @@
 				</#if>
 				<button type="button" class="btn btn-primary" ng-click="showCustomInfo(${orderDetailMsgs[0].base.buyerId});">客户信息</button>
 				<button type="button" class="btn btn-primary" ng-click="complaintMsg(${orderDetailMsgs[0].base.orderSnMain});">投诉</button>
+				<button type="button" class="btn btn-primary" ng-click="showOrderRemark(${orderDetailMsgs[0].base.orderSnMain});">备注
+					<#if (remarkCount > 0) >
+						<span style="color:pink">(${remarkCount})</span>
+					</#if>
+				</button>
 			</div>
 			  <div class="panel-body">
 			  	 <table style="width:100%">

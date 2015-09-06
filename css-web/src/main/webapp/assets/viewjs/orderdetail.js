@@ -332,4 +332,49 @@ function OrderDetailController($scope, $http) {
 			}
 		});
 	}
+	
+	$scope.showOrderRemark = function(orderSnMain){
+		$.colorbox({
+            href: "/order/showOrderRemark?orderSnMain=" + orderSnMain,
+            iframe: true,
+            width: "600px",
+            height: "420px",
+            top: "100px",
+            opacity: 0,
+            overlayClose: false,
+            scrolling: true
+        });
+		
+	}
+	
 }
+
+function getRemark(){
+	var orderSnMain = $("#orderSnMain").val();
+	var type = $("input[name='orderOrHandover']:checked").val();
+	var param = {
+			"orderSnMain":orderSnMain,
+			"type":type
+	};
+	$.ajax({
+		url:"/order/getOrderRemark",
+		data:param,
+		type: "POST",
+		success: function(result){
+			var divs = "";
+			for(var i=0; i<result.length; i++){
+				var handover = result[i];
+				var div = "<div style='margin-top:5px;margin-left:10px;'>" + handover.user;
+				if(handover.closed == 0){
+					div += ":<span style='color:red;'>";
+				}else{
+					div += ":<span style='color:green;'>";
+				}
+				div += handover.content+"</span><span style='float:right;margin-right:5px;'>["+handover.time+"]</span></div>";
+				divs += div;
+			}
+			$("#remarkInfo").html(divs);
+		}
+	});
+}
+
