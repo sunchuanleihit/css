@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.loukou.css.annotation.AuthPassport;
 import com.loukou.css.processor.UserProcessor;
 import com.loukou.css.resp.CssOrderShow;
 import com.loukou.css.service.redis.entity.SessionEntity;
@@ -47,7 +48,7 @@ import com.loukou.order.service.resp.dto.GoodsListDto;
 
 @Controller
 @RequestMapping("/order")
-//@AuthPassport
+@AuthPassport
 public class OrderController extends  BaseController{
 	@Autowired
 	private BkOrderService bkOrderService;
