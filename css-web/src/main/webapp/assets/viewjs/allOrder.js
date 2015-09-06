@@ -118,7 +118,6 @@ function order_detail(index,rowData){
 	var appElement = document.querySelector('[ng-controller=OrderIndexController]');
 	var $scope = angular.element(appElement).scope(); 
 	$scope.orderDetail(rowData['orderSnMain']);
-
 }
 
 //刷新订单列表

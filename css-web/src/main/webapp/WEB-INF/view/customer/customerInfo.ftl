@@ -10,7 +10,7 @@
 </style>
 <input type="hidden" id="buyerId" value="${buyerId}">
 <!--Tabs-->
-<div id="custom_tabs" class="easyui-tabs" style="height:600px;">  
+<div id="custom_tabs" class="easyui-tabs">  
     <div title="客户订单" style="padding:20px;">  
         <div id="_custom_orders_"></div>
     </div>  

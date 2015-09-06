@@ -28,9 +28,9 @@ $(document).ready(function(){
 		rownumbers:true,
 		columns:noreturnfields,
 		onDblClickRow:order_detail//查看订单详情
-	
+		
 	});
-
+	
 	$("#no_return_search_submit").click(function(){
 		var orderSnMain = $("#orderSnMain").val();
 		var buyerName = $("#buyerName").val();

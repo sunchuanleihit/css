@@ -118,7 +118,6 @@ function OrderDetailController($scope, $http) {
 	
 	//获取特殊退款页面
 	$scope.specialPaymentRefundBox = function(){
-		alert(1);
 		var orderSnMain=$('#orderSnMain').val();
 		if(!orderSnMain){
 			jAlert("请输入订单号");

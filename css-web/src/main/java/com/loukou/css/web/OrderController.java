@@ -2,17 +2,15 @@ package com.loukou.css.web;
 
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -33,7 +31,7 @@ import com.loukou.css.service.redis.entity.SessionEntity;
 import com.loukou.css.util.DataGrid;
 import com.loukou.order.service.api.BkOrderService;
 import com.loukou.order.service.bo.BaseRes;
-import com.loukou.order.service.req.dto.BkOrderHandoverReqDto;
+import com.loukou.order.service.req.dto.BkOrderRemarkReqDto;
 import com.loukou.order.service.req.dto.CssOrderReqDto;
 import com.loukou.order.service.resp.dto.BkExtmMsgDto;
 import com.loukou.order.service.resp.dto.BkOrderActionRespDto;
@@ -43,6 +41,8 @@ import com.loukou.order.service.resp.dto.BkOrderListRespDto;
 import com.loukou.order.service.resp.dto.BkOrderReturnDto;
 import com.loukou.order.service.resp.dto.BkOrderReturnListRespDto;
 import com.loukou.order.service.resp.dto.BkOrderPayDto;
+import com.loukou.order.service.resp.dto.BkOrderRemarkDto;
+import com.loukou.order.service.resp.dto.BkOrderRemarkListRespDto;
 import com.loukou.order.service.resp.dto.GoodsListDto;
 
 @Controller
@@ -527,12 +527,65 @@ public class OrderController extends  BaseController{
 	
 	@RequestMapping("/findHandover")
 	@ResponseBody
-	public DataGrid findHandover(HttpServletRequest request, int page, int rows, BkOrderHandoverReqDto reqDto){
+	public DataGrid findHandover(HttpServletRequest request, int page, int rows, BkOrderRemarkReqDto reqDto){
 		DataGrid grid = new DataGrid();
-		
-		
-		
+		BkOrderRemarkListRespDto respDto = bkOrderService.queryHandover(page, rows, reqDto);
+		grid.setTotal(respDto.getTotal());
+		grid.setRows(respDto.getBkOrderRemarkList());
 		return grid;
+	}
+	
+	@RequestMapping("/closeOrderRemark")
+	@ResponseBody
+	public String closeOrderRemark(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{
+		String ids = request.getParameter("ids");
+		if(StringUtils.isBlank(ids)){
+			return "none";
+		}
+		SessionEntity sessionEntity= this.getWhSessionEntity();
+		if(sessionEntity == null){
+			return "login";
+		}
+		String userName = sessionEntity.getUserName();
+		if(StringUtils.isBlank(userName)){
+			return "login";
+		}
+		String[] idArr = ids.split(",");
+		for(String id: idArr){
+			if(StringUtils.isNotBlank(id)){
+				bkOrderService.closeOrderRemark(userName, Integer.parseInt(id));
+			}
+		}
+		return "success";
+	}
+	
+	@RequestMapping("/addOrderRemark")
+	@ResponseBody
+	public String addOrderRemark(HttpServletRequest request, HttpServletResponse response){
+		SessionEntity sessionEntity= this.getWhSessionEntity();
+		if(sessionEntity == null){
+			return "login";
+		}
+		String userName = sessionEntity.getUserName();
+		if(StringUtils.isBlank(userName)){
+			return "login";
+		}
+		String orderSnMain = request.getParameter("orderSnMain");
+		String content = request.getParameter("content");
+		String typeStr = request.getParameter("type");
+		if(StringUtils.isBlank(orderSnMain) || StringUtils.isBlank(content) || StringUtils.isBlank(typeStr)){
+			return "error";
+		}
+		Integer type = Integer.parseInt(typeStr);
+		bkOrderService.addOrderRemark(userName, orderSnMain, content, type);
+		return "success";
+	}
+	@RequestMapping("/getOrderHandover")
+	@ResponseBody
+	public List<BkOrderRemarkDto> getOrderHanderover(HttpServletRequest request, HttpServletResponse response){
+		String orderSnMain = request.getParameter("orderSnMain");
+		List<BkOrderRemarkDto> resultList = bkOrderService.queryHandoverByOrderSnMain(orderSnMain);
+		return resultList;
 	}
 	
 	

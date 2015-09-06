@@ -1,46 +1,50 @@
 <#import "/spring.ftl" as s />
-<!DOCTYPE html>
+<!DOCTYPE html >
 <html lang="en">
   <head>
   	<link href="<@s.url '/assets/scripts/jquery.easyui/themes/default/easyui.css' />" rel="stylesheet">
   	<link href="<@s.url '/assets/scripts/jquery.easyui/themes/icon.css' />" rel="stylesheet">
+  	<link href="<@s.url '/assets/css/searchform.css' />" rel="stylesheet">
   </head>
   <body ng-app="myapp">
-		<div id="panel" style="padding:20px;border:1px solid #dadada;" ng-controller="OrderIndexController">
+		<div id="panel" style="padding:20px;border:1px solid #dadada;" ng-controller="OrderHandoverController">
 			<form>
-				<table>
-					<tr>
-					<td>订单号</td><td><input type="text" name="order_sn_main"/></td>
-					<td>操作人</td><td><input type="text" name="user_name"/></td>
-					<td>&nbsp;&nbsp;操作类型</td>
-                    <td>
-                        <select id="type" name="type" >  
-							<option value="">操作类型</option>
-								{html_options options=$type selected=$query.type}
-                         </select> 
-                    </td>
-                    <td>交接部门</td>
-                    <td><select name="bumen" id="bumen">
-		               <option value="0">客服</option>
-		               <option value="1">仓储</option>
-		               <option value="2">物流</option>
-		             </select></td>
-					<td>&nbsp;&nbsp;是否交接</td>
-                    <td>
-                        <select id="closed" name="closed" >  
-							<option value="">操作类型</option>
-								{html_options options=$closed selected=$query.closed}
-                         </select> 
-                     </td>
-                  </tr>
-				</table>
-				<p style="border-top:1px solid #dadada;text-align:center;padding-top:5px;">
-					<input type="button" id="search_submit" value="查询" class="formbtn"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="formbtn"/>
-				</p>
+				<span class="inputspan">订单号<input type="text" id="orderSnMain"/></span>
+				<span class="inputspan">操作人</td><td><input type="text" id="userName"/></span>
+				<span class="inputspan">操作类型
+                    <select id="type">  
+						<option value="">操作类型</option>
+						<option value="0">备注</option>
+						<option value="1" selected>交接</option>
+                     </select>
+                </span>
+				<span class="inputspan">是否交接
+                    <select id="closed">
+						<option value="">所有</option>
+						<option value="0" selected>未交接</option>
+						<option value="1">已交接</option>
+                    </select>
+                 </span>
+                 <span class="inputspan">
+                 	&nbsp;&nbsp;<input type="button" id="search_submit" value="查询"/>
+                 </td>
 			</form>
 		</div>
 		<div style="height:5px;"></div>
-        <div id="dt_handover"></div>
+        <div id="table"></div>
+        <div id="addOrderRemarkDialog">
+    		<div style="text-align:center;margin-top:20px;">
+    			订单号:&nbsp;&nbsp;<input type="text" id="addOrderSnMain">
+				<textarea id="orderRemarkContent" style="width:450px;height:200px;margin-top:20px;"></textarea>
+    		</div>
+        </div>
+        <div id="showHandoverDialog" >
+        	<input type="hidden" id="handoverOrderSnMain">
+        	<div style="height:230px;" id="handoverInfo"></div>
+			<div style="text-align:center;">
+				<textarea style="width:90%;height:70px;" id="handoverContent"></textarea>
+			</div>
+        </div>
   </body>
   <script src="<@s.url '/assets/scripts/jquery-1.7.1.min.js' />"></script>
   <script src="<@s.url '/assets/scripts/jquery.easyui/jquery.easyui.min.js' />"></script>
