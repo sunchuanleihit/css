@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+  <link rel="stylesheet" type="text/css" href="<@s.url '/assets/scripts/bootstrap/bootstrap.min.css' />">
   </head>
   <body>
   	<input type="hidden" id="orderSnMain" value="${orderSnMain}">
@@ -15,7 +16,7 @@
 	<div style="text-align:center;">
 		<textarea style="width:99%;height:70px;" id="remarkContent"></textarea>
 	</div>
-	<div><button style="float:right;margin-top:20px;" onclick="addRemark()">提交</button></div>
+	<div><button class="btn btn-primary" style="float:right;margin-top:20px;margin-right:10px;" onclick="addRemark()">提交</button></div>
   </body>
   <script src="<@s.url '/assets/scripts/jquery-1.7.1.min.js' />"></script>
   <script src="<@s.url '/assets/viewjs/showOrderRemarks.js' />"></script>
