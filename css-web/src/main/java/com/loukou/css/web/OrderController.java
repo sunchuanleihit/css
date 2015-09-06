@@ -586,6 +586,7 @@ public class OrderController extends  BaseController{
 		return res;
 	}
 	
+	//支付列表
 	@RequestMapping(value="/orderPayList")
 	public ModelAndView orderPayList(HttpServletRequest request, HttpServletResponse response){
 		String orderSnMain = request.getParameter("orderSnMain");

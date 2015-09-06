@@ -200,7 +200,7 @@ function OrderDetailController($scope, $http) {
 	
 	//修改订单期望送货时间
 	$scope.changeOrder = function() {
-		jConfirm('确认要退款吗？', '退款确认', function(r) {
+		jConfirm('确认要保存吗？', '保存确认', function(r) {
 			if (r) {
 			$.ajax( {
 				type : "POST",
