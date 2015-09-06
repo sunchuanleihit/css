@@ -2,13 +2,14 @@ function opershow() {
 	$("#oper").toggle();
 }
 
-$(document).ready(function(){
-	$("#needShipTime").val("2015-09-21");
-});
+//$(document).ready(function(){
+//	$("#needShipTime").val("2015-09-21");
+//});
 
 function OrderDetailController($scope, $http) {
 	//获取包裹商品列表
 	$scope.getordergoodslist = function(orderId) {
+		$("#subOrderId").val(orderId);
 		$http.get('/order/getOrderGoodsList', {
 			params : {
 				orderId : orderId
@@ -198,7 +199,7 @@ function OrderDetailController($scope, $http) {
 	
 	//修改订单期望送货时间
 	$scope.changeOrder = function() {
-		jConfirm('确认要退款吗？', '退款确认', function(r) {
+		jConfirm('确认要保存吗？', '保存确认', function(r) {
 			if (r) {
 			$.ajax( {
 				type : "POST",
@@ -242,5 +243,93 @@ function OrderDetailController($scope, $http) {
 	//跳转投诉
 	$scope.complaintMsg = function(index) {
 		GetDetailTab("complaintMsg","/order/complaintMsg/" + index, index+"退货");
+	}
+	
+	//子订单作废
+	$scope.cancelSubOrder = function() {
+		var orderId=$("#subOrderId").val();
+		jConfirm('确认要作废子订单吗？', '作废子订单确认', function(r) {
+			if (r) {
+				$http.get("/order/cancelSubOrder", {
+					params : {
+						orderId : orderId
+					}
+				}).success(function(data) {
+					jAlert(data.message, '', function() {
+						window.location.reload();
+					});
+				}).error(function(data) {
+					jAlert(data.ExceptionMessage);
+				});
+			}
+		});
+	}
+	
+	//子订单取消作废
+	$scope.resetCancelSubOrder = function() {
+		var orderId=$("#subOrderId").val();
+		jConfirm('确认要取消作废子订单吗？', '取消作废子订单确认', function(r) {
+			if (r) {
+				$http.get("/order/resetCancelSubOrder", {
+					params : {
+						orderId : orderId
+					}
+				}).success(function(data) {
+					jAlert(data.message, '', function() {
+						window.location.reload();
+					});
+				}).error(function(data) {
+					jAlert(data.ExceptionMessage);
+				});
+			}
+		});
+	}
+	
+	//子订单支付页面
+	$scope.paySubOrderHtml = function(orderSnMain) {
+		$http.get("/order/paySubOrder", {
+			params : {
+				orderSnMain : orderSnMain,
+				payId : 0
+			}
+		}).success(function(data) {
+			if(data.code==200){
+				$.colorbox({
+		            href: "/order/orderPayList?orderSnMain=" + orderSnMain,
+		            iframe: true,
+		            width: "800px",
+		            height: "420px",
+		            top: "100px",
+		            opacity: 0,
+		            overlayClose: false,
+		            scrolling: true
+		        });
+			}else{
+				jAlert(data.message);
+			}
+		}).error(function(data) {
+			jAlert(data.ExceptionMessage);
+		});
+	}
+	
+	//子订单支付
+	$scope.paySubOrder = function(orderSnMain) {
+		var payId=$("input[name='paymentId']:checked").val();
+		jConfirm('确认要支付子订单吗？', '支付子订单确认', function(r) {
+			if (r) {
+				$http.get("/order/paySubOrder", {
+					params : {
+						orderSnMain : orderSnMain,
+						payId : payId
+					}
+				}).success(function(data) {
+					jAlert(data.message, '', function() {
+						window.location.reload();
+					});
+				}).error(function(data) {
+					jAlert(data.ExceptionMessage);
+				});
+			}
+		});
 	}
 }
