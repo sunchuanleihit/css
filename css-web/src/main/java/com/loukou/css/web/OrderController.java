@@ -55,7 +55,7 @@ public class OrderController extends  BaseController{
 	private BkOrderService bkOrderService;
 	
 	@Autowired
-	private CssService cssOrderService;
+	private CssService cssService;
 	
 	@Autowired 
     private UserProcessor userProcessor;
@@ -75,6 +75,18 @@ public class OrderController extends  BaseController{
 			List<BkOrderListDto> orderDetailMsgs = orderDetail.getResult().getOrderList();
 			mv.addObject("orderDetailMsgs", orderDetailMsgs);
 		}
+		
+		String checker="";
+		String checkTime="";
+		List<BkOrderActionRespDto> resultList = bkOrderService.getOrderActions(orderSnMain);
+		for(BkOrderActionRespDto rl:resultList){
+			if(rl.getAction()==3){
+				checker=rl.getActor();
+				checkTime=rl.getActionTime();
+			}
+		}
+		mv.addObject("checker", checker);
+		mv.addObject("checkTime", checkTime);
 		
 		String[] timeList = {"08:00~11:00","13:30~16:30","17:00~20:00","09:00~14:00","14:30~20:00","10:00~17:00"};
 		mv.addObject("timeList", timeList);
@@ -96,9 +108,11 @@ public class OrderController extends  BaseController{
 	public BaseRes<String> changeOrder(
 			@RequestParam(value = "orderSnMain", required = false, defaultValue = "") String orderSnMain,
 			@RequestParam(value = "needShiptime", required = false, defaultValue = "") String needShiptime,
-			@RequestParam(value = "needShiptimeSlot", required = false, defaultValue = "") String needShiptimeSlot
+			@RequestParam(value = "needShiptimeSlot", required = false, defaultValue = "") String needShiptimeSlot,
+			@RequestParam(value = "invoiceHeader", required = false, defaultValue = "") String invoiceHeader,
+			@RequestParam(value = "phoneMob", required = false, defaultValue = "") String phoneMob
 			){
-		BaseRes<String> res=bkOrderService.changeOrder(orderSnMain,needShiptime,needShiptimeSlot);
+		BaseRes<String> res=bkOrderService.changeOrder(orderSnMain,needShiptime,needShiptimeSlot,invoiceHeader,phoneMob);
 		return res;
 	}
 	
@@ -667,7 +681,7 @@ public class OrderController extends  BaseController{
 		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
 		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
 		
-		CssBaseRes<String> res=cssOrderService.sendBillNotice(orderSnMain,actor);
+		CssBaseRes<String> res=cssService.sendBillNotice(orderSnMain,actor);
 		return res;
 	}
 }

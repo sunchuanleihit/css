@@ -7,6 +7,22 @@
 		<div class="panel panel-default"  class="text-center">
 			<div class="panel-heading">基本信息</div>
 			<div class="panel-heading">
+			<table style="width:100%">
+				<tbody>
+				<tr>
+				  <td class="text-right">审核人姓名:</td>
+				  <td class="text-left">${checker}</td>
+				  <td class="text-right">审核时间:</td>
+				  <td class="text-left">${checkTime}</td>
+				  <td class="text-right">发票号:</td>
+				  <td class="text-left">${orderDetailMsgs[0].base.invoiceNo?default("")}</td>
+				  <td class="text-right">订单备注:</td>
+				  <td class="text-left">${orderDetailMsgs[0].base.postscript?default("")}</td>
+				</tr>
+				</tbody>
+			</table>
+			</div>
+			<div class="panel-heading">
 			<form method="post" id="orderForm">
 				<input type="hidden" name="orderSnMain" value="${orderDetailMsgs[0].base.orderSnMain}">
 				<input type="hidden" id="needShipTime" value="${orderDetailMsgs[0].base.needShipTime}">
@@ -16,7 +32,8 @@
 				<option value="${time}">${time}</option>
 				</#list>
 				</select>
-				发票抬头：<input type="text" name="invoiceHeader" value="">
+				发票抬头：<input type="text" name="invoiceHeader" value="${orderDetailMsgs[0].base.invoiceHeader?default("")}">
+				手机号：<input type="text" name="phoneMob" value="${orderDetailMsgs[0].extmMsg.phoneMob?default("")}">
 				<button style="margin-top: 1px;" type="button" class="btn btn-primary" ng-click="changeOrder(${orderDetailMsgs[0].base.orderSnMain});">保存</button>
 			</form>
 			</div>
