@@ -4,6 +4,7 @@ var handover_order_fields=[[
        			{field:'user',title:'操作人',width:60},
        			{field:'time',title:'操作时间',width:120},
        			{field:'type',title:'操作类型',formatter:typeFormatter, width:75},
+       			{field:'userClosed',title:"交接人",width:80},
        			{field:'closedTime',title:'交接时间',width:120},
        			{field:'content',title:'备注内容',width:400},
        ]];
