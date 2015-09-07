@@ -1,6 +1,6 @@
 package com.loukou.css.bo;
 //响应实体
-public class BaseRes<T> {
+public class CssBaseRes<T> {
     private String code;
     private String message;
     private T result;

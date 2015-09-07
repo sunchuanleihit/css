@@ -16,6 +16,7 @@
 				<option value="${time}">${time}</option>
 				</#list>
 				</select>
+				发票抬头：<input type="text" name="invoiceHeader" value="">
 				<button style="margin-top: 1px;" type="button" class="btn btn-primary" ng-click="changeOrder(${orderDetailMsgs[0].base.orderSnMain});">保存</button>
 			</form>
 			</div>
@@ -40,6 +41,7 @@
 						<span style="color:pink">(${remarkCount})</span>
 					</#if>
 				</button>
+				<button type="button" class="btn btn-primary" ng-click="sendBillNotice(${orderDetailMsgs[0].base.orderSnMain});">发送开票提醒</button>
 			</div>
 			  <div class="panel-body">
 			  	 <table style="width:100%">

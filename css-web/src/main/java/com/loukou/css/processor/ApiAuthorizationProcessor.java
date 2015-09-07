@@ -3,7 +3,7 @@ package com.loukou.css.processor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.loukou.css.bo.BaseRes;
+import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.bo.tools.MD5;
 import com.loukou.css.entity.ApiAuthorizationEntity;
 import com.loukou.css.service.ApiAuthorizationService;

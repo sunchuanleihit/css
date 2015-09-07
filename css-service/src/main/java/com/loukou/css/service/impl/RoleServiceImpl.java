@@ -23,7 +23,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.loukou.css.bo.BaseRes;
+import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.bo.PageListEntity;
 import com.loukou.css.dao.RoleDao;
 import com.loukou.css.entity.PickingOrderEntity;

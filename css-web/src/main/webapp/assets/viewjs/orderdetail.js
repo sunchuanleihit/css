@@ -197,7 +197,7 @@ function OrderDetailController($scope, $http) {
 		});
 	}
 	
-	//修改订单期望送货时间
+	//保存
 	$scope.changeOrder = function() {
 		jConfirm('确认要保存吗？', '保存确认', function(r) {
 			if (r) {
@@ -346,35 +346,52 @@ function OrderDetailController($scope, $http) {
         });
 		
 	}
-	
-}
 
-function getRemark(){
-	var orderSnMain = $("#orderSnMain").val();
-	var type = $("input[name='orderOrHandover']:checked").val();
-	var param = {
-			"orderSnMain":orderSnMain,
-			"type":type
-	};
-	$.ajax({
-		url:"/order/getOrderRemark",
-		data:param,
-		type: "POST",
-		success: function(result){
-			var divs = "";
-			for(var i=0; i<result.length; i++){
-				var handover = result[i];
-				var div = "<div style='margin-top:5px;margin-left:10px;'>" + handover.user;
-				if(handover.closed == 0){
-					div += ":<span style='color:red;'>";
-				}else{
-					div += ":<span style='color:green;'>";
+	function getRemark(){
+		var orderSnMain = $("#orderSnMain").val();
+		var type = $("input[name='orderOrHandover']:checked").val();
+		var param = {
+				"orderSnMain":orderSnMain,
+				"type":type
+		};
+		$.ajax({
+			url:"/order/getOrderRemark",
+			data:param,
+			type: "POST",
+			success: function(result){
+				var divs = "";
+				for(var i=0; i<result.length; i++){
+					var handover = result[i];
+					var div = "<div style='margin-top:5px;margin-left:10px;'>" + handover.user;
+					if(handover.closed == 0){
+						div += ":<span style='color:red;'>";
+					}else{
+						div += ":<span style='color:green;'>";
+					}
+					div += handover.content+"</span><span style='float:right;margin-right:5px;'>["+handover.time+"]</span></div>";
+					divs += div;
 				}
-				div += handover.content+"</span><span style='float:right;margin-right:5px;'>["+handover.time+"]</span></div>";
-				divs += div;
+				$("#remarkInfo").html(divs);
 			}
-			$("#remarkInfo").html(divs);
-		}
-	});
-}
+		});
+	}
 
+	//发送开票提醒
+	$scope.sendBillNotice = function(orderSnMain) {
+		jConfirm('确认要发送吗？', '发送确认', function(r) {
+			if (r) {
+				$http.get("/order/sendBillNotice", {
+					params : {
+						orderSnMain : orderSnMain
+					}
+				}).success(function(data) {
+					jAlert(data.message, '', function() {
+						window.location.reload();
+					});
+				}).error(function(data) {
+					jAlert(data.ExceptionMessage);
+				});
+			}
+		});
+	}
+}

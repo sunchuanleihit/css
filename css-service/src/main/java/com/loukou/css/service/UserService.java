@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
-import com.loukou.css.bo.BaseRes;
+import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.bo.LoginUser;
 import com.loukou.css.bo.PageListEntity;
 import com.loukou.css.entity.UserEntity;

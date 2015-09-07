@@ -1,6 +1,5 @@
 package com.loukou.css.web;
 
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -26,8 +25,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.loukou.css.annotation.AuthPassport;
+import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.processor.UserProcessor;
 import com.loukou.css.resp.CssOrderShow;
+import com.loukou.css.service.CssService;
 import com.loukou.css.service.redis.entity.SessionEntity;
 import com.loukou.css.util.DataGrid;
 import com.loukou.order.service.api.BkOrderService;
@@ -52,6 +53,9 @@ import com.loukou.order.service.resp.dto.GoodsListDto;
 public class OrderController extends  BaseController{
 	@Autowired
 	private BkOrderService bkOrderService;
+	
+	@Autowired
+	private CssService cssOrderService;
 	
 	@Autowired 
     private UserProcessor userProcessor;
@@ -654,5 +658,16 @@ public class OrderController extends  BaseController{
 //		mv.addObject("resultList", resultList);
 		mv.addObject("orderSnMain", orderSnMain);
 		return mv;
+	}
+	
+	//发送开票提醒
+	@RequestMapping(value = "/sendBillNotice", method = RequestMethod.GET)
+	@ResponseBody
+	public CssBaseRes<String> sendBillNotice(@RequestParam String orderSnMain){
+		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
+		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
+		
+		CssBaseRes<String> res=cssOrderService.sendBillNotice(orderSnMain,actor);
+		return res;
 	}
 }

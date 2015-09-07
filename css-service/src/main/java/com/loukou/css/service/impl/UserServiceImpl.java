@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.loukou.css.bo.BaseRes;
+import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.bo.LoginUser;
 import com.loukou.css.bo.PageListEntity;
 import com.loukou.css.bo.tools.MD5;

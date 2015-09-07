@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.loukou.css.bo.BaseRes;
+import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.bo.PageListEntity;
 import com.loukou.css.bo.RoleActionRes;
 import com.loukou.css.entity.RoleEntity;
@@ -27,8 +27,8 @@ public class RoleProcessor {
 	}
 	
 	//新增角色
-	public BaseRes<RoleEntity> addRole(String roleName){
-		BaseRes<RoleEntity> res = new BaseRes<RoleEntity>();
+	public CssBaseRes<RoleEntity> addRole(String roleName){
+		CssBaseRes<RoleEntity> res = new CssBaseRes<RoleEntity>();
 		if(roleService.exitsRole(roleName)){
 			//角色名已存在
 			res.setCode("201");
@@ -50,8 +50,8 @@ public class RoleProcessor {
 		return res;
 	}
 	//删除角色
-	public BaseRes<RoleEntity> delRole(int roleId){
-		BaseRes<RoleEntity> res = new BaseRes<RoleEntity>();
+	public CssBaseRes<RoleEntity> delRole(int roleId){
+		CssBaseRes<RoleEntity> res = new CssBaseRes<RoleEntity>();
 		List<UserRoleEntity> lstUserRole = userRoleService.getUserRoleByRoleId(roleId);
 		if(lstUserRole !=null && lstUserRole.size()>0){
 			//该角色下有用户
