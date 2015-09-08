@@ -88,7 +88,16 @@ public class OrderController extends  BaseController{
 		mv.addObject("checker", checker);
 		mv.addObject("checkTime", checkTime);
 		
-		String[] timeList = {"08:00~11:00","13:30~16:30","17:00~20:00","09:00~14:00","14:30~20:00","10:00~17:00"};
+		ArrayList<String> timeList = new ArrayList<String>();
+		for(int i=9; i<22; i++){
+			String temp=i+":00-"+(i+1)+":00";
+			if(i==9){
+				temp="0"+i+":00-"+(i+1)+":00";
+			}
+			
+			timeList.add(temp);
+		}
+		
 		mv.addObject("timeList", timeList);
 		
 		//判断订单下是否有留言

@@ -2,12 +2,15 @@ package com.loukou.css.web;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.loukou.css.processor.LoginProcessor;
 import com.loukou.css.bo.LoginUser;
 import com.loukou.css.contains.PageUrls;
@@ -23,10 +26,6 @@ public class LoginController extends BaseController {
 
 	@Autowired
 	private LoginProcessor loginProcessor;
-//	@Autowired
-//	private UserWareHouseProcessor userWarehouseProcessor;
-//	@Autowired
-//	private WareHouseProcessor warehouseProcessor;
 	@Autowired
 	private UserRoleProcessor userRoleProcessor;
 	@Autowired
@@ -34,6 +33,10 @@ public class LoginController extends BaseController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public String Login() {
+		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
+		if(SessionEntity!=null){
+			return "redirect:/main";
+		}
         return PageUrls.LOGIN_URL;
 	}
 	
@@ -60,7 +63,6 @@ public class LoginController extends BaseController {
 			if(roleIds.size()>1){
 				SessionEntity.setLstRole(roleProcessor.getRolesByRoleIds(roleIds));
 			}
-			//whSessionEntity.setWarehouseId(warehouseId);
 			sessionRedisService.save(SessionEntity);
 			modelMap.put("loginUser", loginUser);
 	    }

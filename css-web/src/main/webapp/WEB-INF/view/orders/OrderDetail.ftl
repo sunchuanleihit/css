@@ -25,11 +25,14 @@
 			<div class="panel-heading">
 			<form method="post" id="orderForm">
 				<input type="hidden" name="orderSnMain" value="${orderDetailMsgs[0].base.orderSnMain}">
-				<input type="hidden" id="needShipTime" value="${orderDetailMsgs[0].base.needShipTime}">
-				<input type="text" name="needShiptime" class="form-control" placeholder="" ng-model="planArrivetime1" my97datepicker="{dateFmt:'yyyy-MM-dd',readOnly:true}" style="width:120px;float: left;">
+				<input type="text" name="needShiptime" class="form-control" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="${orderDetailMsgs[0].base.needShipTime}" style="width:120px;float: left;">
 				<select name="needShiptimeSlot" class="form-control ng-pristine ng-valid" style="width:130px;float: left;margin-left: 10px;">
 				<#list timeList as time>
-				<option value="${time}">${time}</option>
+					<#if time==orderDetailMsgs[0].base.needShipTimeSlot>
+						<option value="${time}" selected>${time}</option>
+					<#else>
+						<option value="${time}" >${time}</option>
+					</#if>
 				</#list>
 				</select>
 				发票抬头：<input type="text" name="invoiceHeader" value="${orderDetailMsgs[0].base.invoiceHeader?default("")}">

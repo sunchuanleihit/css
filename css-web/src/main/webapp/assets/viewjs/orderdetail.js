@@ -2,10 +2,6 @@ function opershow() {
 	$("#oper").toggle();
 }
 
-//$(document).ready(function(){
-//	$("#needShipTime").val("2015-09-21");
-//});
-
 function OrderDetailController($scope, $http) {
 	//获取包裹商品列表
 	$scope.getordergoodslist = function(orderId) {
@@ -242,7 +238,7 @@ function OrderDetailController($scope, $http) {
 	
 	//跳转投诉
 	$scope.complaintMsg = function(index) {
-		GetDetailTab("complaintMsg","/order/complaintMsg/" + index, index+"退货");
+		GetDetailTab("complaintMsg","/order/complaintMsg/" + index, index+"投诉");
 	}
 	
 	//子订单作废
