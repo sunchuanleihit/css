@@ -15,11 +15,6 @@
 	</bean>
 
 	<bean id="propertiesConfiguration" class="com.github.diamond.client.PropertiesConfigurationFactoryBean">
-	  <constructor-arg index="0" value="10.11.1.21" />
-	  <constructor-arg index="1" value="8283" />
-	  <constructor-arg index="2" value="lk0000" />
-	  <constructor-arg index="3" value="development" />
-	  <constructor-arg index="4" value="database,goods-service,solr,dubbo,userapp" />
 	</bean>
 
   <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
