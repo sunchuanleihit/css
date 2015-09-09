@@ -530,6 +530,33 @@ public class OrderController extends  BaseController{
 			List<BkOrderListDto> orderDetailMsgs = orderDetail.getResult().getOrderList();
 			mv.addObject("orderDetailMsgs", orderDetailMsgs);
 		}
+		
+		ArrayList<String> wscList = new ArrayList<String>();
+		wscList.add("配送延迟");
+		wscList.add("虚假回单");
+		wscList.add("商品破损");
+		wscList.add("配送缺发");
+		wscList.add("态度问题");
+		mv.addObject("wscList", wscList);
+		
+		ArrayList<String> pcList = new ArrayList<String>();
+		pcList.add("实物不符");
+		pcList.add("产品质量");
+		pcList.add("产品缺货");
+		mv.addObject("pcList", pcList);
+		
+		ArrayList<String> whcList = new ArrayList<String>();
+		whcList.add("包装问题");
+		whcList.add("产品过期");
+		mv.addObject("whcList", whcList);
+		
+		ArrayList<String> scList = new ArrayList<String>();
+		scList.add("订单错误");
+		scList.add("支付错误");
+		scList.add("账户问题");
+		mv.addObject("scList", scList);
+		
+		mv.addObject("complaintId", 0);
 		return mv;
 	}
 	
@@ -537,22 +564,24 @@ public class OrderController extends  BaseController{
 	@RequestMapping(value = "/generateComplaint", method = RequestMethod.POST)
 	@ResponseBody
 	public BaseRes<String> generateComplaint(
+			@RequestParam(value = "complaintId", required = false, defaultValue = "") int complaintId,
 			@RequestParam(value = "orderSnMain", required = false, defaultValue = "") String orderSnMain,
-			@RequestParam(value = "content1", required = false, defaultValue = "") String content1,
-			@RequestParam(value = "addTime", required = false, defaultValue = "") String addTime,
+			@RequestParam(value = "whId", required = false, defaultValue = "") int whId,
+			@RequestParam(value = "whName", required = false, defaultValue = "") String whName,
+			@RequestParam(value = "goodsName", required = false, defaultValue = "") String[] goodsNameList,
+			@RequestParam(value = "content", required = false, defaultValue = "") String content,
+			@RequestParam(value = "creatTime", required = false, defaultValue = "") String creatTime,
 			@RequestParam(value = "userName", required = false, defaultValue = "") String userName,
 			@RequestParam(value = "mobile", required = false, defaultValue = "") String mobile,
-			@RequestParam(value = "type", required = false, defaultValue = "") int type,
-			@RequestParam(value = "status", required = false, defaultValue = "") int status,
-			@RequestParam(value = "content2", required = false, defaultValue = "") String content2,
-			@RequestParam(value = "sellerName", required = false, defaultValue = "") String[] sellerNameList,
-			@RequestParam(value = "goodsName", required = false, defaultValue = "") String[] goodsNameList
+			@RequestParam(value = "department", required = false, defaultValue = "") int department,
+			@RequestParam(value = "complaintType", required = false, defaultValue = "") String complaintType,
+			@RequestParam(value = "handleStatus", required = false, defaultValue = "") int handleStatus
 			){
 		
 		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
 		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
 		
-		BaseRes<String> res=bkOrderService.generateComplaint(actor,orderSnMain,content1,addTime,userName,mobile,type,status,content2,sellerNameList,goodsNameList);
+		BaseRes<String> res=bkOrderService.generateComplaint(actor,complaintId,orderSnMain,whId,whName,goodsNameList,content,creatTime,userName,mobile,department,complaintType,handleStatus);
 		return res;
 	}
 	

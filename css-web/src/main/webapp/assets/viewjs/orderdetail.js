@@ -2,6 +2,28 @@ function opershow() {
 	$("#oper").toggle();
 }
 
+//选择微仓
+function selectSeller(){
+	var whId=$("#whId").val();
+	var tr=$("tr[name='s"+whId+"']");
+	$(tr.siblings()).css("display", "none");
+	$(tr.siblings()).find(":checkbox").attr("checked",false);
+	tr.removeAttr("style");
+	
+	var whName=$("#whId").find("option:selected").text();
+	$("input[name='whName']").val(whName);
+}
+
+//选择部门
+function selectDepartment(){
+	var departmentId=$("#department").val();
+	var tr=$("#type"+departmentId);
+	$(tr.siblings()).css("display", "none");
+	$(tr.siblings()).attr("disabled",true);
+	tr.attr("disabled",false);
+	tr.css('display', 'initial');
+}
+
 function OrderDetailController($scope, $http) {
 	//获取包裹商品列表
 	$scope.getordergoodslist = function(orderId) {
@@ -171,6 +193,7 @@ function OrderDetailController($scope, $http) {
 	
 	//提交投诉
 	$scope.generateComplaint = function() {
+		
 		jConfirm('确认要提交吗？', '提交确认', function(r) {
 			if (r) {
 			$.ajax( {
