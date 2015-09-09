@@ -52,19 +52,14 @@
             //document.getElementById("browserVersionMsg").style.display = "block";
         }
         function doCheck() {
-            //if (IsFieldEmpty("username", "系统提示:\r\n用户名不能为空，请输入用户名.") == false) {
-            //    return;
-            //}
-            //if (IsFieldEmpty("userpassword", "系统提示:\r\n密码不能为空，请输入密码.") == false) {
-            //    return;
-            //}
+            if (IsFieldEmpty("username", "系统提示:\r\n用户名不能为空，请输入用户名.") == false) {
+                return;
+            }
+            if (IsFieldEmpty("userpassword", "系统提示:\r\n密码不能为空，请输入密码.") == false) {
+                return;
+            }
             var userCode = $("#username").val();
             var userPwd = $("#userpassword").val();
-            if(userCode == "")
-            {userCode = "1001";}
-            if(userPwd == ""){
-             userPwd = "123";
-            }
            
             $.post("/login/checklogin", { userCode:userCode,userPwd:userPwd }).success(function (data) {
                 if (data.code == "200") {

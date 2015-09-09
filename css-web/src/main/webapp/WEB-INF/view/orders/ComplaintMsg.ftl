@@ -59,7 +59,7 @@
 		      <td><input width="100" type="text" value="" name="userName"></td>
 		  </tr>
 		  <tr><td>联系方式：</td>
-		      <td><input width="80" type="text" value="${orderDetailMsgs[0].extmMsg.phoneMob}" name="mobile"></td>
+		      <td><input width="80" type="text" value="${orderDetailMsgs[0].extmMsg.phoneMob?default("")}" name="mobile"></td>
 		  </tr>
 		  <tr><td height="30">投诉等级：</td>
 	          <td>

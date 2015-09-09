@@ -100,7 +100,7 @@ public class CssServiceImpl implements CssService {
 		
 		String userName=orderList.get(0).getBuyerName();
 		MemberRate memberRate=memberRateDao.getMsgByUserName(userName);
-		if(memberRate==null){
+		if(memberRate!=null){
 			result.setCode("400");
 			result.setMessage("建行员工不开票，如需开票联系江春梅");
 			return result;
