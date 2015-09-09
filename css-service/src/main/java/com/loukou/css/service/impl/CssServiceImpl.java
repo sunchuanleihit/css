@@ -27,6 +27,7 @@ import com.loukou.css.dao.GoodsDao;
 import com.loukou.css.dao.InvoiceActionDao;
 import com.loukou.css.dao.InvoiceDao;
 import com.loukou.css.dao.InvoiceGoodsDao;
+import com.loukou.css.dao.LkComplaintDao;
 import com.loukou.css.dao.MemberRateDao;
 import com.loukou.css.dao.OrderDao;
 import com.loukou.css.dao.OrderGoodsDao;
@@ -39,6 +40,7 @@ import com.loukou.css.entity.Goods;
 import com.loukou.css.entity.Invoice;
 import com.loukou.css.entity.InvoiceAction;
 import com.loukou.css.entity.InvoiceGoods;
+import com.loukou.css.entity.LkComplaint;
 import com.loukou.css.entity.MemberRate;
 import com.loukou.css.entity.Order;
 import com.loukou.css.entity.OrderGoods;
@@ -84,6 +86,9 @@ public class CssServiceImpl implements CssService {
 	
 	@Autowired
 	private ComplaintDao complaintDao;
+	
+	@Autowired
+	private LkComplaintDao lkComplaintDao;
 	
 	@Autowired
 	private ComplaintHandlerDao complaintHandlerDao;
@@ -378,5 +383,76 @@ public class CssServiceImpl implements CssService {
 			dto.setActor(handler.getActor());
 		}
 		return dto;
+	}
+	
+	//提交/修改投诉
+	public CssBaseRes<String> generateComplaint(String actor,int complaintId,String orderSnMain,int whId,String whName,
+		String[] goodsNameList,String content,String creatTime,String userName,String mobile,int department,String complaintType,int handleStatus){
+		CssBaseRes<String> result=new CssBaseRes<String>();
+		
+		List<Order> orderList = orderDao.findByOrderSnMain(orderSnMain);//获取订单列表信息
+		if (CollectionUtils.isEmpty(orderList)) {
+			result.setCode("400");
+			result.setMessage("订单为空");
+			return result;
+		}
+		
+		String goodsName="";
+		for(String sn:goodsNameList){
+			goodsName+=sn+",";
+		}
+		goodsName=goodsName.substring(0,goodsName.length()-1);
+		
+		//新增投诉
+		if(complaintId==0){
+			handleStatus=0;
+			LkComplaint complaintData=new LkComplaint();
+			complaintData.setUserName(userName);
+			complaintData.setMobile(mobile);
+			complaintData.setOrderSnMain(orderSnMain);
+			complaintData.setWhId(whId);
+			complaintData.setWhName(whName);
+			complaintData.setGoodsName(goodsName);
+			complaintData.setContent(content);
+			complaintData.setDepartment(department);
+			complaintData.setComplaintType(complaintType);
+			complaintData.setHandleStatus(handleStatus);
+			complaintData.setStatus(0);
+			complaintData.setCreatTime(DateUtils.str2Date(creatTime));
+			complaintData.setCityCode(orderList.get(0).getSellSite());
+			complaintData.setActor(actor);
+			LkComplaint complaintResult=lkComplaintDao.save(complaintData);
+			if(complaintResult==null){
+				result.setCode("400");
+				result.setMessage("投诉失败");
+				return result;
+			}
+		}else{
+			LkComplaint complaintData=new LkComplaint();
+			complaintData.setUserName(userName);
+			complaintData.setMobile(mobile);
+			complaintData.setOrderSnMain(orderSnMain);
+			complaintData.setWhId(whId);
+			complaintData.setWhName(whName);
+			complaintData.setGoodsName(goodsName);
+			complaintData.setContent(content);
+			complaintData.setDepartment(department);
+			complaintData.setComplaintType(complaintType);
+			complaintData.setHandleStatus(handleStatus);
+			complaintData.setStatus(0);
+			complaintData.setCreatTime(DateUtils.str2Date(creatTime));
+			complaintData.setCityCode(orderList.get(0).getSellSite());
+			complaintData.setActor(actor);
+			LkComplaint complaintResult=lkComplaintDao.save(complaintData);
+			if(complaintResult==null){
+				result.setCode("400");
+				result.setMessage("生成退款支付单失败");
+				return result;
+			}
+		}
+		
+		result.setCode("200");
+		result.setMessage("提交成功");
+		return result;
 	}
 }

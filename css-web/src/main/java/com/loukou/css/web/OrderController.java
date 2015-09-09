@@ -520,9 +520,10 @@ public class OrderController extends  BaseController{
 	}
 	
 	//投诉页面
-	@RequestMapping(value = "/complaintMsg/{orderSnMain}", method = RequestMethod.GET)
-	public ModelAndView complaintMsg(@PathVariable String orderSnMain,
-			ModelMap modelMap) {
+	@RequestMapping(value = "/complaintMsg", method = RequestMethod.GET)
+	public ModelAndView complaintMsg(HttpServletRequest request,ModelMap modelMap) {
+		String orderSnMain = request.getParameter("orderSnMain");
+		int complaintId = Integer.parseInt(request.getParameter("complaintId"));
 		ModelAndView mv = new ModelAndView("orders/ComplaintMsg");
 		BkOrderListRespDto orderDetail = bkOrderService.orderDetail(orderSnMain);
 		
@@ -556,14 +557,14 @@ public class OrderController extends  BaseController{
 		scList.add("账户问题");
 		mv.addObject("scList", scList);
 		
-		mv.addObject("complaintId", 0);
+		mv.addObject("complaintId",complaintId);
 		return mv;
 	}
 	
 	//提交投诉
 	@RequestMapping(value = "/generateComplaint", method = RequestMethod.POST)
 	@ResponseBody
-	public BaseRes<String> generateComplaint(
+	public CssBaseRes<String> generateComplaint(
 			@RequestParam(value = "complaintId", required = false, defaultValue = "") int complaintId,
 			@RequestParam(value = "orderSnMain", required = false, defaultValue = "") String orderSnMain,
 			@RequestParam(value = "whId", required = false, defaultValue = "") int whId,
@@ -581,7 +582,7 @@ public class OrderController extends  BaseController{
 		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
 		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
 		
-		BaseRes<String> res=bkOrderService.generateComplaint(actor,complaintId,orderSnMain,whId,whName,goodsNameList,content,creatTime,userName,mobile,department,complaintType,handleStatus);
+		CssBaseRes<String> res=cssService.generateComplaint(actor,complaintId,orderSnMain,whId,whName,goodsNameList,content,creatTime,userName,mobile,department,complaintType,handleStatus);
 		return res;
 	}
 	

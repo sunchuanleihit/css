@@ -116,7 +116,7 @@
 					</select>
 				</td>
 			</tr>
-			<#if complaintId!=0>
+			<#if complaintId==0>
 			<tr style="display:none;">
 			<#else>
 			<tr>

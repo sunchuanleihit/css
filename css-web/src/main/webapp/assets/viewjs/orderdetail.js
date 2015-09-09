@@ -261,7 +261,7 @@ function OrderDetailController($scope, $http) {
 	
 	//跳转投诉
 	$scope.complaintMsg = function(index) {
-		GetDetailTab("complaintMsg","/order/complaintMsg/" + index, index+"投诉");
+		GetDetailTab("complaintMsg","/order/complaintMsg?orderSnMain=" + index + "&complaintId=0", index+"投诉");
 	}
 	
 	//子订单作废

@@ -35,4 +35,6 @@ public interface CssService {
 	 * @return
 	 */
 	public ComplaintRespListDto queryComplaint(String orderSnMain, String weic, String startTime, String endTime, int page, int rows);
+	
+	public CssBaseRes<String> generateComplaint(String actor,int complaintId,String orderSnMain,int whId,String whName,String[] goodsNameList,String content,String creatTime,String userName,String mobile,int department,String complaintType,int handleStatus);
 }
