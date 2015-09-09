@@ -37,12 +37,14 @@ $(document).ready(function(){
 		var sellerName = $("#sellerName").val();
 		var startTime = $("#startTime").datebox("getValue");
 		var endTime = $("#endTime").datebox("getValue");
+		var storeType = $("#storeType").val();
 		var params = {
 				"orderSnMain":orderSnMain,
 				"buyerName":buyerName,
 				"sellerName":sellerName,
 				"startTime":startTime,
-				"endTime":endTime
+				"endTime":endTime,
+				"storeType":storeType
 		};
 		$("#table").datagrid("load", params);
 	});

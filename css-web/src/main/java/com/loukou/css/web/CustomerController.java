@@ -135,6 +135,13 @@ public class CustomerController {
 		return grid;
 	}
 	
+	/**
+	 * 淘心卡消费明细
+	 * @param request
+	 * @param page
+	 * @param rows
+	 * @return
+	 */
 	@RequestMapping(value="txkRecord")
 	@ResponseBody
 	public DataGrid txkRecord(HttpServletRequest request,int page, int rows){

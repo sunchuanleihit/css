@@ -593,6 +593,7 @@ public class OrderController extends  BaseController{
 		bkOrderService.addOrderRemark(userName, orderSnMain, content, type);
 		return "success";
 	}
+	
 	@RequestMapping("/getOrderRemark")
 	@ResponseBody
 	public List<BkOrderRemarkDto> getOrderHanderover(HttpServletRequest request, HttpServletResponse response){

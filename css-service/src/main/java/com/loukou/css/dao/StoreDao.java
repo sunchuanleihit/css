@@ -2,6 +2,7 @@ package com.loukou.css.dao;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -22,4 +23,6 @@ public interface StoreDao extends CrudRepository<Store, Integer>{
 	List<Store> findByTelBusiness(String telBusiness);
 
 	List<Store> findByStoreIdIn(List<Integer> storeIds);
+	
+	List<Store> findBySellSiteAndStoreType(String sellSite, String storeType, Pageable Pageable);
 }

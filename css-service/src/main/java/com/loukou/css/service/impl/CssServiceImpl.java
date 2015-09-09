@@ -2,13 +2,27 @@ package com.loukou.css.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.loukou.css.bo.CssBaseRes;
+import com.loukou.css.dao.ComplaintDao;
+import com.loukou.css.dao.ComplaintHandlerDao;
 import com.loukou.css.dao.GoodsDao;
 import com.loukou.css.dao.InvoiceActionDao;
 import com.loukou.css.dao.InvoiceDao;
@@ -17,7 +31,10 @@ import com.loukou.css.dao.MemberRateDao;
 import com.loukou.css.dao.OrderDao;
 import com.loukou.css.dao.OrderGoodsDao;
 import com.loukou.css.dao.OrderPayDao;
+import com.loukou.css.dao.SiteDao;
 import com.loukou.css.dao.StoreDao;
+import com.loukou.css.entity.Complaint;
+import com.loukou.css.entity.ComplaintHandler;
 import com.loukou.css.entity.Goods;
 import com.loukou.css.entity.Invoice;
 import com.loukou.css.entity.InvoiceAction;
@@ -26,8 +43,12 @@ import com.loukou.css.entity.MemberRate;
 import com.loukou.css.entity.Order;
 import com.loukou.css.entity.OrderGoods;
 import com.loukou.css.entity.OrderPay;
+import com.loukou.css.entity.Site;
 import com.loukou.css.entity.Store;
+import com.loukou.css.resp.ComplaintRespDto;
+import com.loukou.css.resp.ComplaintRespListDto;
 import com.loukou.css.service.CssService;
+import com.loukou.css.utils.DateUtils;
 
 @Service
 public class CssServiceImpl implements CssService {
@@ -57,6 +78,15 @@ public class CssServiceImpl implements CssService {
 	
 	@Autowired
     private InvoiceActionDao invoiceActionDao;
+	
+	@Autowired
+	private SiteDao siteDao;
+	
+	@Autowired
+	private ComplaintDao complaintDao;
+	
+	@Autowired
+	private ComplaintHandlerDao complaintHandlerDao;
 	
 	//发送开票提醒
 	public CssBaseRes<String> sendBillNotice(String orderSnMain,String actor){
@@ -258,5 +288,95 @@ public class CssServiceImpl implements CssService {
 		}
 		
 		return true;
+	}
+
+	@Override
+	public List<Site> getAllSite() {
+		List<Site> siteList = siteDao.getAllSite();
+		return siteList;
+	}
+
+	@Override
+	public List<Store> getStoresBySiteCode(String siteCode) {
+		PageRequest pagenation = new PageRequest(0,10000 , new Sort(Sort.Direction.ASC, "storeId"));
+		List<Store> storeList = storeDao.findBySellSiteAndStoreType(siteCode, "wei_wh", pagenation);
+		return storeList;
+	}
+
+	@Override
+	public ComplaintRespListDto queryComplaint(final String orderSnMain, final String weic, final String startTime, final String endTime, int page, int rows) {
+		page = page-1;
+		PageRequest pagenation = new PageRequest(page, rows , new Sort(Sort.Direction.DESC, "id"));
+		Page<Complaint> complaintPage = complaintDao.findAll(new Specification<Complaint>(){
+			@Override
+			public Predicate toPredicate(Root<Complaint> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				List<Predicate> predicates = new ArrayList<>();
+				if(StringUtils.isNotBlank(orderSnMain)){
+					predicates.add(cb.equal(root.get("orderSnMain"), orderSnMain));
+				}
+				if(StringUtils.isNotBlank(weic)){
+					predicates.add(cb.equal(root.get("sellerName"), weic));
+				}
+				if(StringUtils.isNotBlank(startTime)){
+					Integer startTimeInt = (int)(DateUtils.str2Date(startTime).getTime()/1000);
+					predicates.add(cb.greaterThanOrEqualTo(root.get("dateline1").as(Integer.class), startTimeInt));
+				}
+				if(StringUtils.isNotBlank(endTime)){
+					Integer endTimeInt = (int)(DateUtils.str2Date(endTime).getTime()/1000);
+					predicates.add(cb.lessThanOrEqualTo(root.get("dateline1").as(Integer.class), endTimeInt));
+				}
+				Predicate[] pre = new Predicate[predicates.size()];
+				return query.where(predicates.toArray(pre)).getRestriction();
+			}
+		}, pagenation);
+		List<Complaint> complaintList = complaintPage.getContent();
+		List<Integer> complaintIds = new ArrayList<Integer>();
+		if(complaintList!=null && complaintList.size()>0){
+			for(Complaint tmp: complaintList){
+				complaintIds.add(tmp.getId());
+			}
+		}
+		List<ComplaintHandler> handlerList = new ArrayList<ComplaintHandler>();
+		if(complaintIds.size()>0){
+			handlerList = complaintHandlerDao.findByTypeAndTidIn(0, complaintIds);
+		}
+		Map<Integer, ComplaintHandler> handlerMap = new HashMap<Integer, ComplaintHandler>();
+		for(ComplaintHandler tmp: handlerList){
+			handlerMap.put(tmp.getTid(), tmp);
+		}
+		List<ComplaintRespDto> respList = new ArrayList<ComplaintRespDto>();
+		for(Complaint complaint: complaintList){
+			ComplaintHandler handler = handlerMap.get(complaint.getId());
+			ComplaintRespDto dto = this.createComplaintResp(complaint, handler);
+			respList.add(dto);
+		}
+		ComplaintRespListDto respListDto = new ComplaintRespListDto();
+		respListDto.setCount((int)complaintPage.getTotalElements());
+		respListDto.setComplaintList(respList);
+		return respListDto;
+	}
+	
+	private ComplaintRespDto createComplaintResp(Complaint complaint, ComplaintHandler handler){
+		ComplaintRespDto dto = new ComplaintRespDto();
+		dto.setId(complaint.getId());
+		if( complaint.getDateline1() != null ){
+			dto.setComplaintTime(DateUtils.dateTimeToStr2(complaint.getDateline1()));
+		}
+		if(complaint.getDateline2() != null){
+			dto.setDealTime(DateUtils.dateTimeToStr2(complaint.getDateline2()));
+		}
+		dto.setDepartment(complaint.getDepartment());
+		dto.setGoodsName(complaint.getGoodsName());
+		dto.setOrderSnMain(complaint.getOrderSnMain());
+		dto.setSellerName(complaint.getSellerName());
+		dto.setStatus(complaint.getStatus());
+		dto.setType(complaint.getType());
+		dto.setUserName(complaint.getUserName());
+		dto.setMobile(complaint.getMobile());
+		if(handler!=null){
+			dto.setContent(handler.getContent());
+			dto.setActor(handler.getActor());
+		}
+		return dto;
 	}
 }
