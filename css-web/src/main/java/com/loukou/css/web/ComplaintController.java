@@ -16,23 +16,39 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.entity.Site;
 import com.loukou.css.entity.Store;
+import com.loukou.css.processor.UserProcessor;
 import com.loukou.css.req.ComplaintReqDto;
 import com.loukou.css.resp.ComplaintRespDto;
 import com.loukou.css.resp.ComplaintRespListDto;
 import com.loukou.css.service.CssService;
+import com.loukou.css.service.redis.entity.SessionEntity;
 import com.loukou.css.util.DataGrid;
+import com.loukou.css.utils.DateUtils;
+import com.loukou.order.service.api.BkOrderService;
+import com.loukou.order.service.resp.dto.BkOrderListDto;
+import com.loukou.order.service.resp.dto.BkOrderListRespDto;
 
 @Controller
 @RequestMapping("/complaint")
-public class ComplaintController {
+public class ComplaintController extends  BaseController{
 	@Autowired
 	private CssService cssService;
+	
+	@Autowired
+	private BkOrderService bkOrderService;
+	
+	@Autowired 
+    private UserProcessor userProcessor;
 	
 	@RequestMapping(value="/complaintList")
 	public ModelAndView complaintList(HttpServletRequest request,HttpServletResponse response){
@@ -130,5 +146,57 @@ public class ComplaintController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	//投诉页面
+	@RequestMapping(value = "/complaintMsg", method = RequestMethod.GET)
+	public ModelAndView complaintMsg(HttpServletRequest request,ModelMap modelMap) {
+		String orderSnMain = request.getParameter("orderSnMain");
+		int complaintId = Integer.parseInt(request.getParameter("complaintId"));
+		ModelAndView mv = new ModelAndView("complaint/ComplaintMsg");
+		BkOrderListRespDto orderDetail = bkOrderService.orderDetail(orderSnMain);
+		
+		if(orderDetail.getCode()==200){
+			List<BkOrderListDto> orderDetailMsgs = orderDetail.getResult().getOrderList();
+			mv.addObject("orderDetailMsgs", orderDetailMsgs);
+		}
+		ComplaintRespDto complaintMsg=new ComplaintRespDto();
+		if(complaintId>0){
+			List<Integer> idList=new ArrayList<Integer>();
+			idList.add(complaintId);
+			List<ComplaintRespDto> complaintMsgList=cssService.queryComplaintByIds(idList);
+			complaintMsg=complaintMsgList.get(0);
+			String cCreateTime = complaintMsg.getCreateTime();
+			String rCreateTime = DateUtils.date2DateStr(DateUtils.str2Date(cCreateTime));
+			complaintMsg.setCreateTime(rCreateTime);
+		}
+		mv.addObject("complaintMsg",complaintMsg);
+		mv.addObject("complaintId",complaintId);
+		return mv;
+	}
+	
+	//提交投诉
+	@RequestMapping(value = "/generateComplaint", method = RequestMethod.POST)
+	@ResponseBody
+	public CssBaseRes<String> generateComplaint(
+			@RequestParam(value = "complaintId", required = false, defaultValue = "") int complaintId,
+			@RequestParam(value = "orderSnMain", required = false, defaultValue = "") String orderSnMain,
+			@RequestParam(value = "whId", required = false, defaultValue = "") int whId,
+			@RequestParam(value = "whName", required = false, defaultValue = "") String whName,
+			@RequestParam(value = "goodsName", required = false, defaultValue = "") String[] goodsNameList,
+			@RequestParam(value = "content", required = false, defaultValue = "") String content,
+			@RequestParam(value = "creatTime", required = false, defaultValue = "") String creatTime,
+			@RequestParam(value = "userName", required = false, defaultValue = "") String userName,
+			@RequestParam(value = "mobile", required = false, defaultValue = "") String mobile,
+			@RequestParam(value = "department", required = false, defaultValue = "") int department,
+			@RequestParam(value = "complaintType", required = false, defaultValue = "") int complaintType,
+			@RequestParam(value = "handleStatus", required = false, defaultValue = "") int handleStatus
+			){
+		
+		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
+		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
+		
+		CssBaseRes<String> res=cssService.generateComplaint(actor,complaintId,orderSnMain,whId,whName,goodsNameList,content,creatTime,userName,mobile,department,complaintType,handleStatus);
+		return res;
 	}
 }

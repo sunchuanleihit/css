@@ -63,15 +63,17 @@
 			<tbody>
 			<tr>
 				<td width="10%">情况说明：</td>
-				<td width="93%"><textarea name="content" style="width:520px;height:60px;"></textarea></td>
+				<td width="93%"><textarea name="content" style="width:520px;height:60px;">${complaintMsg.content?default("")}</textarea></td>
 			</tr>
 			<tr>
 				<td height="30">投诉日期：</td>
-				<td><input type="text" name="creatTime" class="form-control" placeholder="" ng-model="planArrivetime1" my97datepicker="{ dateFmt: 'yyyy-MM-dd', readOnly: true }" style="width:120px"></td>
+				<td>
+					<input type="text" name="creatTime" class="form-control" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="${complaintMsg.createTime?default("")}" style="width:120px">
+				</td>
 			</tr>
 			<tr>
 				<td height="30">顾客姓名：</td>
-				<td><input width="100" type="text" value="" name="userName"></td>
+				<td><input width="100" type="text" name="userName" value="${complaintMsg.userName?default("")}"></td>
 			</tr>
 			<tr>
 				<td>联系方式：</td>
@@ -81,10 +83,10 @@
 				<td>所属部门：</td>
 				<td>
 					<select id="department" name="department" class="form-control ng-pristine ng-valid" style="width:auto;float: left;" onchange="selectDepartment()">
-						<option value="1" >微仓</option>
-						<option value="2" >采购</option>
-						<option value="3" >仓库</option>
-						<option value="4" >系统</option>
+						<option value="1" <#if complaintMsg.departmentId?default(0)==1>selected</#if>>微仓</option>
+						<option value="2" <#if complaintMsg.departmentId?default(0)==2>selected</#if>>采购</option>
+						<option value="3" <#if complaintMsg.departmentId?default(0)==3>selected</#if>>仓库</option>
+						<option value="4" <#if complaintMsg.departmentId?default(0)==4>selected</#if>>系统</option>
 					</select>
 				</td>
 			</tr>
@@ -92,28 +94,28 @@
 				<td height="30">投诉类型：</td>
 				<td>
 					<select id="type1" class="form-control ng-pristine ng-valid" style="width:auto;float: left;" name="complaintType">
-						<option value="1" >配送延迟</option>
-						<option value="2" >虚假回单</option>
-						<option value="3" >商品破损</option>
-						<option value="4" >配送缺发</option>
-						<option value="5" >态度问题</option>
+						<option value="1" <#if complaintMsg.complaintTypeId?default(0)==1>selected</#if>>配送延迟</option>
+						<option value="2" <#if complaintMsg.complaintTypeId?default(0)==2>selected</#if>>虚假回单</option>
+						<option value="3" <#if complaintMsg.complaintTypeId?default(0)==3>selected</#if>>商品破损</option>
+						<option value="4" <#if complaintMsg.complaintTypeId?default(0)==4>selected</#if>>配送缺发</option>
+						<option value="5" <#if complaintMsg.complaintTypeId?default(0)==5>selected</#if>>态度问题</option>
 					</select>
 					
 					<select id="type2" class="form-control ng-pristine ng-valid" style="width:auto;float: left;display:none;" disabled="disabled" name="complaintType">
-						<option value="6" >实物不符</option>
-						<option value="7" >产品质量</option>
-						<option value="8" >产品缺货</option>
+						<option value="6" <#if complaintMsg.complaintTypeId?default(0)==6>selected</#if>>实物不符</option>
+						<option value="7" <#if complaintMsg.complaintTypeId?default(0)==7>selected</#if>>产品质量</option>
+						<option value="8" <#if complaintMsg.complaintTypeId?default(0)==8>selected</#if>>产品缺货</option>
 					</select>
 					
 					<select id="type3" class="form-control ng-pristine ng-valid" style="width:auto;float: left;display:none;" disabled="disabled" name="complaintType">
-						<option value="9" >包装问题</option>
-						<option value="10" >产品过期</option>
+						<option value="9" <#if complaintMsg.complaintTypeId?default(0)==9>selected</#if>>包装问题</option>
+						<option value="10" <#if complaintMsg.complaintTypeId?default(0)==10>selected</#if>>产品过期</option>
 					</select>
 					
 					<select id="type4" class="form-control ng-pristine ng-valid" style="width:auto;float: left;display:none;" disabled="disabled" name="complaintType">
-						<option value="11" >订单错误</option>
-						<option value="12" >支付错误</option>
-						<option value="13" >账户问题</option>
+						<option value="11" <#if complaintMsg.complaintTypeId?default(0)==11>selected</#if>>订单错误</option>
+						<option value="12" <#if complaintMsg.complaintTypeId?default(0)==12>selected</#if>>支付错误</option>
+						<option value="13" <#if complaintMsg.complaintTypeId?default(0)==13>selected</#if>>账户问题</option>
 					</select>
 				</td>
 			</tr>
@@ -124,8 +126,8 @@
 			</#if>
 				<td height="30">状态：</td>
 				<td>
-				<input type="radio" checked="" value="1" name="handleStatus">处理中
-				<input type="radio" value="2" name="handleStatus">已处理
+				<input type="radio" checked="" value="1" name="handleStatus" <#if complaintMsg.handleStatus?default(0)==1>checked</#if>>处理中
+				<input type="radio" value="2" name="handleStatus" <#if complaintMsg.handleStatus?default(0)==2>checked</#if>>已处理
 				</td>
 			</tr>
 			<tr>
@@ -136,6 +138,6 @@
 		</div>
 	</form>
 </div>
-<script src="<@s.url '/assets/viewjs/orderdetail.js' />"></script>
 <script src="<@s.url '/assets/scripts/jquery-1.7.1.min.js' />"></script>
+<script src="<@s.url '/assets/viewjs/orderdetail.js' />"></script>
 <#include "/base/basefooter.ftl">

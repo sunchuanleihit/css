@@ -400,7 +400,8 @@ public class CssServiceImpl implements CssService {
 		dto.setWhName(complaint.getWhName());
 		dto.setGoodsName(complaint.getGoodsName());
 		dto.setActor(complaint.getActor());
-		
+		dto.setDepartmentId(complaint.getDepartment());
+		dto.setComplaintTypeId(complaint.getComplaintType());
 		return dto;
 	}
 	
