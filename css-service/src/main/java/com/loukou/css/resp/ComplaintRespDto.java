@@ -9,9 +9,11 @@ public class ComplaintRespDto implements Serializable{
 	
 	private String userName;
 	
+	private String createTime;
+	
 	private String orderSnMain;
 	
-	private String sellerName;
+	private String whName;
 	
 	private String goodsName;
 	
@@ -19,11 +21,13 @@ public class ComplaintRespDto implements Serializable{
 	
 	private String mobile;
 	
-	private Integer type;
+	private String city;
 	
-	private String complaintTime;
+	private String complaintType;
 	
-	private String dealTime;
+	private Integer handleStatus;
+	
+	private String addTime;
 	
 	private Integer status;
 	
@@ -33,6 +37,54 @@ public class ComplaintRespDto implements Serializable{
 	
 	public String getActor() {
 		return actor;
+	}
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getWhName() {
+		return whName;
+	}
+
+	public void setWhName(String whName) {
+		this.whName = whName;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getComplaintType() {
+		return complaintType;
+	}
+
+	public void setComplaintType(String complaintType) {
+		this.complaintType = complaintType;
+	}
+
+	public Integer getHandleStatus() {
+		return handleStatus;
+	}
+
+	public void setHandleStatus(Integer handleStatus) {
+		this.handleStatus = handleStatus;
+	}
+
+	public String getAddTime() {
+		return addTime;
+	}
+
+	public void setAddTime(String addTime) {
+		this.addTime = addTime;
 	}
 
 	public void setActor(String actor) {
@@ -71,14 +123,6 @@ public class ComplaintRespDto implements Serializable{
 		this.orderSnMain = orderSnMain;
 	}
 
-	public String getSellerName() {
-		return sellerName;
-	}
-
-	public void setSellerName(String sellerName) {
-		this.sellerName = sellerName;
-	}
-
 	public String getGoodsName() {
 		return goodsName;
 	}
@@ -93,30 +137,6 @@ public class ComplaintRespDto implements Serializable{
 
 	public void setDepartment(String department) {
 		this.department = department;
-	}
-
-	public Integer getType() {
-		return type;
-	}
-
-	public void setType(Integer type) {
-		this.type = type;
-	}
-
-	public String getComplaintTime() {
-		return complaintTime;
-	}
-
-	public void setComplaintTime(String complaintTime) {
-		this.complaintTime = complaintTime;
-	}
-
-	public String getDealTime() {
-		return dealTime;
-	}
-
-	public void setDealTime(String dealTime) {
-		this.dealTime = dealTime;
 	}
 
 	public Integer getStatus() {
