@@ -122,8 +122,8 @@ public class CssServiceImpl implements CssService {
 		
 		if(needInvoice==1 && orderList.get(0).getPayId()!=31 && orderList.get(0).getBuyerId()!=128702){
 			List<Invoice> invoiceList=invoiceDao.findByOrderSnMain(orderSnMain);
-			if (CollectionUtils.isEmpty(invoiceList)) {
-				orderDao.updateNeedInvoiceByOrderSnMain(orderSnMain,2);
+			if (!CollectionUtils.isEmpty(invoiceList)) {
+				invoiceDao.updateOrderValid(orderSnMain,0);//作废之前的发票单
 			}
 			
 			double invoiceAmount=0;
@@ -448,24 +448,14 @@ public class CssServiceImpl implements CssService {
 				result.setMessage("投诉失败");
 				return result;
 			}
-		}else{
-			LkComplaint complaintData=new LkComplaint();
-			complaintData.setUserName(userName);
-			complaintData.setMobile(mobile);
-			complaintData.setOrderSnMain(orderSnMain);
-			complaintData.setWhId(whId);
-			complaintData.setWhName(whName);
-			complaintData.setGoodsName(goodsName);
-			complaintData.setContent(content);
-			complaintData.setDepartment(department);
-			complaintData.setComplaintType(complaintType);
-			complaintData.setHandleStatus(handleStatus);
-			complaintData.setStatus(0);
-			complaintData.setCreatTime(DateUtils.str2Date(creatTime));
-			complaintData.setCityCode(orderList.get(0).getSellSite());
-			complaintData.setActor(actor);
-			LkComplaint complaintResult=lkComplaintDao.save(complaintData);
-			if(complaintResult==null){
+		}else{//修改投诉
+			Date finishTime=null;
+			if(handleStatus==2){
+				finishTime=new Date();
+			}
+			int lcResult=lkComplaintDao.updateComplaintById(complaintId, userName, mobile, whId, whName, goodsName, content, department, 
+					complaintType, handleStatus, finishTime, actor);
+			if(lcResult>0){
 				result.setCode("400");
 				result.setMessage("生成退款支付单失败");
 				return result;

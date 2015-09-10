@@ -74,6 +74,13 @@ public class OrderController extends  BaseController{
 		if(orderDetail.getCode()==200){
 			List<BkOrderListDto> orderDetailMsgs = orderDetail.getResult().getOrderList();
 			mv.addObject("orderDetailMsgs", orderDetailMsgs);
+			int finished=0;
+			for(BkOrderListDto od:orderDetailMsgs){
+				if(od.getBase().getStatus()==15){
+					finished=1;
+				}
+			}
+			mv.addObject("finished", finished);
 		}
 		
 		String checker="";
@@ -382,6 +389,7 @@ public class OrderController extends  BaseController{
 			@RequestParam(value = "returnType", required = false, defaultValue = "") int returnType,
 			@RequestParam(value = "payId", required = false, defaultValue = "") int payId,
 			@RequestParam(value = "shippingFee", required = false, defaultValue = "") double shippingFee,
+			@RequestParam(value = "checkedGoods", required = false, defaultValue = "") int[] checkedGoodsList,
 			@RequestParam(value = "goodsId", required = false, defaultValue = "") int[] goodsIdList,
 			@RequestParam(value = "specId", required = false, defaultValue = "") int[] specIdList,
 			@RequestParam(value = "proType", required = false, defaultValue = "") int[] proTypeList,
@@ -393,12 +401,11 @@ public class OrderController extends  BaseController{
 			@RequestParam(value = "paymentId", required = false, defaultValue = "") int[] paymentIdList,
 			@RequestParam(value = "returnAmount", required = false, defaultValue = "") double[] returnAmountList
 			){
-		
 		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
 		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
 		
 		BaseRes<String> res=bkOrderService.generateReturn(actor,orderId, postScript, orderSnMain, returnType, payId, shippingFee, 
-		goodsIdList, specIdList, proTypeList, recIdList, goodsReturnNumList, goodsReturnAmountList, goodsReasonList, goodsNameList,
+		checkedGoodsList,goodsIdList, specIdList, proTypeList, recIdList, goodsReturnNumList, goodsReturnAmountList, goodsReasonList, goodsNameList,
 		paymentIdList,returnAmountList);
 		return res;
 	}
@@ -456,13 +463,14 @@ public class OrderController extends  BaseController{
 			@RequestParam(value = "orderSnMain", required = false, defaultValue = "") String orderSnMain,
 			@RequestParam(value = "postScript", required = false, defaultValue = "") String postScript,
 			@RequestParam(value = "paymentId", required = false, defaultValue = "") int[] paymentIdList,
+			@RequestParam(value = "hasPaid", required = false, defaultValue = "") double hasPaid,
 			@RequestParam(value = "returnAmount", required = false, defaultValue = "") double[] returnAmountList
 			){
 		
 		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
 		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
 		
-		BaseRes<String> res=bkOrderService.generatePaymentRefund(reason,actor,orderSnMain,postScript,paymentIdList,returnAmountList);
+		BaseRes<String> res=bkOrderService.generatePaymentRefund(reason,actor,orderSnMain,postScript,paymentIdList,hasPaid,returnAmountList);
 		return res;
 	}
 	

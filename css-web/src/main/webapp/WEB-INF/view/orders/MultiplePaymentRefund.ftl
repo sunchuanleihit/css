@@ -5,12 +5,13 @@
 		</strong>
 	</div>
 	
-	<form method="post" action="/order/generatePaymentRefund" id="returnForm">
+	<form method="post" id="returnForm">
 	<input type="hidden" name="orderSnMain" value="${orderDetailMsgs[0].base.orderSnMain}">
+	<input type="hidden" name="hasPaid" value="${hasPaid}">
 	<div class="row">
 		<div class="panel panel-default"  class="text-center">
 			<div class="panel-heading">
-				<button type="button" class="btn btn-primary" ng-click="generatePaymentRefund();">生成退货订单</button>
+				<button type="button" class="btn btn-primary" ng-click="generatePaymentRefund();">生成退款订单</button>
 			</div>
 			<div>
 				<table id="beyond_paid_return_table">
