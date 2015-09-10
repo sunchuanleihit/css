@@ -11,8 +11,8 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<properties>
-		<dubbo-ext.version>0.1.0</dubbo-ext.version>
-		<cat-ext.version>0.1.0</cat-ext.version>
+		<dubbo-ext.version>0.2.0</dubbo-ext.version>
+		<cat-ext.version>0.2.0</cat-ext.version>
 	</properties>
 	<dependencies>
 		<!-- dubbo -->
@@ -129,7 +129,21 @@
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 		</dependency>
-
+		<!-- poi -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml-schemas</artifactId>
+			<version>3.11</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.11</version>
+		</dependency>
 		<!-- File Upload -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
@@ -158,6 +172,25 @@
 			<version>9.2.4.v20141103</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.loukou</groupId>
+			<artifactId>css-service</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.loukou</groupId>
+			<artifactId>order-api</artifactId>
+			<version>0.5.0</version>
+		</dependency>
+		<!-- pos-account-client -->
+		<dependency>
+			<groupId>com.loukou</groupId>
+			<artifactId>pos-account-client</artifactId>
+			<version>0.2.1</version>
+		</dependency>
+		
 	</dependencies>
 	
 	<build>

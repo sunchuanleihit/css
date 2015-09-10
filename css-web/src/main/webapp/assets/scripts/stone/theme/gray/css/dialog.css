@@ -1,0 +1,25 @@
+.s-dialog-inner {
+	margin: 15px;
+	padding: 0;
+	height: auto;
+}
+.s-dialog-icon {
+	float: left;
+	width: 32px;
+	height: 32px;
+	margin-right: 10px;
+}
+.s-dialog-alert{
+	background: url('../images/dialog/alert.png') no-repeat scroll 0 0 transparent;
+}
+.s-dialog-confirm{
+	background: url('../images/dialog/confirm.png') no-repeat scroll 0 0 transparent;
+}
+.s-dialog-error{
+	background: url('../images/dialog/error.png') no-repeat scroll 0 0 transparent;
+}
+.s-dialog-success{
+	background: url('../images/dialog/success.png') no-repeat scroll 0 0 transparent;
+}
+.s-dialog-bubble {
+}

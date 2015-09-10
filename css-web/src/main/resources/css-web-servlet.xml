@@ -3,26 +3,43 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xmlns:mvc="http://www.springframework.org/schema/mvc"
     xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
     xsi:schemaLocation="
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
 	<!-- Import dubbo Bean -->
     <import resource="classpath*:css-web-dubbo.xml" />
+    <import resource="classpath*:css-service-appcontext.xml" />
+    
+    <!-- 注册中心配置 -->  
+  	<dubbo:registry address="${dubbo.registry.address}" />
+<!--   	本地调试使用  -->
+<!--     <dubbo:registry address="zookeeper://127.0.0.1:2181" /> -->
+	<dubbo:application name="order-service" />
+  	<dubbo:protocol name="dubbo" port="${dubbo.protocol.port.order.service}" />
 
     <mvc:resources mapping="/resources/**" location="/resources/" />
     
+    <mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.loukou.css.interceptor.WhInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+    
     <mvc:annotation-driven />
-  	<context:component-scan base-package="com.loukou.css.web" />
+  	<context:component-scan base-package="com.loukou.css" />
 
     <!-- Only needed because we require file upload in the org.springframework.samples.mvc.fileupload 
         package -->
-    <bean id="multipartResolver"
-        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<property name="defaultEncoding" value="UTF-8"/>
-		<property name="uploadTempDir" value="resources/temp/upload"/>
-    </bean>
+<!--     <bean id="multipartResolver" -->
+<!--         class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> -->
+<!-- 		<property name="defaultEncoding" value="UTF-8"/> -->
+<!-- 		<property name="uploadTempDir" value="resources/temp/upload"/> -->
+<!--     </bean> -->
 
 	<!-- freemarker的配置 --> 
 	 <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer"> 
@@ -34,8 +51,8 @@
 	    <prop key="locale">zh_CN</prop> 
 	    <prop key="datetime_format">yyyy-MM-dd</prop> 
 	    <prop key="date_format">yyyy-MM-dd</prop> 
-	    <prop key="number_format">\#.\#\#</prop> 
-	   </props> 
+	    <prop key="number_format">#.##</prop> 
+	   </props>
 	  </property> 
 	 </bean> 
 	 <!-- FreeMarker视图解析   如返回student。。在这里配置后缀名ftl和视图解析器。。--> 
