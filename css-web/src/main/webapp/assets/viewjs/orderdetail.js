@@ -2,6 +2,13 @@ function opershow() {
 	$("#oper").toggle();
 }
 
+$(function(){
+	var complaintId=$("input[name='complaintId']").val();
+	if(complaintId>0){
+		selectDepartment();
+	}
+});
+
 //选择微仓
 function selectSeller(){
 	var whId=$("#whId").val();
@@ -199,31 +206,6 @@ function OrderDetailController($scope, $http) {
 		});
 	}
 	
-	//提交投诉
-	$scope.generateComplaint = function() {
-		
-		jConfirm('确认要提交吗？', '提交确认', function(r) {
-			if (r) {
-			$.ajax( {
-				type : "POST",
-				url : "/order/generateComplaint", 
-				data : $('#returnForm').serializeArray(),
-				dataType: "json",
-				success : function(data) {
-					if(data.code==200){
-						jAlert(data.message);
-					}else{
-						jAlert(data.message);
-					}
-				},   
-				error :function(data){
-					jAlert("系统错误");
-				}
-			});
-			}
-		});
-	}
-	
 	//保存
 	$scope.changeOrder = function() {
 		jConfirm('确认要保存吗？', '保存确认', function(r) {
@@ -269,7 +251,31 @@ function OrderDetailController($scope, $http) {
 	
 	//跳转投诉
 	$scope.complaintMsg = function(index) {
-		GetDetailTab("complaintMsg","/order/complaintMsg?orderSnMain=" + index + "&complaintId=0", index+"投诉");
+		GetDetailTab("complaintMsg","/complaint/complaintMsg?orderSnMain=" + index + "&complaintId=0", index+"投诉");
+	}
+	
+	//提交投诉
+	$scope.generateComplaint = function() {
+		jConfirm('确认要提交吗？', '提交确认', function(r) {
+			if (r) {
+			$.ajax( {
+				type : "POST",
+				url : "/complaint/generateComplaint", 
+				data : $('#returnForm').serializeArray(),
+				dataType: "json",
+				success : function(data) {
+					if(data.code==200){
+						jAlert(data.message);
+					}else{
+						jAlert(data.message);
+					}
+				},   
+				error :function(data){
+					jAlert("系统错误");
+				}
+			});
+			}
+		});
 	}
 	
 	//子订单作废
