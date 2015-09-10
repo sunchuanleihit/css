@@ -1,6 +1,5 @@
 package com.loukou.css.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -387,7 +386,7 @@ public class CssServiceImpl implements CssService {
 		if(complaint.getDepartment()!=null){
 			dto.setDepartment(DeptEnum.parseName(complaint.getDepartment()).getName());
 		}
-		if(complaint.getComplaintType()!=null){
+		if(complaint.getComplaintType()!=0){
 			dto.setComplaintType(ComplaintTypeEnum.parseName(complaint.getComplaintType()).getName());
 		}
 		dto.setHandleStatus(complaint.getHandleStatus());
@@ -408,7 +407,7 @@ public class CssServiceImpl implements CssService {
 	
 	//提交/修改投诉
 	public CssBaseRes<String> generateComplaint(String actor,int complaintId,String orderSnMain,int whId,String whName,
-		String[] goodsNameList,String content,String creatTime,String userName,String mobile,int department,String complaintType,int handleStatus){
+		String[] goodsNameList,String content,String creatTime,String userName,String mobile,int department,int complaintType,int handleStatus){
 		CssBaseRes<String> result=new CssBaseRes<String>();
 		
 		List<Order> orderList = orderDao.findByOrderSnMain(orderSnMain);//获取订单列表信息

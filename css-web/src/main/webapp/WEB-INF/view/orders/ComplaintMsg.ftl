@@ -92,27 +92,28 @@
 				<td height="30">投诉类型：</td>
 				<td>
 					<select id="type1" class="form-control ng-pristine ng-valid" style="width:auto;float: left;" name="complaintType">
-						<#list wscList as wsc>
-						<option value="${wsc}" >${wsc}</option>
-						</#list>
+						<option value="1" >配送延迟</option>
+						<option value="2" >虚假回单</option>
+						<option value="3" >商品破损</option>
+						<option value="4" >配送缺发</option>
+						<option value="5" >态度问题</option>
 					</select>
 					
 					<select id="type2" class="form-control ng-pristine ng-valid" style="width:auto;float: left;display:none;" disabled="disabled" name="complaintType">
-						<#list pcList as pc>
-						<option value="${pc}" >${pc}</option>
-						</#list>
+						<option value="6" >实物不符</option>
+						<option value="7" >产品质量</option>
+						<option value="8" >产品缺货</option>
 					</select>
 					
 					<select id="type3" class="form-control ng-pristine ng-valid" style="width:auto;float: left;display:none;" disabled="disabled" name="complaintType">
-						<#list whcList as whc>
-						<option value="${whc}" >${whc}</option>
-						</#list>
+						<option value="9" >包装问题</option>
+						<option value="10" >产品过期</option>
 					</select>
 					
 					<select id="type4" class="form-control ng-pristine ng-valid" style="width:auto;float: left;display:none;" disabled="disabled" name="complaintType">
-						<#list scList as sc>
-						<option value="${sc}" >${sc}</option>
-						</#list>
+						<option value="11" >订单错误</option>
+						<option value="12" >支付错误</option>
+						<option value="13" >账户问题</option>
 					</select>
 				</td>
 			</tr>

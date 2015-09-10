@@ -25,6 +25,6 @@ public interface LkComplaintDao extends PagingAndSortingRepository<LkComplaint, 
 			+ "department = ?8,complaintType = ?9,handleStatus = ?10,finishTime = ?11,actor = ?12"
 			+ " where id = ?1")
 	int updateComplaintById(int complaintId,String userName,String mobile,int whId,String whName,String goodsName,String content,int department,
-			String complaintType,int handleStatus,Date finishTime,String actor);
+			int complaintType,int handleStatus,Date finishTime,String actor);
 }
 
