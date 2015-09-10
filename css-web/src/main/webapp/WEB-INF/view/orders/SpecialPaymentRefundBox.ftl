@@ -5,7 +5,7 @@
 		</strong>
 	</div>
 	
-	<form method="post" action="/order/generatePaymentRefund" id="returnForm">
+	<form method="post" id="returnForm">
 	<input type="hidden" name="orderSnMain" value="${orderDetailMsgs[0].base.orderSnMain}">
 	<div class="row">
 		<div class="panel panel-default"  class="text-center">

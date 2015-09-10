@@ -5,6 +5,8 @@ import java.util.List;
 import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.entity.Site;
 import com.loukou.css.entity.Store;
+import com.loukou.css.req.ComplaintReqDto;
+import com.loukou.css.resp.ComplaintRespDto;
 import com.loukou.css.resp.ComplaintRespListDto;
 
 public interface CssService {
@@ -34,7 +36,9 @@ public interface CssService {
 	 * @param rows
 	 * @return
 	 */
-	public ComplaintRespListDto queryComplaint(String orderSnMain, String weic, String startTime, String endTime, int page, int rows);
+	public ComplaintRespListDto queryComplaint(ComplaintReqDto complaintReqDto, int page, int rows);
 	
-	public CssBaseRes<String> generateComplaint(String actor,int complaintId,String orderSnMain,int whId,String whName,String[] goodsNameList,String content,String creatTime,String userName,String mobile,int department,String complaintType,int handleStatus);
+	public CssBaseRes<String> generateComplaint(String actor,int complaintId,String orderSnMain,int whId,String whName,String[] goodsNameList,String content,String creatTime,String userName,String mobile,int department,int complaintType,int handleStatus);
+
+	public List<ComplaintRespDto> queryComplaintByIds(List<Integer> idList);
 }

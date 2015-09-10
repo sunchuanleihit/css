@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.loukou.css.entity.LkComplaint;
+
 public class ComplaintRespListDto implements Serializable{
 	private static final long serialVersionUID = -1787393288847592607L;
 	
@@ -21,5 +23,4 @@ public class ComplaintRespListDto implements Serializable{
 	public void setComplaintList(List<ComplaintRespDto> complaintList) {
 		this.complaintList = complaintList;
 	}
-	
 }

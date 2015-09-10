@@ -46,26 +46,34 @@ function OrderDetailController($scope, $http) {
 	
 	//退货
 	$scope.generateReturn = function() {
-		jConfirm('确认要退货吗？', '退货确认', function(r) {
-			if (r) {
-				$.ajax( {   
-					type : "POST",
-					url : "/order/generateReturn", 
-					data : $('#returnForm').serializeArray(),
-					dataType: "json",
-					success : function(data) {
-						if(data.code==200){
-							jAlert(data.message);
-						}else{
-							jAlert(data.message);
+		var radioChks = $("input[type=radio][name='orderId']:checked");
+		var selectChks = $("input[type=checkbox][name=checkedGoods]:checked");
+		if(!radioChks){
+			jAlert("请选择退货订单");
+		}else if(!selectChks){
+			jAlert("请选择退货商品");
+		}else{
+			jConfirm('确认要退货吗？', '退货确认', function(r) {
+				if (r) {
+					$.ajax( {   
+						type : "POST",
+						url : "/order/generateReturn", 
+						data : $('#returnForm').serializeArray(),
+						dataType: "json",
+						success : function(data) {
+							if(data.code==200){
+								jAlert(data.message);
+							}else{
+								jAlert(data.message);
+							}
+						},   
+						error :function(data){
+							jAlert("系统错误");
 						}
-					},   
-					error :function(data){
-						jAlert("系统错误");
-					}
-				});
-			}
-		});
+					});
+				}
+			});
+		}
 	}
 	
 	//作废订单

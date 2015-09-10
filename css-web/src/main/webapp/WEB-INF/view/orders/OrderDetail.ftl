@@ -25,10 +25,10 @@
 			<div class="panel-heading">
 			<form method="post" id="orderForm">
 				<input type="hidden" name="orderSnMain" value="${orderDetailMsgs[0].base.orderSnMain}">
-				<input type="text" name="needShiptime" class="form-control" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="${orderDetailMsgs[0].base.needShipTime}" style="width:120px;float: left;">
+				<input type="text" name="needShiptime" class="form-control" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="${orderDetailMsgs[0].base.needShipTime?default("")}" style="width:120px;float: left;">
 				<select name="needShiptimeSlot" class="form-control ng-pristine ng-valid" style="width:130px;float: left;margin-left: 10px;">
 				<#list timeList as time>
-					<#if time==orderDetailMsgs[0].base.needShipTimeSlot>
+					<#if time==orderDetailMsgs[0].base.needShipTimeSlot?default("")>
 						<option value="${time}" selected>${time}</option>
 					<#else>
 						<option value="${time}" >${time}</option>
@@ -41,7 +41,7 @@
 			</form>
 			</div>
 			<div class="panel-heading">
-				<#if orderDetailMsgs[0].base.status==15>
+				<#if finished==1>
 				<button type="button" class="btn btn-primary" ng-click="returnGoods(${orderDetailMsgs[0].base.orderSnMain});">退货</button>
 				</#if>
 				<#if orderDetailMsgs[0].base.status==2>

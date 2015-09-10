@@ -44,7 +44,8 @@
 							<#list order.goodsList as goods>
 							<tr height="26" align="center">
 							<td width="12%">
-								<input style="width: 50px;" type="checkbox" alt="${order.base.orderId}" value="${goods.goodsId}" name="goodsId">${goods.goodsId}
+								<input style="width: 50px;" type="checkbox" value="${goods.goodsId}" name="checkedGoods">${goods.goodsId}
+								<input type="hidden" name="goodsId" value="${goods.goodsId}">
 								<input type="hidden" name="specId" value="${goods.specId}">
 								<input type="hidden" name="proType" value="${goods.proType}">
 								<input type="hidden" name="recId" value="${goods.recId}">
