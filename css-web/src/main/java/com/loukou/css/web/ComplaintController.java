@@ -169,6 +169,16 @@ public class ComplaintController extends  BaseController{
 			String cCreateTime = complaintMsg.getCreateTime();
 			String rCreateTime = DateUtils.date2DateStr(DateUtils.str2Date(cCreateTime));
 			complaintMsg.setCreateTime(rCreateTime);
+			
+			String goodsIdList=complaintMsg.getGoodsId();
+			List<Integer> gidList=new ArrayList<Integer>();
+			if(goodsIdList!=null){
+				String[] tempList=goodsIdList.split(",");
+				for(String t:tempList){
+					gidList.add(Integer.parseInt(t));
+				}
+			}
+			mv.addObject("gidList",gidList);
 		}
 		mv.addObject("complaintMsg",complaintMsg);
 		mv.addObject("complaintId",complaintId);
@@ -183,7 +193,7 @@ public class ComplaintController extends  BaseController{
 			@RequestParam(value = "orderSnMain", required = false, defaultValue = "") String orderSnMain,
 			@RequestParam(value = "whId", required = false, defaultValue = "") int whId,
 			@RequestParam(value = "whName", required = false, defaultValue = "") String whName,
-			@RequestParam(value = "goodsName", required = false, defaultValue = "") String[] goodsNameList,
+			@RequestParam(value = "goodsId", required = false, defaultValue = "") int[] goodsIdList,
 			@RequestParam(value = "content", required = false, defaultValue = "") String content,
 			@RequestParam(value = "creatTime", required = false, defaultValue = "") String creatTime,
 			@RequestParam(value = "userName", required = false, defaultValue = "") String userName,
@@ -196,7 +206,7 @@ public class ComplaintController extends  BaseController{
 		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
 		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
 		
-		CssBaseRes<String> res=cssService.generateComplaint(actor,complaintId,orderSnMain,whId,whName,goodsNameList,content,creatTime,userName,mobile,department,complaintType,handleStatus);
+		CssBaseRes<String> res=cssService.generateComplaint(actor,complaintId,orderSnMain,whId,whName,goodsIdList,content,creatTime,userName,mobile,department,complaintType,handleStatus);
 		return res;
 	}
 }

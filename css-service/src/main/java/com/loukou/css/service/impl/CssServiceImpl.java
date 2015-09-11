@@ -402,13 +402,15 @@ public class CssServiceImpl implements CssService {
 		dto.setActor(complaint.getActor());
 		dto.setDepartmentId(complaint.getDepartment());
 		dto.setComplaintTypeId(complaint.getComplaintType());
+		dto.setWhId(complaint.getWhId());
+		dto.setGoodsId(complaint.getGoodsId());
 		return dto;
 	}
 	
 	
 	//提交/修改投诉
 	public CssBaseRes<String> generateComplaint(String actor,int complaintId,String orderSnMain,int whId,String whName,
-		String[] goodsNameList,String content,String creatTime,String userName,String mobile,int department,int complaintType,int handleStatus){
+		int[] goodsIdList,String content,String creatTime,String userName,String mobile,int department,int complaintType,int handleStatus){
 		CssBaseRes<String> result=new CssBaseRes<String>();
 		
 		List<Order> orderList = orderDao.findByOrderSnMain(orderSnMain);//获取订单列表信息
@@ -418,9 +420,24 @@ public class CssServiceImpl implements CssService {
 			return result;
 		}
 		
+		if(goodsIdList.length<=0){
+			result.setCode("400");
+			result.setMessage("所选商品为空");
+			return result;
+		}
+		
+		List<Integer> gidList=new ArrayList<Integer>();
+		String goodsId="";
+		for(int g:goodsIdList){
+			gidList.add(g);
+			goodsId+=g+",";
+		}
+		goodsId=goodsId.substring(0,goodsId.length()-1);
+		
+		List<Goods> goodsList=goodsDao.getGoodsByIDs(gidList);
 		String goodsName="";
-		for(String sn:goodsNameList){
-			goodsName+=sn+",";
+		for(Goods g:goodsList){
+			goodsName+=g.getGoodsName()+",";
 		}
 		goodsName=goodsName.substring(0,goodsName.length()-1);
 		
@@ -433,6 +450,7 @@ public class CssServiceImpl implements CssService {
 			complaintData.setOrderSnMain(orderSnMain);
 			complaintData.setWhId(whId);
 			complaintData.setWhName(whName);
+			complaintData.setGoodsId(goodsId);
 			complaintData.setGoodsName(goodsName);
 			complaintData.setContent(content);
 			complaintData.setDepartment(department);
@@ -449,13 +467,10 @@ public class CssServiceImpl implements CssService {
 				return result;
 			}
 		}else{//修改投诉
-			Date finishTime=null;
-			if(handleStatus==2){
-				finishTime=new Date();
-			}
+			Date finishTime=new Date();
 			int lcResult=lkComplaintDao.updateComplaintById(complaintId, userName, mobile, whId, whName, goodsName, content, department, 
-					complaintType, handleStatus, finishTime, actor);
-			if(lcResult>0){
+					complaintType, handleStatus, actor,finishTime,goodsId);
+			if(lcResult<=0){
 				result.setCode("400");
 				result.setMessage("生成退款支付单失败");
 				return result;
