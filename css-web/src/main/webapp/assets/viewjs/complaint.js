@@ -15,21 +15,27 @@ app.controller('IndexCtrl', ['$scope','$http', function ($scope, $http) {
 		}
 	});
     $scope.cityChange = function () {
-		var siteCode = $scope.city.id;
+    	var siteCode = "";
+    	if($scope.city && $scope.city!=null){
+    		siteCode = $scope.city.id;
+    	}
+    	$scope.weicOptions = [];
 		$scope.weic = "";
-		$http.get("/complaint/getStores?siteCode="+siteCode).success(function(data){
-			if(data){
-				var storeOptions = new Array();
-				for(var i=0; i<data.length; i++){
-					var store = data[i];
-					storeOptions.push({
-						"id":store.storeId,
-						"name":store.storeName
-					});
+		if(siteCode){
+			$http.get("/complaint/getStores?siteCode="+siteCode).success(function(data){
+				if(data){
+					var storeOptions = new Array();
+					for(var i=0; i<data.length; i++){
+						var store = data[i];
+						storeOptions.push({
+							"id":store.storeId,
+							"name":store.storeName
+						});
+					}
+					$scope.weicOptions = storeOptions;
 				}
-				$scope.weicOptions = storeOptions;
-			}
-		});
+			});
+		}
     };
     $scope.depts=[{
         "id":1,
