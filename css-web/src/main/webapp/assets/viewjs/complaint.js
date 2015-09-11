@@ -229,6 +229,8 @@ function exportComplaint(){
 	$("#ids").val(ids);
 	$("#exportExcelForm").submit();
 }
-function order_detail(){
-	alert(3);
+function order_detail(index,rowData){
+	var orderSnMain=rowData.orderSnMain;
+	var id=rowData.id;
+	GetDetailTab("complaintMsg","/complaint/complaintMsg?orderSnMain=" + orderSnMain + "&complaintId="+id, orderSnMain+"投诉");
 }

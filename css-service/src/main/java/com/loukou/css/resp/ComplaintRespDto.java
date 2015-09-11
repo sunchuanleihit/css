@@ -17,12 +17,24 @@ public class ComplaintRespDto implements Serializable{
 	
 	private String goodsName;
 	
+	private int departmentId;
+	
 	private String department;
 	
 	private String mobile;
 	
 	private String city;
 	
+	private int complaintTypeId;
+	
+	public int getComplaintTypeId() {
+		return complaintTypeId;
+	}
+
+	public void setComplaintTypeId(int complaintTypeId) {
+		this.complaintTypeId = complaintTypeId;
+	}
+
 	private String complaintType;
 	
 	private Integer handleStatus;
@@ -129,6 +141,14 @@ public class ComplaintRespDto implements Serializable{
 
 	public void setGoodsName(String goodsName) {
 		this.goodsName = goodsName;
+	}
+	
+	public int getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(int departmentId) {
+		this.departmentId = departmentId;
 	}
 
 	public String getDepartment() {
