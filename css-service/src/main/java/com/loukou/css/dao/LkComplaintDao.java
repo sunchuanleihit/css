@@ -19,12 +19,10 @@ public interface LkComplaintDao extends PagingAndSortingRepository<LkComplaint, 
 	@Query("select c from LkComplaint c where id in ?1")
 	List<LkComplaint> getByIds(List<Integer> idList);
 
-	@Transactional(value="transactionManagerMall")
+	@Transactional
 	@Modifying
-	@Query("UPDATE LkComplaint set userName = ?2,mobile = ?3,whId = ?4,whName = ?5,goodsName = ?6,content = ?7,"
-			+ "department = ?8,complaintType = ?9,handleStatus = ?10,finishTime = ?11,actor = ?12"
-			+ " where id = ?1")
+	@Query("UPDATE LkComplaint set userName = ?2,mobile = ?3,whId = ?4,whName = ?5,goodsId = ?13,goodsName = ?6,content = ?7,department = ?8,complaintType = ?9,handleStatus = ?10,actor = ?11,finishTime = ?12 WHERE id = ?1")
 	int updateComplaintById(int complaintId,String userName,String mobile,int whId,String whName,String goodsName,String content,int department,
-			int complaintType,int handleStatus,Date finishTime,String actor);
+			int complaintType,int handleStatus,String actor,Date finishTime,String goodsId);
 }
 

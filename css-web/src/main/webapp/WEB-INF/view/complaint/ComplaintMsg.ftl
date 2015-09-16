@@ -26,7 +26,7 @@
 							<td valign="middle" align="center">
 								<select name="whId" id="whId" class="form-control ng-pristine ng-valid" style="width:auto;float: left;" onchange="selectSeller()">
 									<#list orderDetailMsgs as order>
-									<option value="${order.base.sellerId}" >${order.base.sellerName}</option>
+									<option value="${order.base.sellerId}" <#if complaintMsg.whId?default(0)==order.base.sellerId>selected</#if>>${order.base.sellerName}</option>
 									</#list>
 								</select>
 							</td>
@@ -35,13 +35,26 @@
 								<tbody>
 									<#list orderDetailMsgs as order>
 									<#list order.goodsList as goods>
-									<#if order_index==0>
-									<tr height="26" align="center" name="s${order.base.sellerId}">
+									<#if complaintMsg.whId?default(0)==0>
+										<#if order_index==0>
+										<tr height="26" align="center" name="s${order.base.sellerId}">
+										<#else>
+										<tr height="26" align="center" name="s${order.base.sellerId}" style="display:none;">
+										</#if>
 									<#else>
-									<tr height="26" align="center" name="s${order.base.sellerId}" style="display:none;">
+										<#if complaintMsg.whId?default(0)==order.base.sellerId>
+										<tr height="26" align="center" name="s${order.base.sellerId}">
+										<#else>
+										<tr height="26" align="center" name="s${order.base.sellerId}" style="display:none;">
+										</#if>
 									</#if>
+							
 									<td width="12%">
-									<input id="goods_name" style="width: 50px;" type="checkbox" value="${goods.goodsName}" name="goodsName">${goods.goodsId}
+									<#if (gidList?size>0)>
+										<input id="goods_name" style="width: 50px;" type="checkbox" value="${goods.goodsId}" name="goodsId" <#list gidList as g><#if g?default(0)==goods.goodsId>checked</#if></#list>>${goods.goodsId}
+									<#else>
+										<input id="goods_name" style="width: 50px;" type="checkbox" value="${goods.goodsId}" name="goodsId" >${goods.goodsId}
+									</#if>
 									</td>
 									<td width="28%">${goods.goodsName}</td>
 									<td width="6%">${goods.quantity}</td>
