@@ -10,7 +10,7 @@
 		<div id="tabs" style="border:1px solid #dadada;">
 			<div title="投诉列表" closable="true" style="padding:20px;">
 				<div id="panel" style="padding:20px;border:1px solid #dadada;" ng-controller="IndexCtrl">
-					<form id="no_return_search_form">
+					<form id="complaintForm">
 						<span class="inputspan">订单号<input type="text" id="orderSnMain" /></span>
 						<span class="inputspan">订单时间<input type="text" id="startTime"/>--<input type="text" id="endTime"/></span>
 						<span class="inputspan">处理状态
@@ -41,7 +41,7 @@
 		                </span>
 						<span class="inputspan">&nbsp;&nbsp;
 							<input type="button" ng-click="reloadTable();" value="查询" class="formbtn"/>&nbsp;&nbsp;
-							<input type="reset" value="重置" class="formbtn" />
+							<input type="button" value="重置" ng-click="resetForm()" class="formbtn" />
 						</span>
 					</form>
 				</div>

@@ -115,6 +115,14 @@ app.controller('IndexCtrl', ['$scope','$http', function ($scope, $http) {
     	$scope.complaintType = "";
     }
     
+    $scope.resetForm = function(){
+    	$("#complaintForm")[0].reset();
+    	$("#startTime").datebox("setValue","");
+    	$("#endTime").datebox("setValue","");
+    	$scope.department = "";
+    	$scope.city = "";
+    }
+    
     $scope.reloadTable = function(){
     	var orderSnMain = $("#orderSnMain").val();
     	var startTime = $("#startTime").datebox("getValue");
@@ -209,9 +217,6 @@ function typeFormatter(num){
 function statusFormatter(num){
 	var map = {0:"待处理",1:"处理中",2:"已处理"};
 	return map[num];
-}
-function complaintDetail(){
-	alert(1);
 }
 function exportComplaint(){
 	var selections=$("#table").datagrid("getSelections");
