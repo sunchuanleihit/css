@@ -50,7 +50,7 @@
 									</#if>
 							
 									<td width="12%">
-									<#if (gidList?size>0)>
+									<#if (gidList?exists && gidList?size>0)>
 										<input id="goods_name" style="width: 50px;" type="checkbox" value="${goods.goodsId}" name="goodsId" <#list gidList as g><#if g?default(0)==goods.goodsId>checked</#if></#list>>${goods.goodsId}
 									<#else>
 										<input id="goods_name" style="width: 50px;" type="checkbox" value="${goods.goodsId}" name="goodsId" >${goods.goodsId}
@@ -132,14 +132,10 @@
 					</select>
 				</td>
 			</tr>
-			<#if complaintId==0>
-			<tr style="display:none;">
-			<#else>
 			<tr>
-			</#if>
 				<td height="30">状态：</td>
 				<td>
-				<input type="radio" checked="" value="1" name="handleStatus" <#if complaintMsg.handleStatus?default(0)==1>checked</#if>>处理中
+				<input type="radio" checked="" value="1" name="handleStatus" <#if (complaintId==0 || complaintMsg.handleStatus?default(0)==1)>checked</#if>>处理中
 				<input type="radio" value="2" name="handleStatus" <#if complaintMsg.handleStatus?default(0)==2>checked</#if>>已处理
 				</td>
 			</tr>

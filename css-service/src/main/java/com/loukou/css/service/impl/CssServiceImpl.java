@@ -443,7 +443,6 @@ public class CssServiceImpl implements CssService {
 		
 		//新增投诉
 		if(complaintId==0){
-			handleStatus=0;
 			LkComplaint complaintData=new LkComplaint();
 			complaintData.setUserName(userName);
 			complaintData.setMobile(mobile);

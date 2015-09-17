@@ -16,7 +16,6 @@
 						<span class="inputspan">处理状态
 							<select id="handleStatus">
 								<option value="">处理状态</option>
-								<option value=0>待处理</option>
 								<option value=1>处理中</option>
 								<option value=2>已处理</option>
 							</select>

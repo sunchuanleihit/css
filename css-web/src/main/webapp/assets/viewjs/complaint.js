@@ -215,7 +215,7 @@ function typeFormatter(num){
 	return map[num];
 }
 function statusFormatter(num){
-	var map = {0:"待处理",1:"处理中",2:"已处理"};
+	var map = {1:"处理中",2:"已处理"};
 	return map[num];
 }
 function exportComplaint(){
