@@ -149,7 +149,7 @@
 				  	<#list orderDetailMsgs as order>
 					<tr style="cursor:pointer" ng-click="getordergoodslist(${order.base.orderId});">
 					  <td class="text-center">${order.base.taoOrderSn?default("")}</td>
-					  <td class="text-center">${order.base.sellerName}</td>
+					  <td class="text-center" onclick="showSeller(${order.base.sellerId})">${order.base.sellerName}</td>
 					  <td class="text-center">${order.base.statusName?default("")}</td>
 					  <td class="text-center">${order.base.payTypeToString?default("")}</td>
 					  <td class="text-center">${order.base.payStatusToString?default("")}</td>

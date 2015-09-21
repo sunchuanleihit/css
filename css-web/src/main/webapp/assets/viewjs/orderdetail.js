@@ -75,7 +75,7 @@ function OrderDetailController($scope, $http) {
 							}
 						},   
 						error :function(data){
-							jAlert("系统错误");
+							jAlert("录入信息错误");
 						}
 					});
 				}
@@ -428,3 +428,17 @@ function OrderDetailController($scope, $http) {
 		});
 	}
 }
+function showSeller(sellerId){
+	$.colorbox({
+        href: "/order/showSeller?sellerId=" + sellerId,
+        iframe: true,
+        width: "500px",
+        height: "170px",
+        top: "100px",
+        opacity: 0,
+        overlayClose: false,
+        scrolling: true
+    });
+}
+
+

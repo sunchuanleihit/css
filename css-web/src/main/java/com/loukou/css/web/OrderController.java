@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.loukou.css.annotation.AuthPassport;
 import com.loukou.css.bo.CssBaseRes;
+import com.loukou.css.entity.Store;
 import com.loukou.css.processor.UserProcessor;
 import com.loukou.css.resp.CssOrderShow;
 import com.loukou.css.service.CssService;
@@ -41,10 +42,10 @@ import com.loukou.order.service.resp.dto.BkOrderListBaseDto;
 import com.loukou.order.service.resp.dto.BkOrderListDto;
 import com.loukou.order.service.resp.dto.BkOrderListRespDto;
 import com.loukou.order.service.resp.dto.BkOrderPayDto;
-import com.loukou.order.service.resp.dto.BkOrderReturnDto;
-import com.loukou.order.service.resp.dto.BkOrderReturnListRespDto;
 import com.loukou.order.service.resp.dto.BkOrderRemarkDto;
 import com.loukou.order.service.resp.dto.BkOrderRemarkListRespDto;
+import com.loukou.order.service.resp.dto.BkOrderReturnDto;
+import com.loukou.order.service.resp.dto.BkOrderReturnListRespDto;
 import com.loukou.order.service.resp.dto.GoodsListDto;
 
 @Controller
@@ -664,5 +665,17 @@ public class OrderController extends  BaseController{
 		
 		CssBaseRes<String> res=cssService.sendBillNotice(orderSnMain,actor);
 		return res;
+	}
+	
+	@RequestMapping("/showSeller")
+	public ModelAndView showSeller(HttpServletRequest request){
+		ModelAndView mv = new ModelAndView("/orders/showSeller");
+		String sellerIdStr = request.getParameter("sellerId");
+		if(StringUtils.isNotBlank(sellerIdStr)){
+			Integer sellerId = Integer.parseInt(sellerIdStr);
+			Store store = cssService.queryStore(sellerId);
+			mv.addObject("store", store);
+		}
+		return mv;
 	}
 }

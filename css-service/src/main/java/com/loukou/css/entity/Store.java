@@ -19,7 +19,10 @@ public class Store {
 
 	@Column(name = "store_name")
 	private String storeName = "";
-
+	
+	@Column(name="company_name")
+	private String companyName;
+	
 	@Column(name = "store_taotype")
 	private int storeTaotype = 0;
 
@@ -104,6 +107,14 @@ public class Store {
 
 	public String getSellSite() {
 		return sellSite;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 
 	public void setSellSite(String sellSite) {

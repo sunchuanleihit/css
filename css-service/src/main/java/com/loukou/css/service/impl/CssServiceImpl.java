@@ -50,6 +50,7 @@ import com.loukou.css.resp.ComplaintRespDto;
 import com.loukou.css.resp.ComplaintRespListDto;
 import com.loukou.css.service.CssService;
 import com.loukou.css.utils.DateUtils;
+import com.serverstarted.store.service.resp.dto.StoreRespDto;
 
 @Service
 public class CssServiceImpl implements CssService {
@@ -494,5 +495,11 @@ public class CssServiceImpl implements CssService {
 			}
 		}
 		return respList;
+	}
+
+	@Override
+	public Store queryStore(Integer sellerId) {
+		Store store = storeDao.findOne(sellerId);
+		return store;
 	}
 }
