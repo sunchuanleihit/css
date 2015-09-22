@@ -26,6 +26,7 @@
 	
     <script type="text/javascript" src="<@s.url '/assets/scripts/myValidate.js' />"></script>
     <script type="text/javascript" src="<@s.url '/assets/scripts/jquery-1.10.2.js' />"></script>
+    <script type="text/javascript" src="<@s.url '/assets/scripts/jquery.cookie.js' />"></script>
     <script type="text/javascript" src="<@s.url '/assets/scripts/jalert/jquery.alerts.js' />"></script>
     <script type="text/javascript" src="<@s.url '/assets/scripts/jalert/jquery.ui.draggable.js' />"></script>
 	<link rel="stylesheet" type="text/css" href="<@s.url '/assets/scripts/jalert/jquery.alerts.css' />">
@@ -60,7 +61,13 @@
             }
             var userCode = $("#username").val();
             var userPwd = $("#userpassword").val();
-           
+            if(document.getElementById("Rem").checked){
+				$.cookie("css_username",userCode);
+            	$.cookie("css_userpassword", userPwd);
+            }else{
+            	$.cookie("css_username","",{expires:-1});
+            	$.cookie("css_userpassword", "",{expires:-1});
+            }
             $.post("/login/checklogin", { userCode:userCode,userPwd:userPwd }).success(function (data) {
                 if (data.code == "200") {
                     top.window.location.href = "/main";
@@ -113,10 +120,10 @@
 								  <div class="form-group"> 
 									<label for="exampleInputPassword1">密码</label>
 									<i class="fa fa-lock"></i>
-									<input type="password" class="form-control" id="userpassword" name="userpassword" >
+									<input type="password" class="form-control" id="userpassword" name="userpassword" onkeydown="if(event.keyCode==13) Login();">
 								  </div>
 								  <div class="form-actions">
-									<label class="checkbox"> <div class="checker" id="uniform-Rem"><span><input type="checkbox" name="Rem" id="Rem" class="uniform"></span></div> 记住密码</label>
+									<div><input type="checkbox" name="Rem" id="Rem" style="width:auto;">记住密码</div>
 									<button onclick="Login()" class="btn btn-primary">登录</button>
 								  </div>
 								
@@ -139,8 +146,17 @@
 	<script type="text/javascript" src="<@s.url '/assets/main/js/script.js' />"></script>
 	<script>
 	    jQuery(document).ready(function () {
-	        App.setPage("login");  //Set current page
-	        App.init(); //Initialise plugins and elements
+	     	//App.setPage("login");  //Set current page
+	        //App.init(); //Initialise plugins and elements
+			var css_username = $.cookie("css_username");
+			var css_userpassword = $.cookie("css_userpassword");
+			if(css_username){
+				$("#username").val(css_username);
+			}
+			if(css_userpassword){
+				$("#userpassword").val(css_userpassword);
+				$("#Rem").prop("checked", true);
+			}
 	    });
 	</script>
 	<script type="text/javascript">
