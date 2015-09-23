@@ -9,21 +9,31 @@ public class ComplaintRespDto implements Serializable{
 	
 	private String userName;
 	
+	private String createTime;
+	
 	private String orderSnMain;
 	
-	private String sellerName;
+	private String whName;
+	
+	private String goodsId;
 	
 	private String goodsName;
+	
+	private int departmentId;
 	
 	private String department;
 	
 	private String mobile;
 	
-	private Integer type;
+	private String city;
 	
-	private String complaintTime;
+	private int complaintTypeId;
+
+	private String complaintType;
 	
-	private String dealTime;
+	private Integer handleStatus;
+	
+	private String addTime;
 	
 	private Integer status;
 	
@@ -31,21 +41,7 @@ public class ComplaintRespDto implements Serializable{
 
 	private String actor;
 	
-	public String getActor() {
-		return actor;
-	}
-
-	public void setActor(String actor) {
-		this.actor = actor;
-	}
-
-	public String getMobile() {
-		return mobile;
-	}
-
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
+	private Integer whId;
 
 	public Integer getId() {
 		return id;
@@ -63,6 +59,14 @@ public class ComplaintRespDto implements Serializable{
 		this.userName = userName;
 	}
 
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
 	public String getOrderSnMain() {
 		return orderSnMain;
 	}
@@ -71,12 +75,20 @@ public class ComplaintRespDto implements Serializable{
 		this.orderSnMain = orderSnMain;
 	}
 
-	public String getSellerName() {
-		return sellerName;
+	public String getWhName() {
+		return whName;
 	}
 
-	public void setSellerName(String sellerName) {
-		this.sellerName = sellerName;
+	public void setWhName(String whName) {
+		this.whName = whName;
+	}
+
+	public String getGoodsId() {
+		return goodsId;
+	}
+
+	public void setGoodsId(String goodsId) {
+		this.goodsId = goodsId;
 	}
 
 	public String getGoodsName() {
@@ -87,6 +99,14 @@ public class ComplaintRespDto implements Serializable{
 		this.goodsName = goodsName;
 	}
 
+	public int getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(int departmentId) {
+		this.departmentId = departmentId;
+	}
+
 	public String getDepartment() {
 		return department;
 	}
@@ -95,28 +115,52 @@ public class ComplaintRespDto implements Serializable{
 		this.department = department;
 	}
 
-	public Integer getType() {
-		return type;
+	public String getMobile() {
+		return mobile;
 	}
 
-	public void setType(Integer type) {
-		this.type = type;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
-	public String getComplaintTime() {
-		return complaintTime;
+	public String getCity() {
+		return city;
 	}
 
-	public void setComplaintTime(String complaintTime) {
-		this.complaintTime = complaintTime;
+	public void setCity(String city) {
+		this.city = city;
 	}
 
-	public String getDealTime() {
-		return dealTime;
+	public int getComplaintTypeId() {
+		return complaintTypeId;
 	}
 
-	public void setDealTime(String dealTime) {
-		this.dealTime = dealTime;
+	public void setComplaintTypeId(int complaintTypeId) {
+		this.complaintTypeId = complaintTypeId;
+	}
+
+	public String getComplaintType() {
+		return complaintType;
+	}
+
+	public void setComplaintType(String complaintType) {
+		this.complaintType = complaintType;
+	}
+
+	public Integer getHandleStatus() {
+		return handleStatus;
+	}
+
+	public void setHandleStatus(Integer handleStatus) {
+		this.handleStatus = handleStatus;
+	}
+
+	public String getAddTime() {
+		return addTime;
+	}
+
+	public void setAddTime(String addTime) {
+		this.addTime = addTime;
 	}
 
 	public Integer getStatus() {
@@ -134,5 +178,20 @@ public class ComplaintRespDto implements Serializable{
 	public void setContent(String content) {
 		this.content = content;
 	}
-	
+
+	public String getActor() {
+		return actor;
+	}
+
+	public void setActor(String actor) {
+		this.actor = actor;
+	}
+
+	public Integer getWhId() {
+		return whId;
+	}
+
+	public void setWhId(Integer whId) {
+		this.whId = whId;
+	}
 }

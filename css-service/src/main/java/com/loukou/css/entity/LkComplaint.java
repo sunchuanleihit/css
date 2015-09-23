@@ -32,6 +32,9 @@ public class LkComplaint {
 	@Column(name = "wh_name")
 	private String whName = "";
 	
+	@Column(name = "goods_id")
+	private String goodsId = "";
+
 	@Column(name = "goods_name")
 	private String goodsName = "";
 	
@@ -42,7 +45,7 @@ public class LkComplaint {
 	private Integer department;
 	
 	@Column(name = "complaint_type")
-	private String complaintType = "";
+	private int complaintType = 0;
 	
 	@Column(name = "handle_status")
 	private Integer handleStatus;
@@ -109,6 +112,14 @@ public class LkComplaint {
 	public void setWhName(String whName) {
 		this.whName = whName;
 	}
+	
+	public String getGoodsId() {
+		return goodsId;
+	}
+
+	public void setGoodsId(String goodsId) {
+		this.goodsId = goodsId;
+	}
 
 	public String getGoodsName() {
 		return goodsName;
@@ -134,11 +145,11 @@ public class LkComplaint {
 		this.department = department;
 	}
 
-	public String getComplaintType() {
+	public int getComplaintType() {
 		return complaintType;
 	}
 
-	public void setComplaintType(String complaintType) {
+	public void setComplaintType(int complaintType) {
 		this.complaintType = complaintType;
 	}
 

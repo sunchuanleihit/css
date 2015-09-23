@@ -2,6 +2,13 @@ function opershow() {
 	$("#oper").toggle();
 }
 
+$(function(){
+	var complaintId=$("input[name='complaintId']").val();
+	if(complaintId>0){
+		selectDepartment();
+	}
+});
+
 //选择微仓
 function selectSeller(){
 	var whId=$("#whId").val();
@@ -46,26 +53,34 @@ function OrderDetailController($scope, $http) {
 	
 	//退货
 	$scope.generateReturn = function() {
-		jConfirm('确认要退货吗？', '退货确认', function(r) {
-			if (r) {
-				$.ajax( {   
-					type : "POST",
-					url : "/order/generateReturn", 
-					data : $('#returnForm').serializeArray(),
-					dataType: "json",
-					success : function(data) {
-						if(data.code==200){
-							jAlert(data.message);
-						}else{
-							jAlert(data.message);
+		var radioChks = $("input[type=radio][name='orderId']:checked");
+		var selectChks = $("input[type=checkbox][name=checkedGoods]:checked");
+		if(!radioChks){
+			jAlert("请选择退货订单");
+		}else if(!selectChks){
+			jAlert("请选择退货商品");
+		}else{
+			jConfirm('确认要退货吗？', '退货确认', function(r) {
+				if (r) {
+					$.ajax( {   
+						type : "POST",
+						url : "/order/generateReturn", 
+						data : $('#returnForm').serializeArray(),
+						dataType: "json",
+						success : function(data) {
+							if(data.code==200){
+								jAlert(data.message);
+							}else{
+								jAlert(data.message);
+							}
+						},   
+						error :function(data){
+							jAlert("录入信息错误");
 						}
-					},   
-					error :function(data){
-						jAlert("系统错误");
-					}
-				});
-			}
-		});
+					});
+				}
+			});
+		}
 	}
 	
 	//作废订单
@@ -191,31 +206,6 @@ function OrderDetailController($scope, $http) {
 		});
 	}
 	
-	//提交投诉
-	$scope.generateComplaint = function() {
-		
-		jConfirm('确认要提交吗？', '提交确认', function(r) {
-			if (r) {
-			$.ajax( {
-				type : "POST",
-				url : "/order/generateComplaint", 
-				data : $('#returnForm').serializeArray(),
-				dataType: "json",
-				success : function(data) {
-					if(data.code==200){
-						jAlert(data.message);
-					}else{
-						jAlert(data.message);
-					}
-				},   
-				error :function(data){
-					jAlert("系统错误");
-				}
-			});
-			}
-		});
-	}
-	
 	//保存
 	$scope.changeOrder = function() {
 		jConfirm('确认要保存吗？', '保存确认', function(r) {
@@ -261,7 +251,31 @@ function OrderDetailController($scope, $http) {
 	
 	//跳转投诉
 	$scope.complaintMsg = function(index) {
-		GetDetailTab("complaintMsg","/order/complaintMsg?orderSnMain=" + index + "&complaintId=0", index+"投诉");
+		GetDetailTab("complaintMsg","/complaint/complaintMsg?orderSnMain=" + index + "&complaintId=0", index+"投诉");
+	}
+	
+	//提交投诉
+	$scope.generateComplaint = function() {
+		jConfirm('确认要提交吗？', '提交确认', function(r) {
+			if (r) {
+			$.ajax( {
+				type : "POST",
+				url : "/complaint/generateComplaint", 
+				data : $('#returnForm').serializeArray(),
+				dataType: "json",
+				success : function(data) {
+					if(data.code==200){
+						jAlert(data.message);
+					}else{
+						jAlert(data.message);
+					}
+				},   
+				error :function(data){
+					jAlert("系统错误");
+				}
+			});
+			}
+		});
 	}
 	
 	//子订单作废
@@ -414,3 +428,17 @@ function OrderDetailController($scope, $http) {
 		});
 	}
 }
+function showSeller(sellerId){
+	$.colorbox({
+        href: "/order/showSeller?sellerId=" + sellerId,
+        iframe: true,
+        width: "500px",
+        height: "170px",
+        top: "100px",
+        opacity: 0,
+        overlayClose: false,
+        scrolling: true
+    });
+}
+
+

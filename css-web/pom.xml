@@ -182,13 +182,13 @@
 		<dependency>
 			<groupId>com.loukou</groupId>
 			<artifactId>order-api</artifactId>
-			<version>0.5.0</version>
+			<version>0.5.2</version>
 		</dependency>
 		<!-- pos-account-client -->
 		<dependency>
 			<groupId>com.loukou</groupId>
 			<artifactId>pos-account-client</artifactId>
-			<version>0.2.1</version>
+			<version>0.2.2</version>
 		</dependency>
 		
 	</dependencies>

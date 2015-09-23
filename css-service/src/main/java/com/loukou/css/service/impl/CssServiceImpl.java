@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.loukou.css.bo.CssBaseRes;
-import com.loukou.css.dao.ComplaintDao;
-import com.loukou.css.dao.ComplaintHandlerDao;
 import com.loukou.css.dao.GoodsDao;
 import com.loukou.css.dao.InvoiceActionDao;
 import com.loukou.css.dao.InvoiceDao;
@@ -34,8 +32,6 @@ import com.loukou.css.dao.OrderGoodsDao;
 import com.loukou.css.dao.OrderPayDao;
 import com.loukou.css.dao.SiteDao;
 import com.loukou.css.dao.StoreDao;
-import com.loukou.css.entity.Complaint;
-import com.loukou.css.entity.ComplaintHandler;
 import com.loukou.css.entity.Goods;
 import com.loukou.css.entity.Invoice;
 import com.loukou.css.entity.InvoiceAction;
@@ -47,10 +43,14 @@ import com.loukou.css.entity.OrderGoods;
 import com.loukou.css.entity.OrderPay;
 import com.loukou.css.entity.Site;
 import com.loukou.css.entity.Store;
+import com.loukou.css.enums.ComplaintTypeEnum;
+import com.loukou.css.enums.DeptEnum;
+import com.loukou.css.req.ComplaintReqDto;
 import com.loukou.css.resp.ComplaintRespDto;
 import com.loukou.css.resp.ComplaintRespListDto;
 import com.loukou.css.service.CssService;
 import com.loukou.css.utils.DateUtils;
+import com.serverstarted.store.service.resp.dto.StoreRespDto;
 
 @Service
 public class CssServiceImpl implements CssService {
@@ -85,13 +85,7 @@ public class CssServiceImpl implements CssService {
 	private SiteDao siteDao;
 	
 	@Autowired
-	private ComplaintDao complaintDao;
-	
-	@Autowired
 	private LkComplaintDao lkComplaintDao;
-	
-	@Autowired
-	private ComplaintHandlerDao complaintHandlerDao;
 	
 	//发送开票提醒
 	public CssBaseRes<String> sendBillNotice(String orderSnMain,String actor){
@@ -128,8 +122,8 @@ public class CssServiceImpl implements CssService {
 		
 		if(needInvoice==1 && orderList.get(0).getPayId()!=31 && orderList.get(0).getBuyerId()!=128702){
 			List<Invoice> invoiceList=invoiceDao.findByOrderSnMain(orderSnMain);
-			if (CollectionUtils.isEmpty(invoiceList)) {
-				orderDao.updateNeedInvoiceByOrderSnMain(orderSnMain,2);
+			if (!CollectionUtils.isEmpty(invoiceList)) {
+				invoiceDao.updateOrderValid(orderSnMain,0);//作废之前的发票单
 			}
 			
 			double invoiceAmount=0;
@@ -309,85 +303,115 @@ public class CssServiceImpl implements CssService {
 	}
 
 	@Override
-	public ComplaintRespListDto queryComplaint(final String orderSnMain, final String weic, final String startTime, final String endTime, int page, int rows) {
+	public ComplaintRespListDto queryComplaint(final ComplaintReqDto complaintReqDto,  int page, int rows) {
+		Map<String, Site> siteMap = getSiteMap();
 		page = page-1;
 		PageRequest pagenation = new PageRequest(page, rows , new Sort(Sort.Direction.DESC, "id"));
-		Page<Complaint> complaintPage = complaintDao.findAll(new Specification<Complaint>(){
+		Page<LkComplaint> complaintPage = lkComplaintDao.findAll(new Specification<LkComplaint>(){
 			@Override
-			public Predicate toPredicate(Root<Complaint> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<LkComplaint> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicates = new ArrayList<>();
-				if(StringUtils.isNotBlank(orderSnMain)){
-					predicates.add(cb.equal(root.get("orderSnMain"), orderSnMain));
+				if(StringUtils.isNotBlank(complaintReqDto.getOrderSnMain())){
+					predicates.add(cb.equal(root.get("orderSnMain"), complaintReqDto.getOrderSnMain()));
 				}
-				if(StringUtils.isNotBlank(weic)){
-					predicates.add(cb.equal(root.get("sellerName"), weic));
+				if(StringUtils.isNotBlank(complaintReqDto.getStartTime())){
+					//Integer startTimeInt = (int)(DateUtils.str2Date(complaintReqDto.getStartTime()).getTime()/1000);
+					predicates.add(cb.greaterThanOrEqualTo(root.get("creatTime").as(String.class), complaintReqDto.getStartTime()));
 				}
-				if(StringUtils.isNotBlank(startTime)){
-					Integer startTimeInt = (int)(DateUtils.str2Date(startTime).getTime()/1000);
-					predicates.add(cb.greaterThanOrEqualTo(root.get("dateline1").as(Integer.class), startTimeInt));
+				if(StringUtils.isNotBlank(complaintReqDto.getEndTime())){
+					//Integer endTimeInt = (int)(DateUtils.str2Date(complaintReqDto.getEndTime()).getTime()/1000);
+					predicates.add(cb.lessThanOrEqualTo(root.get("creatTime").as(String.class), complaintReqDto.getEndTime()+" 00:00:00"));
 				}
-				if(StringUtils.isNotBlank(endTime)){
-					Integer endTimeInt = (int)(DateUtils.str2Date(endTime).getTime()/1000);
-					predicates.add(cb.lessThanOrEqualTo(root.get("dateline1").as(Integer.class), endTimeInt));
+				if(complaintReqDto.getHandleStatus()!=null){
+					predicates.add(cb.equal(root.get("handleStatus"), complaintReqDto.getHandleStatus()));
+				}
+				if(complaintReqDto.getDepartment()!=null){
+					predicates.add(cb.equal(root.get("department"), complaintReqDto.getDepartment()));
+				}
+				if(complaintReqDto.getComplaintType()!=null){
+					predicates.add(cb.equal(root.get("complaintType"), complaintReqDto.getComplaintType()));
+				}
+				if(StringUtils.isNotBlank(complaintReqDto.getCityCode())){
+					predicates.add(cb.equal(root.get("cityCode"), complaintReqDto.getCityCode()));
+				}
+				if(complaintReqDto.getWeic()!=null){
+					predicates.add(cb.equal(root.get("whId"), complaintReqDto.getWeic()));
 				}
 				Predicate[] pre = new Predicate[predicates.size()];
 				return query.where(predicates.toArray(pre)).getRestriction();
 			}
 		}, pagenation);
-		List<Complaint> complaintList = complaintPage.getContent();
-		List<Integer> complaintIds = new ArrayList<Integer>();
+		List<LkComplaint> complaintList = complaintPage.getContent();
+		
+		List<ComplaintRespDto> complaintRespList = new ArrayList<ComplaintRespDto>();
 		if(complaintList!=null && complaintList.size()>0){
-			for(Complaint tmp: complaintList){
-				complaintIds.add(tmp.getId());
+			for(LkComplaint complaint: complaintList){
+				ComplaintRespDto dto = createComplaintRespDto(siteMap, complaint);
+				complaintRespList.add(dto);
 			}
-		}
-		List<ComplaintHandler> handlerList = new ArrayList<ComplaintHandler>();
-		if(complaintIds.size()>0){
-			handlerList = complaintHandlerDao.findByTypeAndTidIn(0, complaintIds);
-		}
-		Map<Integer, ComplaintHandler> handlerMap = new HashMap<Integer, ComplaintHandler>();
-		for(ComplaintHandler tmp: handlerList){
-			handlerMap.put(tmp.getTid(), tmp);
-		}
-		List<ComplaintRespDto> respList = new ArrayList<ComplaintRespDto>();
-		for(Complaint complaint: complaintList){
-			ComplaintHandler handler = handlerMap.get(complaint.getId());
-			ComplaintRespDto dto = this.createComplaintResp(complaint, handler);
-			respList.add(dto);
 		}
 		ComplaintRespListDto respListDto = new ComplaintRespListDto();
 		respListDto.setCount((int)complaintPage.getTotalElements());
-		respListDto.setComplaintList(respList);
+		respListDto.setComplaintList(complaintRespList);
 		return respListDto;
 	}
 	
-	private ComplaintRespDto createComplaintResp(Complaint complaint, ComplaintHandler handler){
+	/**
+	 * 获取站点的Map
+	 * @return
+	 */
+	private Map<String, Site> getSiteMap(){
+		List<Site> siteList = siteDao.getAllSite();
+		Map<String, Site> siteMap = new HashMap<String, Site>();
+		if(siteList!=null && siteList.size()>0){
+			for(Site site: siteList){
+				siteMap.put(site.getShortCode(), site);
+			}
+		}
+		return siteMap;
+	}
+	
+	/**
+	 * 根据原始投诉生成处理后的显示数据
+	 * @param siteMap
+	 * @param complaint
+	 * @return
+	 */
+	private ComplaintRespDto createComplaintRespDto(Map<String, Site> siteMap, LkComplaint complaint){
 		ComplaintRespDto dto = new ComplaintRespDto();
 		dto.setId(complaint.getId());
-		if( complaint.getDateline1() != null ){
-			dto.setComplaintTime(DateUtils.dateTimeToStr2(complaint.getDateline1()));
+		if(complaint.getCreatTime()!=null){
+			dto.setCreateTime(DateUtils.date2DateStr(complaint.getCreatTime()));
 		}
-		if(complaint.getDateline2() != null){
-			dto.setDealTime(DateUtils.dateTimeToStr2(complaint.getDateline2()));
-		}
-		dto.setDepartment(complaint.getDepartment());
-		dto.setGoodsName(complaint.getGoodsName());
 		dto.setOrderSnMain(complaint.getOrderSnMain());
-		dto.setSellerName(complaint.getSellerName());
-		dto.setStatus(complaint.getStatus());
-		dto.setType(complaint.getType());
+		if(complaint.getDepartment()!=null){
+			dto.setDepartment(DeptEnum.parseName(complaint.getDepartment()).getName());
+		}
+		if(complaint.getComplaintType()!=0){
+			dto.setComplaintType(ComplaintTypeEnum.parseName(complaint.getComplaintType()).getName());
+		}
+		dto.setHandleStatus(complaint.getHandleStatus());
+		dto.setContent(complaint.getContent());
 		dto.setUserName(complaint.getUserName());
 		dto.setMobile(complaint.getMobile());
-		if(handler!=null){
-			dto.setContent(handler.getContent());
-			dto.setActor(handler.getActor());
+		Site site = siteMap.get(complaint.getCityCode());
+		if(site!=null){
+			dto.setCity(site.getSiteName());
 		}
+		dto.setWhName(complaint.getWhName());
+		dto.setGoodsName(complaint.getGoodsName());
+		dto.setActor(complaint.getActor());
+		dto.setDepartmentId(complaint.getDepartment());
+		dto.setComplaintTypeId(complaint.getComplaintType());
+		dto.setWhId(complaint.getWhId());
+		dto.setGoodsId(complaint.getGoodsId());
 		return dto;
 	}
 	
+	
 	//提交/修改投诉
 	public CssBaseRes<String> generateComplaint(String actor,int complaintId,String orderSnMain,int whId,String whName,
-		String[] goodsNameList,String content,String creatTime,String userName,String mobile,int department,String complaintType,int handleStatus){
+		int[] goodsIdList,String content,String creatTime,String userName,String mobile,int department,int complaintType,int handleStatus){
 		CssBaseRes<String> result=new CssBaseRes<String>();
 		
 		List<Order> orderList = orderDao.findByOrderSnMain(orderSnMain);//获取订单列表信息
@@ -397,21 +421,36 @@ public class CssServiceImpl implements CssService {
 			return result;
 		}
 		
+		if(goodsIdList.length<=0){
+			result.setCode("400");
+			result.setMessage("所选商品为空");
+			return result;
+		}
+		
+		List<Integer> gidList=new ArrayList<Integer>();
+		String goodsId="";
+		for(int g:goodsIdList){
+			gidList.add(g);
+			goodsId+=g+",";
+		}
+		goodsId=goodsId.substring(0,goodsId.length()-1);
+		
+		List<Goods> goodsList=goodsDao.getGoodsByIDs(gidList);
 		String goodsName="";
-		for(String sn:goodsNameList){
-			goodsName+=sn+",";
+		for(Goods g:goodsList){
+			goodsName+=g.getGoodsName()+",";
 		}
 		goodsName=goodsName.substring(0,goodsName.length()-1);
 		
 		//新增投诉
 		if(complaintId==0){
-			handleStatus=0;
 			LkComplaint complaintData=new LkComplaint();
 			complaintData.setUserName(userName);
 			complaintData.setMobile(mobile);
 			complaintData.setOrderSnMain(orderSnMain);
 			complaintData.setWhId(whId);
 			complaintData.setWhName(whName);
+			complaintData.setGoodsId(goodsId);
 			complaintData.setGoodsName(goodsName);
 			complaintData.setContent(content);
 			complaintData.setDepartment(department);
@@ -427,24 +466,11 @@ public class CssServiceImpl implements CssService {
 				result.setMessage("投诉失败");
 				return result;
 			}
-		}else{
-			LkComplaint complaintData=new LkComplaint();
-			complaintData.setUserName(userName);
-			complaintData.setMobile(mobile);
-			complaintData.setOrderSnMain(orderSnMain);
-			complaintData.setWhId(whId);
-			complaintData.setWhName(whName);
-			complaintData.setGoodsName(goodsName);
-			complaintData.setContent(content);
-			complaintData.setDepartment(department);
-			complaintData.setComplaintType(complaintType);
-			complaintData.setHandleStatus(handleStatus);
-			complaintData.setStatus(0);
-			complaintData.setCreatTime(DateUtils.str2Date(creatTime));
-			complaintData.setCityCode(orderList.get(0).getSellSite());
-			complaintData.setActor(actor);
-			LkComplaint complaintResult=lkComplaintDao.save(complaintData);
-			if(complaintResult==null){
+		}else{//修改投诉
+			Date finishTime=new Date();
+			int lcResult=lkComplaintDao.updateComplaintById(complaintId, userName, mobile, whId, whName, goodsName, content, department, 
+					complaintType, handleStatus, actor,finishTime,goodsId);
+			if(lcResult<=0){
 				result.setCode("400");
 				result.setMessage("生成退款支付单失败");
 				return result;
@@ -454,5 +480,26 @@ public class CssServiceImpl implements CssService {
 		result.setCode("200");
 		result.setMessage("提交成功");
 		return result;
+	}
+	
+
+	@Override
+	public List<ComplaintRespDto> queryComplaintByIds(List<Integer> idList) {
+		Map<String, Site> siteMap = this.getSiteMap();
+		List<LkComplaint> complaintList = lkComplaintDao.getByIds(idList);
+		List<ComplaintRespDto> respList = new ArrayList<ComplaintRespDto>();
+		if(complaintList!=null && complaintList.size()>0){
+			for(LkComplaint tmp: complaintList){
+				ComplaintRespDto dto = this.createComplaintRespDto(siteMap, tmp);
+				respList.add(dto);
+			}
+		}
+		return respList;
+	}
+
+	@Override
+	public Store queryStore(Integer sellerId) {
+		Store store = storeDao.findOne(sellerId);
+		return store;
 	}
 }

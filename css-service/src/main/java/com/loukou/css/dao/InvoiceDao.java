@@ -17,4 +17,9 @@ public interface InvoiceDao extends CrudRepository<Invoice, Integer> {
 	@Modifying
 	@Query("UPDATE Invoice set orderAmount = ?2 where invoiceId = ?1")
 	int updateOrderAmount(int invoiceId,double orderAmount);
+	
+	@Transactional
+	@Modifying
+	@Query("UPDATE Invoice set valid = ?2 where order_sn_main = ?1")
+	int updateOrderValid(String orderSnMain,int valid);
 }

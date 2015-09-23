@@ -90,7 +90,7 @@ $(document).ready(function(){
 			var startTime = $("#startTime").datebox("getValue");
 			var endTime = $("#endTime").datebox("getValue");
 			var status = $("#status").val();
-			var returnType = $("returnType").val();
+			var returnType = $("#returnType").val();
 			var refundStatus = $("#refundStatus").val();
 			var params = {
 					"orderSnMain":orderSnMain,

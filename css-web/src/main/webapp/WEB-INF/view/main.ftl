@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<meta charset="utf-8">
-	<title>楼口进出存系统</title>
+	<title>楼口客服系统</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
 	<meta name="description" content="">
 	<meta name="author" content="">
@@ -50,7 +50,8 @@
 						<i class="fa fa-bars" data-icon1="fa fa-bars" data-icon2="fa fa-bars" ></i>
 					</div>
 				</div>
-
+				
+				<!--
 				<ul class="nav navbar-nav pull-left">
 					<li ng-click="menuClick($event,$index,menu)" ng-class=" {'dropdown open gusuqi':true,'dropdown open gusuqi active':selectedMenuID==menu.menuId}" ng-repeat-start="menu in Menus">
 						<a href="#" class="dropdown-toggle">
@@ -60,7 +61,7 @@
 					</li>
                     <span ng-repeat-end ng-show>&nbsp;</span>
 				</ul>
-				
+				-->
 
 				<!-- BEGIN TOP NAVIGATION MENU -->					
 				<ul class="nav navbar-nav pull-right">
@@ -76,14 +77,7 @@
                             <li><a href="/login" ng-click="logout($event)"><i class="fa fa-power-off"></i> 注销</a></li>
                         </ul>
 					</li>
-					<!-- END USER LOGIN DROPDOWN -->
-					<li class="dropdown pull-right" id="header-tasks">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						<small><i class="fa fa-map-marker" style="color:#fff;text-shadow:none;"></i> 仓库 : </small>{{OperatorWareHouse}}
-						</a>
-					</li>
-					
-					
+					<!-- END USER LOGIN DROPDOWN -->					
 				</ul>
 				<!-- END TOP NAVIGATION MENU -->
 		</div>

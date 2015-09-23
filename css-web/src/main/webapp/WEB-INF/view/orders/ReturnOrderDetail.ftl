@@ -19,57 +19,56 @@
 			  <table class="table table-hover">
 	  			  <thead>
 	  				<tr>
-	  					<th class="text-center" width="10%">子订单号</th>
-	  					<th class="text-center" width="6%">运费</th>
-	  					<th class="text-center" width="5%">商品ID</th>
-	  					<th class="text-center" width="26%">商品名称</th>
-	  					<th class="text-center" width="8%">购买数量</th>
-	  					<th class="text-center" width="8%">可退数量</th>
-	  					<th class="text-center" width="8%">购买价格</th>
-	  					<th class="text-center" width="8%">折后价格</th>
-	  					<th class="text-center" width="7%">退款金额</th>		
-	  					<th class="text-center" width="16%">退货原因</th>		
+	  					<th>子订单号</th>
+	  					<th>运费</th>
+	  					<th>商品ID</th>
+	  					<th>商品名称</th>
+	  					<th>购买数量</th>
+	  					<th>可退数量</th>
+	  					<th>购买价格</th>
+	  					<th>折后价格</th>
+	  					<th>退款金额</th>		
+	  					<th>退货原因</th>		
 	  				</tr>
 	  			  </thead>
 	  			  <tbody>
 	  			  	<#list orderDetailMsgs as order>
 					<tr class="type_msg">
-					  <td valign="middle" align="center" style="border-width:0 1px;border-color:#cbe4f5;border-style:solid;">
-						<input type="radio" name="orderId" value="${order.base.orderId}">${order.base.orderId}
+					  <td valign="middle" align="center" style="border-width:0 1px;border-color:#cbe4f5;border-style:solid;" rowspan="${order.goodsList?size}" >
+						<input type="radio" orderId="${order.base.orderId}" name="orderId" value="${order.base.orderId}">${order.base.orderId}
 					  </td>
-					  <td class="text-center"><input style="width: 50px;" type="text" name="shippingFee" value="${order.base.shippingFee}"></td>
-					  <td colspan="8">
-						<table width="100%">
-						<tbody>
-							<#list order.goodsList as goods>
-							<tr height="26" align="center">
-							<td width="12%">
-								<input style="width: 50px;" type="checkbox" alt="${order.base.orderId}" value="${goods.goodsId}" name="goodsId">${goods.goodsId}
-								<input type="hidden" name="specId" value="${goods.specId}">
-								<input type="hidden" name="proType" value="${goods.proType}">
-								<input type="hidden" name="recId" value="${goods.recId}">
-							</td>
-							<td width="28%">${goods.goodsName}<input type="hidden" name="goodsName" value="${goods.goodsName}"></td>
-							<td width="6%">${goods.quantity}</td>
-							<td width="2%"><input style="width: 50px;" type="text" name="goodsReturnNum" value="${goods.returnQuantity}"></td>
-							<td width="10%">${goods.pricePurchase}</td>
-							<td width="8%">${goods.priceDiscount}</td>	
-							<td width="12%"><input type="text" name="goodsReturnAmount" value="${goods.returnMoney}"></td>	
-							<td width="15%">
-								<select name="goodsReason">
-								<option value="1">商品质量问题</option>
-								<option value="2">实物与图片不符</option>
-								<option value="3">商品临期</option>
-								<option value="4">商品过期</option>
-								<option value="5">顾客原因</option>
-								<option value="6">其他</option>
-								</select>
-							</td>	
+					  <td class="text-center" rowspan="${order.goodsList?size}"><input style="width: 50px;" type="text" name="shippingFee" value="${order.base.shippingFee}"></td>
+					  <#list order.goodsList as goods>
+						<#if (goods_index>0)>
+							<tr>
+						</#if>
+						<td>
+							<input style="width: 50px;" orderId="${order.base.orderId}" type="checkbox" value="${goods.goodsId}" name="checkedGoods">${goods.goodsId}
+							<input type="hidden" name="goodsId" value="${goods.goodsId}">
+							<input type="hidden" name="specId" value="${goods.specId}">
+							<input type="hidden" name="proType" value="${goods.proType}">
+							<input type="hidden" name="recId" value="${goods.recId}">
+						</td>
+						<td>${goods.goodsName}<input type="hidden" name="goodsName" value="${goods.goodsName}"></td>
+						<td>${goods.quantity}</td>
+						<td><input style="width: 50px;" type="text" name="goodsReturnNum" value="${goods.returnQuantity}"></td>
+						<td>${goods.pricePurchase}</td>
+						<td>${goods.priceDiscount}</td>	
+						<td><input type="text" name="goodsReturnAmount" value="${goods.returnMoney}"></td>	
+						<td>
+							<select name="goodsReason">
+							<option value="1">商品质量问题</option>
+							<option value="2">实物与图片不符</option>
+							<option value="3">商品临期</option>
+							<option value="4">商品过期</option>
+							<option value="5">顾客原因</option>
+							<option value="6">其他</option>
+							</select>
+						</td>
+						<#if (goods_index>0)>
 							</tr>
-							</#list>
-						</tbody>
-						</table>
-					  </td>
+						</#if>
+					  </#list>
 					</tr>
 					</#list>
 				  </tbody>
@@ -77,7 +76,6 @@
 			  </div>
 		</div>
 	</div>
-	
 	<div class="row">
 		<div class="panel panel-default"  class="text-center">
 			<div class="panel-heading">退款方案</div>
@@ -96,7 +94,7 @@
 					  <td class="text-center">${op.paymentName}</td>
 					  <td class="text-center">${op.money}</td>
 					  <td class="text-center">
-					  	<input type="text" name="returnAmount" alt="2">
+					  	<input type="text" name="returnAmount" alt="2" value="0">
 					  	<input type="hidden" name="paymentId" value="${op.paymentId}">
 					  </td>
 					</tr>
@@ -108,6 +106,26 @@
 	</div>
 	</form>
 </div>
-<script src="<@s.url '/assets/viewjs/orderdetail.js' />"></script>
 <script src="<@s.url '/assets/scripts/jquery-1.7.1.min.js' />"></script>
+<script src="<@s.url '/assets/viewjs/orderdetail.js' />"></script>
+<script>
+	$(function(){
+		$("input[name='orderId']").bind({
+			'click':function(){
+				$("input[name='checkedGoods']").removeAttr("checked");
+				var orderId = $(this).attr("orderId");
+				$("input[orderid='"+orderId+"'][name='checkedGoods']").prop("checked", true);
+			}
+		});
+		$("input[name='checkedGoods']").bind({
+			'click':function(){
+				var orderId = $(this).attr("orderId");
+				var selectOrderId = $("input[name='orderId']:checked").attr("orderId");
+				if(!selectOrderId || selectOrderId!=orderId){
+					$(this).prop("checked", false);				
+				}
+			}
+		});
+	});
+</script>
 <#include "/base/basefooter.ftl">

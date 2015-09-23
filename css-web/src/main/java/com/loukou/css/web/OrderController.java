@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.loukou.css.annotation.AuthPassport;
 import com.loukou.css.bo.CssBaseRes;
+import com.loukou.css.entity.Store;
 import com.loukou.css.processor.UserProcessor;
 import com.loukou.css.resp.CssOrderShow;
 import com.loukou.css.service.CssService;
@@ -41,10 +42,10 @@ import com.loukou.order.service.resp.dto.BkOrderListBaseDto;
 import com.loukou.order.service.resp.dto.BkOrderListDto;
 import com.loukou.order.service.resp.dto.BkOrderListRespDto;
 import com.loukou.order.service.resp.dto.BkOrderPayDto;
-import com.loukou.order.service.resp.dto.BkOrderReturnDto;
-import com.loukou.order.service.resp.dto.BkOrderReturnListRespDto;
 import com.loukou.order.service.resp.dto.BkOrderRemarkDto;
 import com.loukou.order.service.resp.dto.BkOrderRemarkListRespDto;
+import com.loukou.order.service.resp.dto.BkOrderReturnDto;
+import com.loukou.order.service.resp.dto.BkOrderReturnListRespDto;
 import com.loukou.order.service.resp.dto.GoodsListDto;
 
 @Controller
@@ -74,6 +75,13 @@ public class OrderController extends  BaseController{
 		if(orderDetail.getCode()==200){
 			List<BkOrderListDto> orderDetailMsgs = orderDetail.getResult().getOrderList();
 			mv.addObject("orderDetailMsgs", orderDetailMsgs);
+			int finished=0;
+			for(BkOrderListDto od:orderDetailMsgs){
+				if(od.getBase().getStatus()==15){
+					finished=1;
+				}
+			}
+			mv.addObject("finished", finished);
 		}
 		
 		String checker="";
@@ -382,6 +390,7 @@ public class OrderController extends  BaseController{
 			@RequestParam(value = "returnType", required = false, defaultValue = "") int returnType,
 			@RequestParam(value = "payId", required = false, defaultValue = "") int payId,
 			@RequestParam(value = "shippingFee", required = false, defaultValue = "") double shippingFee,
+			@RequestParam(value = "checkedGoods", required = false, defaultValue = "") int[] checkedGoodsList,
 			@RequestParam(value = "goodsId", required = false, defaultValue = "") int[] goodsIdList,
 			@RequestParam(value = "specId", required = false, defaultValue = "") int[] specIdList,
 			@RequestParam(value = "proType", required = false, defaultValue = "") int[] proTypeList,
@@ -393,12 +402,11 @@ public class OrderController extends  BaseController{
 			@RequestParam(value = "paymentId", required = false, defaultValue = "") int[] paymentIdList,
 			@RequestParam(value = "returnAmount", required = false, defaultValue = "") double[] returnAmountList
 			){
-		
 		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
 		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
 		
 		BaseRes<String> res=bkOrderService.generateReturn(actor,orderId, postScript, orderSnMain, returnType, payId, shippingFee, 
-		goodsIdList, specIdList, proTypeList, recIdList, goodsReturnNumList, goodsReturnAmountList, goodsReasonList, goodsNameList,
+		checkedGoodsList,goodsIdList, specIdList, proTypeList, recIdList, goodsReturnNumList, goodsReturnAmountList, goodsReasonList, goodsNameList,
 		paymentIdList,returnAmountList);
 		return res;
 	}
@@ -456,13 +464,14 @@ public class OrderController extends  BaseController{
 			@RequestParam(value = "orderSnMain", required = false, defaultValue = "") String orderSnMain,
 			@RequestParam(value = "postScript", required = false, defaultValue = "") String postScript,
 			@RequestParam(value = "paymentId", required = false, defaultValue = "") int[] paymentIdList,
+			@RequestParam(value = "hasPaid", required = false, defaultValue = "") double hasPaid,
 			@RequestParam(value = "returnAmount", required = false, defaultValue = "") double[] returnAmountList
 			){
 		
 		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
 		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
 		
-		BaseRes<String> res=bkOrderService.generatePaymentRefund(reason,actor,orderSnMain,postScript,paymentIdList,returnAmountList);
+		BaseRes<String> res=bkOrderService.generatePaymentRefund(reason,actor,orderSnMain,postScript,paymentIdList,hasPaid,returnAmountList);
 		return res;
 	}
 	
@@ -516,73 +525,6 @@ public class OrderController extends  BaseController{
 		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
 		
 		BaseRes<String> res=bkOrderService.generateSpecialPaymentRefund(reason,actor,orderSnMain,postScript,paymentIdList,returnAmountList);
-		return res;
-	}
-	
-	//投诉页面
-	@RequestMapping(value = "/complaintMsg", method = RequestMethod.GET)
-	public ModelAndView complaintMsg(HttpServletRequest request,ModelMap modelMap) {
-		String orderSnMain = request.getParameter("orderSnMain");
-		int complaintId = Integer.parseInt(request.getParameter("complaintId"));
-		ModelAndView mv = new ModelAndView("orders/ComplaintMsg");
-		BkOrderListRespDto orderDetail = bkOrderService.orderDetail(orderSnMain);
-		
-		if(orderDetail.getCode()==200){
-			List<BkOrderListDto> orderDetailMsgs = orderDetail.getResult().getOrderList();
-			mv.addObject("orderDetailMsgs", orderDetailMsgs);
-		}
-		
-		ArrayList<String> wscList = new ArrayList<String>();
-		wscList.add("配送延迟");
-		wscList.add("虚假回单");
-		wscList.add("商品破损");
-		wscList.add("配送缺发");
-		wscList.add("态度问题");
-		mv.addObject("wscList", wscList);
-		
-		ArrayList<String> pcList = new ArrayList<String>();
-		pcList.add("实物不符");
-		pcList.add("产品质量");
-		pcList.add("产品缺货");
-		mv.addObject("pcList", pcList);
-		
-		ArrayList<String> whcList = new ArrayList<String>();
-		whcList.add("包装问题");
-		whcList.add("产品过期");
-		mv.addObject("whcList", whcList);
-		
-		ArrayList<String> scList = new ArrayList<String>();
-		scList.add("订单错误");
-		scList.add("支付错误");
-		scList.add("账户问题");
-		mv.addObject("scList", scList);
-		
-		mv.addObject("complaintId",complaintId);
-		return mv;
-	}
-	
-	//提交投诉
-	@RequestMapping(value = "/generateComplaint", method = RequestMethod.POST)
-	@ResponseBody
-	public CssBaseRes<String> generateComplaint(
-			@RequestParam(value = "complaintId", required = false, defaultValue = "") int complaintId,
-			@RequestParam(value = "orderSnMain", required = false, defaultValue = "") String orderSnMain,
-			@RequestParam(value = "whId", required = false, defaultValue = "") int whId,
-			@RequestParam(value = "whName", required = false, defaultValue = "") String whName,
-			@RequestParam(value = "goodsName", required = false, defaultValue = "") String[] goodsNameList,
-			@RequestParam(value = "content", required = false, defaultValue = "") String content,
-			@RequestParam(value = "creatTime", required = false, defaultValue = "") String creatTime,
-			@RequestParam(value = "userName", required = false, defaultValue = "") String userName,
-			@RequestParam(value = "mobile", required = false, defaultValue = "") String mobile,
-			@RequestParam(value = "department", required = false, defaultValue = "") int department,
-			@RequestParam(value = "complaintType", required = false, defaultValue = "") String complaintType,
-			@RequestParam(value = "handleStatus", required = false, defaultValue = "") int handleStatus
-			){
-		
-		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
-		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
-		
-		CssBaseRes<String> res=cssService.generateComplaint(actor,complaintId,orderSnMain,whId,whName,goodsNameList,content,creatTime,userName,mobile,department,complaintType,handleStatus);
 		return res;
 	}
 	
@@ -723,5 +665,17 @@ public class OrderController extends  BaseController{
 		
 		CssBaseRes<String> res=cssService.sendBillNotice(orderSnMain,actor);
 		return res;
+	}
+	
+	@RequestMapping("/showSeller")
+	public ModelAndView showSeller(HttpServletRequest request){
+		ModelAndView mv = new ModelAndView("/orders/showSeller");
+		String sellerIdStr = request.getParameter("sellerId");
+		if(StringUtils.isNotBlank(sellerIdStr)){
+			Integer sellerId = Integer.parseInt(sellerIdStr);
+			Store store = cssService.queryStore(sellerId);
+			mv.addObject("store", store);
+		}
+		return mv;
 	}
 }
