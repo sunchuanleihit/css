@@ -1,4 +1,5 @@
 <#include "/base/basehead.ftl">
+<#if orderDetailMsgs?exists>
 <div ng-controller="OrderDetailController" style="width:90%;margin:0 auto;">
 	<div class="row">
 		<strong><p style="font-size:20px">订单 - ${orderDetailMsgs[0].base.orderSnMain?default("")}<font style="color:red"></font></p></strong>
@@ -224,6 +225,10 @@
 	</div>
 	</#if>
 </div>
+<#else>
+	订单不存在
+</#if>
+
 <script src="<@s.url '/assets/scripts/jquery-1.7.1.min.js' />"></script>
 <script src="<@s.url '/assets/viewjs/orderdetail.js' />"></script>
 <#include "/base/basefooter.ftl">

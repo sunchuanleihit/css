@@ -271,6 +271,7 @@ public class OrderController extends  BaseController{
 		cssOrderShow.setPayMessage(base.getPayMessage());
 		cssOrderShow.setSellerName(base.getSellerName());
 		cssOrderShow.setShippingFee(base.getShippingFee());
+		cssOrderShow.setPostScript(base.getPostscript());
 		return cssOrderShow;
 	}
 	
