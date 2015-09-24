@@ -15,10 +15,11 @@ $(document).ready(function(){
 	//反向订单的所有字段
 	var fields=[[
 	    {field:'orderIdR',title:'反向订单ID',width:80,checkbox:true},
-		{field:'orderSnMain',title:'原淘常州订单号',width:120},
+		{field:'orderSnMain',title:'订单编号',width:120},
 		{field:'orderId',title:'原订单号',width:80},
 		{field:'buyerId',title:'客户ID',width:80},
 		{field:'sellerId',title:'商家ID',width:80},
+		{field:'sellerName',title:'商家名',width:140},
 		{field:'returnAmount',title:'退款金额',width:80},
 		{field:'addTime',title:'添加时间',width:140},
 		{field:'goodsType',title:'商家类型',formatter:returnGoodsTypeFormatter,width:80},
