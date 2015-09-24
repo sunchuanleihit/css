@@ -13,7 +13,7 @@ $(document).ready(function(){
 		{field:'orderPaid',title:'已付金额',formatter:doubleFormat,width:80,sortable:true},
 		{field:'orderNotPaid',title:'未付金额',formatter:doubleFormat,width:80,sortable:true},
 		{field:'addTime',title:'订单时间',width:130,sortable:true},
-		{field:'postscript',title:'物流提示',width:80,sortable:true},
+		{field:'postScript',title:'物流提示',width:80,sortable:true},
 		{field:'payMessage',title:'订单备注',width:80,sortable:true}                
 	]];
 	
