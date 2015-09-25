@@ -145,8 +145,6 @@ public class OrderController extends  BaseController{
 	@ResponseBody
 	public DataGrid queryOrder(HttpServletRequest request,int page, int rows, CssOrderReqDto cssOrderReqDto){
 		cssOrderReqDto.setIsDel(0);
-		Integer timeLimit = (int)(new Date().getTime()/1000) - 10368000;
-		cssOrderReqDto.setTimeLimit(timeLimit);
 		BkOrderListRespDto bkOrderListRespDto = bkOrderService.queryBkOrderList(page, rows, cssOrderReqDto);
 		DataGrid grid = new DataGrid();
 		grid.setTotal(bkOrderListRespDto.getResult().getOrderCount());

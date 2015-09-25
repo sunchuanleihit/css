@@ -1,29 +1,32 @@
 <#include "/base/basehead.ftl">
 <#if orderDetailMsgs?exists>
-<div ng-controller="OrderDetailController" style="width:90%;margin:0 auto;">
-	<div class="row">
-		<strong><p style="font-size:20px">订单 - ${orderDetailMsgs[0].base.orderSnMain?default("")}<font style="color:red"></font></p></strong>
-	</div>
+<div ng-controller="OrderDetailController" style="width:95%;margin:0 auto;">
 	<div class="row">
 		<div class="panel panel-default"  class="text-center">
-			<div class="panel-heading">基本信息</div>
-			<div class="panel-heading">
-			<table style="width:100%">
-				<tbody>
-				<tr>
-				  <td class="text-right">审核人姓名:</td>
-				  <td class="text-left">${checker}</td>
-				  <td class="text-right">审核时间:</td>
-				  <td class="text-left">${checkTime}</td>
-				  <td class="text-right">发票号:</td>
-				  <td class="text-left">${orderDetailMsgs[0].base.invoiceNo?default("")}</td>
-				  <td class="text-right">订单备注:</td>
-				  <td class="text-left">${orderDetailMsgs[0].base.postscript?default("")}</td>
-				</tr>
-				</tbody>
-			</table>
-			</div>
-			<div class="panel-heading">
+		  <div class="panel-heading">
+			<#if finished==1>
+			<button type="button" class="btn btn-primary" ng-click="returnGoods(${orderDetailMsgs[0].base.orderSnMain});">退货</button>
+			</#if>
+			<#if orderDetailMsgs[0].base.status==2>
+			<button type="button" class="btn btn-primary" ng-click="multiplePaymentRefund(${orderDetailMsgs[0].base.orderSnMain});">多付款退款</button>
+			</#if>
+			<button type="button" class="btn btn-primary" ng-click="showOrderAction(${orderDetailMsgs[0].base.orderSnMain});">详细</button>
+			<#if orderDetailMsgs[0].base.status!=1 && orderDetailMsgs[0].base.status!=2>
+			<button type="button" class="btn btn-primary" ng-click="cancel(${orderDetailMsgs[0].base.orderSnMain});">作废[操作优惠券]</button>
+			</#if>
+			<#if orderDetailMsgs[0].base.status==1 || orderDetailMsgs[0].base.status==2>
+			<button type="button" class="btn btn-primary" ng-click="resetCancel(${orderDetailMsgs[0].base.orderSnMain});">取消作废[操作优惠券]</button>
+			</#if>
+			<button type="button" class="btn btn-primary" ng-click="showCustomInfo(${orderDetailMsgs[0].base.buyerId});">客户信息</button>
+			<button type="button" class="btn btn-primary" ng-click="complaintMsg(${orderDetailMsgs[0].base.orderSnMain});">投诉</button>
+			<button type="button" class="btn btn-primary" ng-click="sendBillNotice(${orderDetailMsgs[0].base.orderSnMain});">发送开票提醒</button>
+			<button type="button" class="btn btn-primary" ng-click="showOrderRemark(${orderDetailMsgs[0].base.orderSnMain});" style="float:right;">备注
+				<#if (remarkCount >0)>
+					<span style="color:pink">(${remarkCount})</span>
+				</#if>
+			</button>
+		  </div>
+		  <div class="panel-heading">
 			<form method="post" id="orderForm">
 				<input type="hidden" name="orderSnMain" value="${orderDetailMsgs[0].base.orderSnMain}">
 				<input type="text" name="needShiptime" class="form-control" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="${orderDetailMsgs[0].base.needShipTime?default("")}" style="width:120px;float: left;">
@@ -40,93 +43,57 @@
 				手机号：<input type="text" name="phoneMob" value="${orderDetailMsgs[0].extmMsg.phoneMob?default("")}">
 				<button style="margin-top: 1px;" type="button" class="btn btn-primary" ng-click="changeOrder(${orderDetailMsgs[0].base.orderSnMain});">保存</button>
 			</form>
-			</div>
-			<div class="panel-heading">
-				<#if finished==1>
-				<button type="button" class="btn btn-primary" ng-click="returnGoods(${orderDetailMsgs[0].base.orderSnMain});">退货</button>
-				</#if>
-				<#if orderDetailMsgs[0].base.status==2>
-				<button type="button" class="btn btn-primary" ng-click="multiplePaymentRefund(${orderDetailMsgs[0].base.orderSnMain});">多付款退款</button>
-				</#if>
-				<button type="button" class="btn btn-primary" ng-click="showOrderAction(${orderDetailMsgs[0].base.orderSnMain});">详细</button>
-				<#if orderDetailMsgs[0].base.status!=1 && orderDetailMsgs[0].base.status!=2>
-				<button type="button" class="btn btn-primary" ng-click="cancel(${orderDetailMsgs[0].base.orderSnMain});">作废[操作优惠券]</button>
-				</#if>
-				<#if orderDetailMsgs[0].base.status==1 || orderDetailMsgs[0].base.status==2>
-				<button type="button" class="btn btn-primary" ng-click="resetCancel(${orderDetailMsgs[0].base.orderSnMain});">取消作废[操作优惠券]</button>
-				</#if>
-				<button type="button" class="btn btn-primary" ng-click="showCustomInfo(${orderDetailMsgs[0].base.buyerId});">客户信息</button>
-				<button type="button" class="btn btn-primary" ng-click="complaintMsg(${orderDetailMsgs[0].base.orderSnMain});">投诉</button>
-				<button type="button" class="btn btn-primary" ng-click="showOrderRemark(${orderDetailMsgs[0].base.orderSnMain});">备注
-					<#if (remarkCount > 0) >
-						<span style="color:pink">(${remarkCount})</span>
-					</#if>
-				</button>
-				<button type="button" class="btn btn-primary" ng-click="sendBillNotice(${orderDetailMsgs[0].base.orderSnMain});">发送开票提醒</button>
-			</div>
-			  <div class="panel-body">
-			  	 <table style="width:100%">
-			  			  <tbody>
-							<tr>
-							  <td class="text-right">用户名:</td>
-							  <td class="text-left">${orderDetailMsgs[0].base.buyerName?default("")}</td>
-							  <td class="text-center">|</td>
-							  <td class="text-right">下单时间:</td>
-							  <td class="text-left">${orderDetailMsgs[0].base.addTimeStr?default("")}</td>
-							  <td class="text-center">|</td>
-							  <td class="text-right">收款:</td>
-							  <td class="text-left">${orderDetailMsgs[0].base.payStatusToString?default("")}</td>
-							  <td class="text-center">|</td>
-							  <td class="text-right">订单来源:</td>
-							  <td class="text-left">${orderDetailMsgs[0].base.sourceName}</td>
-							</tr>
-							<tr>
-							  <td class="text-right">收件人:</td>
-							  <td class="text-left">${orderDetailMsgs[0].extmMsg.consignee?default("")}</td>
-							  <td class="text-center">|</td>
-							  <td class="text-right">手机:</td>
-							  <td class="text-left">${orderDetailMsgs[0].extmMsg.phoneMob?default("")}</td>
-							  <td class="text-center">|</td>
-							  <td class="text-right">地址:</td>
-							  <td class="text-left">${orderDetailMsgs[0].extmMsg.address?default("")}</td>
-							</tr>
-							<tr>
-							  <td class="text-right">商品总额:</td>
-							  <td class="text-left">${orderDetailMsgs[0].base.goodsAmount?string.number}</td>
-							  <td class="text-center">|</td>
-							  <td class="text-right">邮费:</td>
-							  <td class="text-left">${orderDetailMsgs[0].base.shippingFee?string.number}</td>
-							  <td class="text-center">|</td>
-							  <td class="text-right">优惠金额:</td>
-							  <td class="text-left">${orderDetailMsgs[0].base.discount?string.number}</td>
-							</tr>
-							<tr>
-							  <td class="text-right">应付:</td>
-							  <td class="text-left">${(orderDetailMsgs[0].base.goodsAmount+orderDetailMsgs[0].base.shippingFee)?string.number}</td>
-							  <td class="text-center">|</td>
-							  <td class="text-right">已付:</td>
-							  <td class="text-left">${orderDetailMsgs[0].base.orderPaid?string.number}</td>
-							  <td class="text-center">|</td>
-							  <td class="text-right">未付:</td>
-							  <td class="text-left">${(orderDetailMsgs[0].base.goodsAmount+orderDetailMsgs[0].base.shippingFee-orderDetailMsgs[0].base.orderPaid)?string.number}</td>
-							</tr>
-						  </tbody>
-				  </table>
-			  </div>
+		  </div>
+		  <div class="panel-body">
+		  	 <table class="table table-bordered">
+					<tr>
+					   <td class="text-right">订单：</td><td>${orderDetailMsgs[0].base.orderSnMain?default("")}</td>
+					   <td class="text-right">用户名:</td><td class="text-left">${orderDetailMsgs[0].base.buyerName?default("")}</td>
+					   <td class="text-right">下单时间:</td><td class="text-left">${orderDetailMsgs[0].base.addTimeStr?default("")}</td>
+					   <td class="text-right">收款:</td><td class="text-left">${orderDetailMsgs[0].base.payStatusToString?default("")}</td>
+					</tr>
+					<tr>
+					   <td class="text-right">收件人:</td><td class="text-left">${orderDetailMsgs[0].extmMsg.consignee?default("")}</td>
+					   <td class="text-right">手机:</td><td class="text-left">${orderDetailMsgs[0].extmMsg.phoneMob?default("")}</td>
+					   <td class="text-right">订单来源:</td><td class="text-left">${orderDetailMsgs[0].base.sourceName}</td>
+					</tr>
+					<tr><td class="text-right">收货地址：</td><td class="text-left" colspan=7>${orderDetailMsgs[0].extmMsg.address?default("")}</td></tr>
+					<tr>
+					   <td class="text-right">商品总额:</td><td class="text-left">${orderDetailMsgs[0].base.goodsAmount?string.number}</td>
+					   <td class="text-right">邮费:</td><td class="text-left">${orderDetailMsgs[0].base.shippingFee?string.number}</td>
+					   <td class="text-right">优惠金额:</td><td class="text-left">${orderDetailMsgs[0].base.discount?string.number}</td>
+					   <td class="text-right">优惠券码：</td><td class="text-left">${orderDetailMsgs[0].base.useCouponNo?default("")}</td>
+					</tr>
+					<tr>
+					   <td class="text-right">应付:</td><td class="text-left">${(orderDetailMsgs[0].base.goodsAmount+orderDetailMsgs[0].base.shippingFee)?string.number}</td>
+					   <td class="text-right">已付:</td><td class="text-left">${orderDetailMsgs[0].base.orderPaid?string.number}</td>
+					   <td class="text-right">未付:</td><td class="text-left">${(orderDetailMsgs[0].base.goodsAmount+orderDetailMsgs[0].base.shippingFee-orderDetailMsgs[0].base.orderPaid)?string.number}</td>
+					   <td class="text-right">付款方式：</td><td class="text-left">
+					     <select id="payId" default='${orderDetailMsgs[0].base.payId?default("")}'>
+					     		<option value="">请选择</option>
+					     		<option value="33">微信支付</option>
+								<option value="4">支付宝支付</option>
+								<option value="2">虚拟账号</option>
+					     		<option value="6">淘心卡</option>
+					     </select>
+					   </td>
+					</tr>
+			  </table>
+		  </div>
 		</div>
 	</div>
-	
 	<div class="row">
 		<div class="panel panel-default"  class="text-center">
-			<div class="panel-heading">订单信息</div>
 			<div class="panel-heading">
 				<button type="button" class="btn btn-primary" ng-click="cancelSubOrder();">子订单作废[不操作优惠券]</button>
 				<button type="button" class="btn btn-primary" ng-click="resetCancelSubOrder();">子订单取消作废[不操作优惠券]</button>
-				<button type="button" class="btn btn-primary" ng-click="paySubOrderHtml(${orderDetailMsgs[0].base.orderSnMain});">支付订单</button>
+				<#if (orderDetailMsgs[0].base.payStatus!=1)>
+					<button type="button" class="btn btn-primary" ng-click="paySubOrderHtml(${orderDetailMsgs[0].base.orderSnMain});">支付订单</button>
+				</#if>
 				<input type="hidden" name="subOrderId" id="subOrderId">
 			</div>
 			  <div class="panel-body">
-			  <table class="table table-hover">
+			  <table class="table table-hover table-bordered">
 				  <thead>
 					<tr>
 						<th class="text-center">订单编号</th>
@@ -174,9 +141,8 @@
 	
 	<div class="row">
 		<div class="panel panel-default"  class="text-center">
-			<div class="panel-heading" style="cursor:pointer" onclick="opershow();">商品列表</div>
 			  <div class="panel-body" id="oper">
-			   <table class="table">
+			   <table class="table table-bordered">
 	  			  <thead>
 	  				<tr>
 	  					<th class="text-left">条形码</th>
@@ -207,7 +173,7 @@
 	</div>
 	<#if orderDetailMsgs[0].base.orderCode??>
 	<div class="row">
-		<table style="width:100%;">
+		<table class="table table-bordered>
 			<tr>
 				<td align="center">
 					<#if order.base.orderState==1 || order.base.orderState==0>
@@ -224,11 +190,36 @@
 		</table>
 	</div>
 	</#if>
+	<div class="row">
+		<table class="table table-bordered">
+			<tr>
+			  <td class="text-right" style="width:100px;">审核人姓名:</td>
+			  <td class="text-left">${checker}</td>
+			  <td class="text-right" style="width:100px;">审核时间:</td>
+			  <td class="text-left">${checkTime}</td>
+			  <td class="text-right" style="width:100px;">发票号:</td>
+			  <td class="text-left">${orderDetailMsgs[0].base.invoiceNo?default("")}</td>
+			  <td class="text-right" style="width:100px;">订单备注:</td>
+			  <td class="text-left">${orderDetailMsgs[0].base.postscript?default("")}</td>
+			</tr>
+		</table>
+	</div>
 </div>
 <#else>
 	订单不存在
 </#if>
-
 <script src="<@s.url '/assets/scripts/jquery-1.7.1.min.js' />"></script>
 <script src="<@s.url '/assets/viewjs/orderdetail.js' />"></script>
 <#include "/base/basefooter.ftl">
+<script>
+	$(function(){
+		var payId = $("#payId").attr("default");
+		var options = $("#payId").find("option");
+		for(var i=0; i<options.length; i++){
+			if($(options[i]).val() == payId){
+				$(options[i]).attr("selected",true);
+			}			
+		}
+	});
+</script>
+

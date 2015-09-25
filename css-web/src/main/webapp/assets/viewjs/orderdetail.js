@@ -320,10 +320,14 @@ function OrderDetailController($scope, $http) {
 	
 	//子订单支付页面
 	$scope.paySubOrderHtml = function(orderSnMain) {
+		var payId= $("#payId").val();
+		if(!payId){
+			payId = 0;
+		}
 		$http.get("/order/paySubOrder", {
 			params : {
 				orderSnMain : orderSnMain,
-				payId : 0
+				payId : payId
 			}
 		}).success(function(data) {
 			if(data.code==200){
