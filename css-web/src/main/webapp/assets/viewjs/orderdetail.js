@@ -54,15 +54,15 @@ function OrderDetailController($scope, $http) {
 	//退货
 	$scope.generateReturn = function() {
 		var radioChks = $("input[type=radio][name='orderId']:checked");
-		var selectChks = $("input[type=checkbox][name=checkedPro]:checked");
-		if(!radioChks){
+		var selectChks = $("input[type=checkbox][name=checkedProduct]:checked");
+		if(!radioChks || radioChks.length==0){
 			jAlert("请选择退货订单");
-		}else if(!selectChks){
+		}else if(!selectChks || selectChks.length==0){
 			jAlert("请选择退货商品");
 		}else{
 			jConfirm('确认要退货吗？', '退货确认', function(r) {
 				if (r) {
-					$.ajax( {   
+					$.ajax({  
 						type : "POST",
 						url : "/order/generateReturn", 
 						data : $('#returnForm').serializeArray(),
