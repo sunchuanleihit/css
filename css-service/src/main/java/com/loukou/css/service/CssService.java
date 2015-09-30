@@ -39,7 +39,7 @@ public interface CssService {
 	 */
 	public ComplaintRespListDto queryComplaint(ComplaintReqDto complaintReqDto, int page, int rows);
 	
-	public CssBaseRes<String> generateComplaint(String actor,int complaintId,String orderSnMain,int whId,String whName,int[] goodsIdList,String content,String creatTime,String userName,String mobile,int department,int complaintType,int handleStatus);
+	public CssBaseRes<String> generateComplaint(String actor,int complaintId,String orderSnMain,int whId,String whName,int[] productIds,String content,String creatTime,String userName,String mobile,int department,int complaintType,int handleStatus);
 
 	public List<ComplaintRespDto> queryComplaintByIds(List<Integer> idList);
 

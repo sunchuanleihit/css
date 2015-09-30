@@ -15,7 +15,7 @@ public class ComplaintRespDto implements Serializable{
 	
 	private String whName;
 	
-	private String goodsId;
+	private String productIds;
 	
 	private String goodsName;
 	
@@ -71,6 +71,14 @@ public class ComplaintRespDto implements Serializable{
 		return orderSnMain;
 	}
 
+	public String getProductIds() {
+		return productIds;
+	}
+
+	public void setProductIds(String productIds) {
+		this.productIds = productIds;
+	}
+
 	public void setOrderSnMain(String orderSnMain) {
 		this.orderSnMain = orderSnMain;
 	}
@@ -81,14 +89,6 @@ public class ComplaintRespDto implements Serializable{
 
 	public void setWhName(String whName) {
 		this.whName = whName;
-	}
-
-	public String getGoodsId() {
-		return goodsId;
-	}
-
-	public void setGoodsId(String goodsId) {
-		this.goodsId = goodsId;
 	}
 
 	public String getGoodsName() {

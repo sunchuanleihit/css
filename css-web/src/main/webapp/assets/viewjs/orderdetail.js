@@ -54,7 +54,7 @@ function OrderDetailController($scope, $http) {
 	//退货
 	$scope.generateReturn = function() {
 		var radioChks = $("input[type=radio][name='orderId']:checked");
-		var selectChks = $("input[type=checkbox][name=checkedGoods]:checked");
+		var selectChks = $("input[type=checkbox][name=checkedPro]:checked");
 		if(!radioChks){
 			jAlert("请选择退货订单");
 		}else if(!selectChks){

@@ -17,17 +17,6 @@ public class InvoiceGoods {
 	@Column(name = "invoice_id")
 	private int invoiceId;
 	
-	@Column(name = "goods_id")
-	private int goodsId;
-	
-	public int getGoodsId() {
-		return goodsId;
-	}
-
-	public void setGoodsId(int goodsId) {
-		this.goodsId = goodsId;
-	}
-	
 	@Column(name = "goods_name")
 	private String goodsName = "";
 	
@@ -40,6 +29,17 @@ public class InvoiceGoods {
 	@Column(name = "num")
 	private int num = 0;
 	
+	@Column(name = "product_id")
+	private int productId;
+	
+	public int getProductId() {
+		return productId;
+	}
+
+	public void setProductId(int productId) {
+		this.productId = productId;
+	}
+
 	public int getId() {
 		return id;
 	}

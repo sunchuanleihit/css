@@ -51,9 +51,9 @@
 							
 									<td width="12%">
 									<#if (gidList?exists && gidList?size>0)>
-										<input id="goods_name" style="width: 50px;" type="checkbox" value="${goods.goodsId}" name="goodsId" <#list gidList as g><#if g?default(0)==goods.goodsId>checked</#if></#list>>${goods.goodsId}
+										<input id="goods_name" style="width: 50px;" type="checkbox" value="${goods.goodsId}" name="productIds" <#list gidList as g><#if g?default(0)==goods.goodsId>checked</#if></#list>>${goods.goodsId}
 									<#else>
-										<input id="goods_name" style="width: 50px;" type="checkbox" value="${goods.goodsId}" name="goodsId" >${goods.goodsId}
+										<input id="goods_name" style="width: 50px;" type="checkbox" value="${goods.goodsId}" name="productIds" >${goods.goodsId}
 									</#if>
 									</td>
 									<td width="28%">${goods.goodsName}</td>

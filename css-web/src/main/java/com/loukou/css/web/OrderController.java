@@ -389,9 +389,9 @@ public class OrderController extends  BaseController{
 			@RequestParam(value = "returnType", required = false, defaultValue = "") int returnType,
 			@RequestParam(value = "payId", required = false, defaultValue = "") int payId,
 			@RequestParam(value = "shippingFee", required = false, defaultValue = "") double shippingFee,
-			@RequestParam(value = "checkedGoods", required = false, defaultValue = "") int[] checkedGoodsList,
-			@RequestParam(value = "goodsId", required = false, defaultValue = "") int[] goodsIdList,
-			@RequestParam(value = "specId", required = false, defaultValue = "") int[] specIdList,
+			@RequestParam(value = "checkedProduct", required = false, defaultValue = "") int[] checkedProductList,
+			@RequestParam(value = "productId", required = false, defaultValue = "") int[] productIdList,
+			@RequestParam(value = "siteskuId", required = false, defaultValue = "") int[] siteskuIdList,
 			@RequestParam(value = "proType", required = false, defaultValue = "") int[] proTypeList,
 			@RequestParam(value = "recId", required = false, defaultValue = "") int[] recIdList,
 			@RequestParam(value = "goodsReturnNum", required = false, defaultValue = "") int[] goodsReturnNumList,
@@ -405,7 +405,7 @@ public class OrderController extends  BaseController{
 		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
 		
 		BaseRes<String> res=bkOrderService.generateReturn(actor,orderId, postScript, orderSnMain, returnType, payId, shippingFee, 
-		checkedGoodsList,goodsIdList, specIdList, proTypeList, recIdList, goodsReturnNumList, goodsReturnAmountList, goodsReasonList, goodsNameList,
+		checkedProductList,productIdList, siteskuIdList, proTypeList, recIdList, goodsReturnNumList, goodsReturnAmountList, goodsReasonList, goodsNameList,
 		paymentIdList,returnAmountList);
 		return res;
 	}

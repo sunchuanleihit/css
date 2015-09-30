@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.loukou.css.bo.CssBaseRes;
-import com.loukou.css.dao.GoodsDao;
 import com.loukou.css.dao.InvoiceActionDao;
 import com.loukou.css.dao.InvoiceDao;
 import com.loukou.css.dao.InvoiceGoodsDao;
@@ -32,7 +31,6 @@ import com.loukou.css.dao.OrderGoodsDao;
 import com.loukou.css.dao.OrderPayDao;
 import com.loukou.css.dao.SiteDao;
 import com.loukou.css.dao.StoreDao;
-import com.loukou.css.entity.Goods;
 import com.loukou.css.entity.Invoice;
 import com.loukou.css.entity.InvoiceAction;
 import com.loukou.css.entity.InvoiceGoods;
@@ -50,7 +48,11 @@ import com.loukou.css.resp.ComplaintRespDto;
 import com.loukou.css.resp.ComplaintRespListDto;
 import com.loukou.css.service.CssService;
 import com.loukou.css.utils.DateUtils;
-import com.serverstarted.store.service.resp.dto.StoreRespDto;
+import com.serverstarted.product.service.api.ProductService;
+import com.serverstarted.product.service.api.SpuService;
+import com.serverstarted.product.service.resp.dto.ProduDto;
+import com.serverstarted.product.service.resp.dto.SpuRespDto;
+import com.serverstarted.base.service.resp.dto.RespDto;
 
 @Service
 public class CssServiceImpl implements CssService {
@@ -73,9 +75,6 @@ public class CssServiceImpl implements CssService {
     private OrderGoodsDao orderGoodsDao;
 	
 	@Autowired
-    private GoodsDao goodsDao;
-	
-	@Autowired
     private InvoiceGoodsDao invoiceGoodsDao;
 	
 	@Autowired
@@ -86,6 +85,12 @@ public class CssServiceImpl implements CssService {
 	
 	@Autowired
 	private LkComplaintDao lkComplaintDao;
+	
+	@Autowired
+	private ProductService productService;
+	
+	@Autowired
+	private SpuService spuService;
 	
 	//发送开票提醒
 	public CssBaseRes<String> sendBillNotice(String orderSnMain,String actor){
@@ -227,10 +232,23 @@ public class CssServiceImpl implements CssService {
 		
 		List<OrderGoods> orderGoodsList=orderGoodsDao.findByOrderIdsAndPriceDiscount(orderIds);
 		List<Double> taxList = new ArrayList<Double>();
+		Map<Integer, SpuRespDto> spuMap = new HashMap<Integer, SpuRespDto>();
+		
 		for(OrderGoods og:orderGoodsList){
-			Goods g=goodsDao.findByGoodsId(og.getGoodsId());
-			if(!taxList.equals(g.getTax())){
-				taxList.add(g.getTax());
+			ProduDto productDto = productService.findProductById(og.getProductId());
+			int spuId = productDto.getSpuId();
+			if(spuId != 0){
+				RespDto<SpuRespDto> spuDto = spuService.findSpuById(spuId);
+				if(spuDto.getCode() == 200){
+					if(!taxList.contains(spuDto.getResult().getTax())){
+						taxList.add(spuDto.getResult().getTax());
+					}
+					spuMap.put(og.getRecId(), spuDto.getResult());
+				}else{
+					return false;
+				}
+			}else{
+				return false;
 			}
 		}
 		
@@ -250,8 +268,8 @@ public class CssServiceImpl implements CssService {
 				double gsum=og.getPriceDiscount()*og.getQuantity();
 				double priceDiscount=og.getPriceDiscount();
 				double subInvoice=0;
-				Goods g=goodsDao.findByGoodsId(og.getGoodsId());
-				if(g.getTax()==t){
+				SpuRespDto spu = spuMap.get(og.getRecId());
+				if(spu !=null && spu.getTax()==t){
 					double subRemain=invoiceAmount-subHaveInvoice;
 					if(subRemain<0.00000001){
 						break;
@@ -267,8 +285,8 @@ public class CssServiceImpl implements CssService {
 					
 					InvoiceGoods invoiceGoodsData=new InvoiceGoods();
 					invoiceGoodsData.setInvoiceId(invoiceRes.getInvoiceId());
-					invoiceGoodsData.setGoodsId(g.getGoodsId());
-					invoiceGoodsData.setGoodsName(g.getGoodsName());
+					invoiceGoodsData.setProductId(og.getProductId());
+					invoiceGoodsData.setGoodsName(spu.getName());
 					invoiceGoodsData.setSpecification(og.getSpecification());
 					invoiceGoodsData.setNum(og.getQuantity());
 					invoiceGoodsData.setGoods_amount(gsum);
@@ -404,14 +422,13 @@ public class CssServiceImpl implements CssService {
 		dto.setDepartmentId(complaint.getDepartment());
 		dto.setComplaintTypeId(complaint.getComplaintType());
 		dto.setWhId(complaint.getWhId());
-		dto.setGoodsId(complaint.getGoodsId());
 		return dto;
 	}
 	
 	
 	//提交/修改投诉
 	public CssBaseRes<String> generateComplaint(String actor,int complaintId,String orderSnMain,int whId,String whName,
-		int[] goodsIdList,String content,String creatTime,String userName,String mobile,int department,int complaintType,int handleStatus){
+		int[] productIdList,String content,String creatTime,String userName,String mobile,int department,int complaintType,int handleStatus){
 		CssBaseRes<String> result=new CssBaseRes<String>();
 		
 		List<Order> orderList = orderDao.findByOrderSnMain(orderSnMain);//获取订单列表信息
@@ -421,27 +438,31 @@ public class CssServiceImpl implements CssService {
 			return result;
 		}
 		
-		if(goodsIdList.length<=0){
+		if(productIdList.length<=0){
 			result.setCode("400");
 			result.setMessage("所选商品为空");
 			return result;
 		}
 		
-		List<Integer> gidList=new ArrayList<Integer>();
-		String goodsId="";
-		for(int g:goodsIdList){
-			gidList.add(g);
-			goodsId+=g+",";
+		List<Integer> pidList = new ArrayList<Integer>();
+		for(int i=0; i < productIdList.length; i++){
+			pidList.add(productIdList[i]);
 		}
-		goodsId=goodsId.substring(0,goodsId.length()-1);
-		
-		List<Goods> goodsList=goodsDao.getGoodsByIDs(gidList);
-		String goodsName="";
-		for(Goods g:goodsList){
-			goodsName+=g.getGoodsName()+",";
+		List<ProduDto> produDtoList = productService.findProductsByIdList(pidList);
+		List<Integer> spuIdList = new ArrayList<Integer>();
+		String productIds = "";
+		for(ProduDto dto: produDtoList){
+			spuIdList.add(dto.getSpuId());
+			productIds += ","+dto.getId();
 		}
-		goodsName=goodsName.substring(0,goodsName.length()-1);
-		
+		if(StringUtils.isNotBlank(productIds)){
+			productIds = productIds.substring(1);
+		}
+		List<SpuRespDto> spuList = spuService.findByIdIn(spuIdList);
+		String goodsName = "";
+		for(SpuRespDto spu: spuList){
+			goodsName += "," + spu.getName();
+		}
 		//新增投诉
 		if(complaintId==0){
 			LkComplaint complaintData=new LkComplaint();
@@ -450,7 +471,7 @@ public class CssServiceImpl implements CssService {
 			complaintData.setOrderSnMain(orderSnMain);
 			complaintData.setWhId(whId);
 			complaintData.setWhName(whName);
-			complaintData.setGoodsId(goodsId);
+			complaintData.setProductId(productIds);
 			complaintData.setGoodsName(goodsName);
 			complaintData.setContent(content);
 			complaintData.setDepartment(department);
@@ -469,10 +490,10 @@ public class CssServiceImpl implements CssService {
 		}else{//修改投诉
 			Date finishTime=new Date();
 			int lcResult=lkComplaintDao.updateComplaintById(complaintId, userName, mobile, whId, whName, goodsName, content, department, 
-					complaintType, handleStatus, actor,finishTime,goodsId);
+					complaintType, handleStatus, actor,finishTime,productIds);
 			if(lcResult<=0){
 				result.setCode("400");
-				result.setMessage("生成退款支付单失败");
+				result.setMessage("修改投诉失败");
 				return result;
 			}
 		}

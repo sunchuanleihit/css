@@ -43,8 +43,9 @@
 							<tr>
 						</#if>
 						<td>
-							<input style="width: 50px;" orderId="${order.base.orderId}" type="checkbox" value="${goods.goodsId}" name="checkedGoods">${goods.goodsId}
-							<input type="hidden" name="goodsId" value="${goods.goodsId}">
+							<input style="width: 50px;" orderId="${order.base.orderId}" type="checkbox" value="${goods.productId}" name="checkedProduct">${goods.productId}
+							<input type="hidden" name="productId" value="${goods.productId}">
+							<input type="hidden" name="siteskuId" value="${goods.siteskuId}">
 							<input type="hidden" name="specId" value="${goods.specId}">
 							<input type="hidden" name="proType" value="${goods.proType}">
 							<input type="hidden" name="recId" value="${goods.recId}">
