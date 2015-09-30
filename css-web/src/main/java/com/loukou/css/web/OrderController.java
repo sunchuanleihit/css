@@ -607,7 +607,6 @@ public class OrderController extends  BaseController{
 	public BaseRes<String> cancelSubOrder(@RequestParam int orderId){
 		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
 		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
-		
 		BaseRes<String> res=bkOrderService.cancelSubOrder(orderId,actor);
 		return res;
 	}
@@ -661,8 +660,13 @@ public class OrderController extends  BaseController{
 	public CssBaseRes<String> sendBillNotice(@RequestParam String orderSnMain){
 		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
 		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
-		
-		CssBaseRes<String> res=cssService.sendBillNotice(orderSnMain,actor);
+		CssBaseRes<String> res = new CssBaseRes<String>();
+		if(StringUtils.isBlank(actor)){
+			res.setCode("error");
+			res.setMessage("请重新登陆");
+		}else{
+			res = cssService.sendBillNotice(orderSnMain,actor);
+		}
 		return res;
 	}
 	

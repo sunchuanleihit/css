@@ -48,11 +48,12 @@ import com.loukou.css.resp.ComplaintRespDto;
 import com.loukou.css.resp.ComplaintRespListDto;
 import com.loukou.css.service.CssService;
 import com.loukou.css.utils.DateUtils;
+import com.serverstarted.base.service.resp.dto.RespDto;
 import com.serverstarted.product.service.api.ProductService;
 import com.serverstarted.product.service.api.SpuService;
 import com.serverstarted.product.service.resp.dto.ProduDto;
+import com.serverstarted.product.service.resp.dto.ProductRespDto;
 import com.serverstarted.product.service.resp.dto.SpuRespDto;
-import com.serverstarted.base.service.resp.dto.RespDto;
 
 @Service
 public class CssServiceImpl implements CssService {
@@ -235,7 +236,7 @@ public class CssServiceImpl implements CssService {
 		Map<Integer, SpuRespDto> spuMap = new HashMap<Integer, SpuRespDto>();
 		
 		for(OrderGoods og:orderGoodsList){
-			ProduDto productDto = productService.findProductById(og.getProductId());
+			ProductRespDto productDto = productService.getProductById(og.getProductId());
 			int spuId = productDto.getSpuId();
 			if(spuId != 0){
 				RespDto<SpuRespDto> spuDto = spuService.findSpuById(spuId);
@@ -422,6 +423,7 @@ public class CssServiceImpl implements CssService {
 		dto.setDepartmentId(complaint.getDepartment());
 		dto.setComplaintTypeId(complaint.getComplaintType());
 		dto.setWhId(complaint.getWhId());
+		dto.setProductId(complaint.getProductId());
 		return dto;
 	}
 	
@@ -448,10 +450,10 @@ public class CssServiceImpl implements CssService {
 		for(int i=0; i < productIdList.length; i++){
 			pidList.add(productIdList[i]);
 		}
-		List<ProduDto> produDtoList = productService.findProductsByIdList(pidList);
+		List<ProductRespDto> produDtoList = productService.getProductsByIds(pidList);
 		List<Integer> spuIdList = new ArrayList<Integer>();
 		String productIds = "";
-		for(ProduDto dto: produDtoList){
+		for(ProductRespDto dto: produDtoList){
 			spuIdList.add(dto.getSpuId());
 			productIds += ","+dto.getId();
 		}

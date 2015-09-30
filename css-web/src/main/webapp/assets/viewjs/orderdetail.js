@@ -281,6 +281,10 @@ function OrderDetailController($scope, $http) {
 	//子订单作废
 	$scope.cancelSubOrder = function() {
 		var orderId=$("#subOrderId").val();
+		if(!orderId){
+			alert("未选择子订单");
+			return false;
+		}
 		jConfirm('确认要作废子订单吗？', '作废子订单确认', function(r) {
 			if (r) {
 				$http.get("/order/cancelSubOrder", {
@@ -301,6 +305,10 @@ function OrderDetailController($scope, $http) {
 	//子订单取消作废
 	$scope.resetCancelSubOrder = function() {
 		var orderId=$("#subOrderId").val();
+		if(!orderId){
+			alert("为选择子订单");
+			return false;
+		}
 		jConfirm('确认要取消作废子订单吗？', '取消作废子订单确认', function(r) {
 			if (r) {
 				$http.get("/order/resetCancelSubOrder", {

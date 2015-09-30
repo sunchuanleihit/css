@@ -169,18 +169,17 @@ public class ComplaintController extends  BaseController{
 			String cCreateTime = complaintMsg.getCreateTime();
 			String rCreateTime = DateUtils.date2DateStr(DateUtils.str2Date(cCreateTime));
 			complaintMsg.setCreateTime(rCreateTime);
-			
-//			String goodsIdList=complaintMsg.getGoodsId();
-//			List<Integer> gidList=new ArrayList<Integer>();
-//			if(goodsIdList!=null){
-//				String[] tempList=goodsIdList.split(",");
-//				for(String t:tempList){
-//					gidList.add(Integer.parseInt(t));
-//				}
-//			}
-//			mv.addObject("gidList",gidList);
-			
-			
+			String productIdList = complaintMsg.getProductId();
+			List<Integer> pidList=new ArrayList<Integer>();
+			if(productIdList!=null){
+				String[] tempList=productIdList.split(",");
+				for(String t:tempList){
+					if(StringUtils.isNotBlank(t)){
+						pidList.add(Integer.parseInt(t));
+					}
+				}
+			}
+			mv.addObject("pidList",pidList);
 		}
 		mv.addObject("complaintMsg",complaintMsg);
 		mv.addObject("complaintId",complaintId);
