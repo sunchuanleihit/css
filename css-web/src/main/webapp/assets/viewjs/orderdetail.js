@@ -339,16 +339,17 @@ function OrderDetailController($scope, $http) {
 			}
 		}).success(function(data) {
 			if(data.code==200){
-				$.colorbox({
-		            href: "/order/orderPayList?orderSnMain=" + orderSnMain,
-		            iframe: true,
-		            width: "800px",
-		            height: "420px",
-		            top: "100px",
-		            opacity: 0,
-		            overlayClose: false,
-		            scrolling: true
-		        });
+				alert("支付成功");
+//				$.colorbox({
+//		            href: "/order/orderPayList?orderSnMain=" + orderSnMain,
+//		            iframe: true,
+//		            width: "800px",
+//		            height: "420px",
+//		            top: "100px",
+//		            opacity: 0,
+//		            overlayClose: false,
+//		            scrolling: true
+//		        });
 			}else{
 				jAlert(data.message);
 			}
