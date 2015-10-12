@@ -115,7 +115,7 @@
 				  </thead>
 				  <tbody>
 				  	<#list orderDetailMsgs as order>
-					<tr style="cursor:pointer" ng-click="getordergoodslist(${order.base.orderId});">
+					<tr style="cursor:pointer" ng-click="getordergoodslist(${order.base.orderId});" class="orderTr" id="orderTr_${order.base.orderId}">
 					  <td class="text-center">${order.base.taoOrderSn?default("")}</td>
 					  <td class="text-center" onclick="showSeller(${order.base.sellerId})">${order.base.sellerName}</td>
 					  <td class="text-center">${order.base.statusName?default("")}</td>

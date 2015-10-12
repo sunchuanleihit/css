@@ -8,7 +8,6 @@ import com.loukou.css.entity.Store;
 import com.loukou.css.req.ComplaintReqDto;
 import com.loukou.css.resp.ComplaintRespDto;
 import com.loukou.css.resp.ComplaintRespListDto;
-import com.serverstarted.store.service.resp.dto.StoreRespDto;
 
 public interface CssService {
 	//发送开票提醒
@@ -44,4 +43,8 @@ public interface CssService {
 	public List<ComplaintRespDto> queryComplaintByIds(List<Integer> idList);
 
 	public Store queryStore(Integer sellerId);
+	
+	public List getAchievement(String startDate, String endDate);
+	
+	
 }

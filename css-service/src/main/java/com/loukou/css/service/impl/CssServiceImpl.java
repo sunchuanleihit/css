@@ -29,6 +29,7 @@ import com.loukou.css.dao.MemberRateDao;
 import com.loukou.css.dao.OrderDao;
 import com.loukou.css.dao.OrderGoodsDao;
 import com.loukou.css.dao.OrderPayDao;
+import com.loukou.css.dao.OrderReturnDao;
 import com.loukou.css.dao.SiteDao;
 import com.loukou.css.dao.StoreDao;
 import com.loukou.css.entity.Invoice;
@@ -39,6 +40,7 @@ import com.loukou.css.entity.MemberRate;
 import com.loukou.css.entity.Order;
 import com.loukou.css.entity.OrderGoods;
 import com.loukou.css.entity.OrderPay;
+import com.loukou.css.entity.OrderReturn;
 import com.loukou.css.entity.Site;
 import com.loukou.css.entity.Store;
 import com.loukou.css.enums.ComplaintTypeEnum;
@@ -51,7 +53,6 @@ import com.loukou.css.utils.DateUtils;
 import com.serverstarted.base.service.resp.dto.RespDto;
 import com.serverstarted.product.service.api.ProductService;
 import com.serverstarted.product.service.api.SpuService;
-import com.serverstarted.product.service.resp.dto.ProduDto;
 import com.serverstarted.product.service.resp.dto.ProductRespDto;
 import com.serverstarted.product.service.resp.dto.SpuRespDto;
 
@@ -86,6 +87,9 @@ public class CssServiceImpl implements CssService {
 	
 	@Autowired
 	private LkComplaintDao lkComplaintDao;
+	
+	@Autowired
+	private OrderReturnDao orderReturnDao;
 	
 	@Autowired
 	private ProductService productService;
@@ -524,5 +528,25 @@ public class CssServiceImpl implements CssService {
 	public Store queryStore(Integer sellerId) {
 		Store store = storeDao.findOne(sellerId);
 		return store;
+	}
+
+	@Override
+	public List getAchievement(String startDate, String endDate) {
+		List<OrderReturn> orderReturnList = orderReturnDao.findByAddTimeBetween(startDate, endDate);
+		Map<String, Integer> orderReturnMap = new HashMap<String, Integer>();//退货Map
+		
+		for(OrderReturn or : orderReturnList){
+			Integer num = orderReturnMap.get(or.getActor());
+			if(num!=null && num > 0){
+				num++;
+			}else{
+				num = 1;
+			}
+			orderReturnMap.put(or.getActor(), num);
+		}
+		orderReturnList = null;
+		
+		
+		return null;
 	}
 }

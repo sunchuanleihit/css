@@ -34,6 +34,7 @@ function selectDepartment(){
 function OrderDetailController($scope, $http) {
 	//获取包裹商品列表
 	$scope.getordergoodslist = function(orderId) {
+		$("#orderTr_"+orderId).addClass("error");
 		$("#subOrderId").val(orderId);
 		$http.get('/order/getOrderGoodsList', {
 			params : {
@@ -330,7 +331,8 @@ function OrderDetailController($scope, $http) {
 	$scope.paySubOrderHtml = function(orderSnMain) {
 		var payId= $("#payId").val();
 		if(!payId){
-			payId = 0;
+			alert("未选支付方式");
+			return false;
 		}
 		$http.get("/order/paySubOrder", {
 			params : {
