@@ -179,6 +179,7 @@ function initTable(){
    		{field:'userName',title:'用户姓名',width:80,sortable:false},
    		{field:'mobile',title:'联系方式',width:100,sortable:false},
    		{field:'city',title:'城市',width:100,sortable:false},
+   		{field:'',title:'商家ID',width:80,sortable:false},
    		{field:'whName',title:'商家',width:180,sortable:false},
    		{field:'goodsName',title:'商品名称',width:180,sortable:false},
    		{field:'actor',title:'经手人',width:80,sortable:false}

@@ -9,6 +9,6 @@ import com.loukou.css.entity.OrderReturn;
 
 public interface OrderReturnDao extends CrudRepository<OrderReturn, Integer>,JpaSpecificationExecutor<OrderReturn>{
 	
-	List<OrderReturn> findByAddTimeBetween(String startDate, String endDate);
+	List<OrderReturn> findByAddTimeBetweenAndOrderStatus(String startDate, String endDate, int orderStatus);
 	
 }

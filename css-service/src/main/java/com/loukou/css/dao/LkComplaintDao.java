@@ -24,5 +24,7 @@ public interface LkComplaintDao extends PagingAndSortingRepository<LkComplaint, 
 	@Query("UPDATE LkComplaint set userName = ?2,mobile = ?3,whId = ?4,whName = ?5,productId = ?13,goodsName = ?6,content = ?7,department = ?8,complaintType = ?9,handleStatus = ?10,actor = ?11,finishTime = ?12 WHERE id = ?1")
 	int updateComplaintById(int complaintId,String userName,String mobile,int whId,String whName,String goodsName,String content,int department,
 			int complaintType,int handleStatus,String actor,Date finishTime,String productId);
+
+	List<LkComplaint> findByCreatTimeBetween(Date start, Date end);
 }
 

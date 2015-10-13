@@ -152,9 +152,6 @@ function toAddCoupon(id){
 		}
 	});
 }
-function loadUrl(url){
-	$("#main").load(url);
-}
 function changeRuleIsuse(id, name, isuse){
 	var str = "";
 	if(isuse == 2){

@@ -6,6 +6,7 @@ import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.entity.Site;
 import com.loukou.css.entity.Store;
 import com.loukou.css.req.ComplaintReqDto;
+import com.loukou.css.resp.AchievementRespDto;
 import com.loukou.css.resp.ComplaintRespDto;
 import com.loukou.css.resp.ComplaintRespListDto;
 
@@ -44,7 +45,7 @@ public interface CssService {
 
 	public Store queryStore(Integer sellerId);
 	
-	public List getAchievement(String startDate, String endDate);
+	public List<AchievementRespDto> getAchievement(String startDate, String endDate);
 	
 	
 }

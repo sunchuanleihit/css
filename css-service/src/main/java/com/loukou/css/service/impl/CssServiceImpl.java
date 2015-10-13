@@ -3,8 +3,10 @@ package com.loukou.css.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -26,26 +28,31 @@ import com.loukou.css.dao.InvoiceDao;
 import com.loukou.css.dao.InvoiceGoodsDao;
 import com.loukou.css.dao.LkComplaintDao;
 import com.loukou.css.dao.MemberRateDao;
+import com.loukou.css.dao.OrderActionDao;
 import com.loukou.css.dao.OrderDao;
 import com.loukou.css.dao.OrderGoodsDao;
 import com.loukou.css.dao.OrderPayDao;
 import com.loukou.css.dao.OrderReturnDao;
 import com.loukou.css.dao.SiteDao;
 import com.loukou.css.dao.StoreDao;
+import com.loukou.css.dao.TczAdminDao;
 import com.loukou.css.entity.Invoice;
 import com.loukou.css.entity.InvoiceAction;
 import com.loukou.css.entity.InvoiceGoods;
 import com.loukou.css.entity.LkComplaint;
 import com.loukou.css.entity.MemberRate;
 import com.loukou.css.entity.Order;
+import com.loukou.css.entity.OrderAction;
 import com.loukou.css.entity.OrderGoods;
 import com.loukou.css.entity.OrderPay;
 import com.loukou.css.entity.OrderReturn;
 import com.loukou.css.entity.Site;
 import com.loukou.css.entity.Store;
+import com.loukou.css.entity.TczAdmin;
 import com.loukou.css.enums.ComplaintTypeEnum;
 import com.loukou.css.enums.DeptEnum;
 import com.loukou.css.req.ComplaintReqDto;
+import com.loukou.css.resp.AchievementRespDto;
 import com.loukou.css.resp.ComplaintRespDto;
 import com.loukou.css.resp.ComplaintRespListDto;
 import com.loukou.css.service.CssService;
@@ -96,6 +103,12 @@ public class CssServiceImpl implements CssService {
 	
 	@Autowired
 	private SpuService spuService;
+	
+	@Autowired
+	private TczAdminDao tczAdminDao;
+	
+	@Autowired
+	private OrderActionDao orderActionDao;
 	
 	//发送开票提醒
 	public CssBaseRes<String> sendBillNotice(String orderSnMain,String actor){
@@ -531,22 +544,69 @@ public class CssServiceImpl implements CssService {
 	}
 
 	@Override
-	public List getAchievement(String startDate, String endDate) {
-		List<OrderReturn> orderReturnList = orderReturnDao.findByAddTimeBetween(startDate, endDate);
-		Map<String, Integer> orderReturnMap = new HashMap<String, Integer>();//退货Map
-		
+	public List<AchievementRespDto> getAchievement(String startDate, String endDate) {
+		Map<String, AchievementRespDto> resultMap = new HashMap<String, AchievementRespDto>();
+		List<AchievementRespDto> achievementList = new ArrayList<AchievementRespDto>();
+		List<TczAdmin> adminList = this.getCallCenterMember();
+		for(TczAdmin admin: adminList){
+			AchievementRespDto respDto = new AchievementRespDto();
+			achievementList.add(respDto);
+			respDto.setName(admin.getRealname());
+			resultMap.put(admin.getRealname(), respDto);
+		}
+		if(StringUtils.isBlank(startDate) || StringUtils.isBlank(endDate)){
+			return achievementList;
+		}
+		List<OrderReturn> orderReturnList = orderReturnDao.findByAddTimeBetweenAndOrderStatus(startDate, endDate, 0);
 		for(OrderReturn or : orderReturnList){
-			Integer num = orderReturnMap.get(or.getActor());
-			if(num!=null && num > 0){
-				num++;
-			}else{
-				num = 1;
+			AchievementRespDto respDto = resultMap.get(or.getActor());
+			if(respDto!=null){
+				if(or.getOrderType() == 0){//统计退货数
+					respDto.setReturnGoodsNum(respDto.getReturnGoodsNum()+1);
+				}
+				if((or.getOrderType() == 2 || or.getOrderType()==7) && or.getReason()>0){//统计退款单数
+					respDto.setReturnMoneyNum(respDto.getReturnMoneyNum()+1);
+				}
 			}
-			orderReturnMap.put(or.getActor(), num);
 		}
 		orderReturnList = null;
-		
-		
-		return null;
+		//统计作废单数
+		Date start = DateUtils.getStartofDate(DateUtils.str2Date(startDate));
+		Date end = DateUtils.getEndofDate(DateUtils.str2Date(endDate));
+		List<Integer> actions = new ArrayList<Integer>();
+		actions.add(2);
+		actions.add(31);
+		actions.add(32);
+		actions.add(33);
+		List<OrderAction> orderActionList = orderActionDao.findByActionTimeBetweenAndActionIn(start, end, actions);//作废订单或改单
+		Set<String> orderSnMainSet = new HashSet<String>();
+		for(OrderAction oa : orderActionList){
+			if(orderSnMainSet.add(oa.getOrderSnMain())){
+				AchievementRespDto respDto = resultMap.get(oa.getActor());
+				if(respDto != null){
+					if(oa.getAction()==2){//作废订单
+						respDto.setCancelOrderNum(respDto.getCancelOrderNum()+1);
+					}else if(oa.getAction() == 31 || oa.getAction() == 32 || oa.getAction() == 33){//改单
+						respDto.setChangeOrderNum(respDto.getChangeOrderNum()+1);
+					}
+				}
+			}
+		}
+		//统计投诉数
+		List<LkComplaint> complaintList = lkComplaintDao.findByCreatTimeBetween(start, end);
+		for(LkComplaint complaint: complaintList){
+			AchievementRespDto respDto = resultMap.get(complaint.getActor());
+			if(respDto != null){
+				respDto.setComplaintNum(respDto.getComplaintNum()+1);
+			}
+		}
+		return achievementList;
 	}
+	
+	private List<TczAdmin> getCallCenterMember(){
+		Integer callCenterManager = 220;// 客服老大 雍燕
+		List<TczAdmin> tczAdminList = tczAdminDao.getAllCallCenterAdmin(callCenterManager);
+		return tczAdminList;
+	} 
+	
 }

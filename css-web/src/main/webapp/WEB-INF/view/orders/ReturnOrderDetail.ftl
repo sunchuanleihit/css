@@ -92,8 +92,8 @@
 	  			  <tbody>
 	  			  	<#list orderPayList as op>
 					<tr>
-					  <td class="text-center">${op.paymentName}</td>
-					  <td class="text-center">${op.money}</td>
+					  <td class="text-center">${op.paymentName?default("")}</td>
+					  <td class="text-center">${op.money?default(0)}</td>
 					  <td class="text-center">
 					  	<input type="text" name="returnAmount" alt="2" value="0">
 					  	<input type="hidden" name="paymentId" value="${op.paymentId}">
