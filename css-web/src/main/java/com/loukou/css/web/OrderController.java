@@ -107,14 +107,18 @@ public class OrderController extends  BaseController{
 		
 		mv.addObject("timeList", timeList);
 		
-		//判断订单下是否有留言
+		int remarkCount = 0;
+		//查找订单下留言
 		List<BkOrderRemarkDto> remarkList = bkOrderService.queryOrderRemark(orderSnMain, 0);
 		if(remarkList!=null && remarkList.size()>0){
-			mv.addObject("remarkCount", remarkList.size());
-		}else{
-			mv.addObject("remarkCount",	0);
+			remarkCount +=  remarkList.size();
 		}
-		
+		//查找订单下交接
+		remarkList = bkOrderService.queryOrderRemark(orderSnMain, 1);
+		if(remarkList!=null && remarkList.size()>0){
+			remarkCount +=  remarkList.size();
+		}
+		mv.addObject("remarkCount",	remarkCount);
 		return mv;
 	}
 	
