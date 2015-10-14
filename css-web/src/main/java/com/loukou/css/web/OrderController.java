@@ -128,7 +128,10 @@ public class OrderController extends  BaseController{
 			@RequestParam(value = "invoiceHeader", required = false, defaultValue = "") String invoiceHeader,
 			@RequestParam(value = "phoneMob", required = false, defaultValue = "") String phoneMob
 			){
-		BaseRes<String> res=bkOrderService.changeOrder(orderSnMain,needShiptime,needShiptimeSlot,invoiceHeader,phoneMob);
+		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
+		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
+		
+		BaseRes<String> res=bkOrderService.changeOrder(orderSnMain,needShiptime,needShiptimeSlot,invoiceHeader,phoneMob,actor);
 		return res;
 	}
 	

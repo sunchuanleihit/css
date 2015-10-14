@@ -441,13 +441,15 @@ public class CssServiceImpl implements CssService {
 		dto.setComplaintTypeId(complaint.getComplaintType());
 		dto.setWhId(complaint.getWhId());
 		dto.setProductId(complaint.getProductId());
+		dto.setCompensationType(complaint.getCompensationType());
+		dto.setMoney(complaint.getMoney());
 		return dto;
 	}
 	
 	
 	//提交/修改投诉
 	public CssBaseRes<String> generateComplaint(String actor,int complaintId,String orderSnMain,int whId,String whName,
-		int[] productIdList,String content,String creatTime,String userName,String mobile,int department,int complaintType,int handleStatus){
+		int[] productIdList,String content,String creatTime,String userName,String mobile,int department,int complaintType,int compensationType, double money, int handleStatus){
 		CssBaseRes<String> result=new CssBaseRes<String>();
 		
 		List<Order> orderList = orderDao.findByOrderSnMain(orderSnMain);//获取订单列表信息
@@ -495,6 +497,8 @@ public class CssServiceImpl implements CssService {
 			complaintData.setContent(content);
 			complaintData.setDepartment(department);
 			complaintData.setComplaintType(complaintType);
+			complaintData.setCompensationType(compensationType);
+			complaintData.setMoney(money);
 			complaintData.setHandleStatus(handleStatus);
 			complaintData.setStatus(0);
 			complaintData.setCreatTime(DateUtils.str2Date(creatTime));

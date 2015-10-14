@@ -42,6 +42,10 @@ public class ComplaintRespDto implements Serializable{
 	private String actor;
 	
 	private Integer whId;
+	
+	private int compensationType;
+	
+	private double money;
 
 	public Integer getId() {
 		return id;
@@ -49,6 +53,22 @@ public class ComplaintRespDto implements Serializable{
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public int getCompensationType() {
+		return compensationType;
+	}
+
+	public void setCompensationType(int compensationType) {
+		this.compensationType = compensationType;
+	}
+
+	public double getMoney() {
+		return money;
+	}
+
+	public void setMoney(double money) {
+		this.money = money;
 	}
 
 	public String getUserName() {

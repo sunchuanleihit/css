@@ -257,6 +257,11 @@ function OrderDetailController($scope, $http) {
 	
 	//提交投诉
 	$scope.generateComplaint = function() {
+		var money = $("#money").val();
+		if(!/^\d+(.\d+)?$/.test(money)){
+			alert("请输入正确的金额");
+			return false;
+		}
 		jConfirm('确认要提交吗？', '提交确认', function(r) {
 			if (r) {
 			$.ajax( {
@@ -272,7 +277,7 @@ function OrderDetailController($scope, $http) {
 					}
 				},   
 				error :function(data){
-					jAlert("系统错误");
+					jAlert("录入内容有误");
 				}
 			});
 			}

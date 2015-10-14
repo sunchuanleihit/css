@@ -170,19 +170,21 @@ $(function(){
 function initTable(){
 	var fields = [[
         {field:'id',title:'记录ID',width:80, checkbox:true},
-   		{field:'createTime',title:'时间',width:120,sortable:false},
+   		{field:'createTime',title:'日期',width:120,sortable:false},
+   		{field:'city',title:'城市',width:100,sortable:false},
+   		{field:'whId',title:'微仓编号',width:80,sortable:false},
+   		{field:'whName',title:'微仓名称',width:180,sortable:false},
    		{field:'orderSnMain',title:'订单号',width:110,sortable:false},
-   		{field:'department',title:'部门',width:60, sortable:false},
-   		{field:'complaintType',title:'投诉类型',width:60, sortable:false},
-   		{field:'handleStatus',title:'处理状态',formatter:statusFormatter,width:60,sortable:false},
    		{field:'content',title:'投诉内容',width:180,sortable:false},
+   		{field:'department',title:'所属部门',width:60, sortable:false},
+   		{field:'complaintType',title:'投诉类型',width:60, sortable:false},
+   		{field:'compensationType', title:'补偿方式',width:60,formatter:compensationFormatter, sortable:false},
+   		{field:'money',title:'涉及金额',width:60, sortable:false},
+   		{field:'handleStatus',title:'处理状态',formatter:statusFormatter,width:60,sortable:false},
    		{field:'userName',title:'用户姓名',width:80,sortable:false},
    		{field:'mobile',title:'联系方式',width:100,sortable:false},
-   		{field:'city',title:'城市',width:100,sortable:false},
-   		{field:'',title:'商家ID',width:80,sortable:false},
-   		{field:'whName',title:'商家',width:180,sortable:false},
    		{field:'goodsName',title:'商品名称',width:180,sortable:false},
-   		{field:'actor',title:'经手人',width:80,sortable:false}
+   		{field:'actor',title:'处理客服',width:80,sortable:false}
     ]];
    	$('#table').datagrid({
    		url: "/complaint/findComplaint",
@@ -210,6 +212,11 @@ function formatDate(date){
 	var m = date.getMonth()+1;
 	var d = date.getDate();
 	return y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d);
+}
+
+function compensationFormatter(num){
+	var map = {1:"退货",2:"退款",3:"补券",4:"换货",5:"其他"};
+	return map[num];
 }
 function typeFormatter(num){
 	var map = {0:"一般",1:"严重",2:"非常严重"};

@@ -201,13 +201,15 @@ public class ComplaintController extends  BaseController{
 			@RequestParam(value = "mobile", required = false, defaultValue = "") String mobile,
 			@RequestParam(value = "department", required = false, defaultValue = "") int department,
 			@RequestParam(value = "complaintType", required = false, defaultValue = "") int complaintType,
+			@RequestParam(value = "compensationType", required = false, defaultValue = "") int compensationType,
+			@RequestParam(value = "money", required = false, defaultValue = "") double money,
 			@RequestParam(value = "handleStatus", required = false, defaultValue = "") int handleStatus
 			){
 		
 		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
 		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
 		
-		CssBaseRes<String> res=cssService.generateComplaint(actor,complaintId,orderSnMain,whId,whName,productIds,content,creatTime,userName,mobile,department,complaintType,handleStatus);
+		CssBaseRes<String> res=cssService.generateComplaint(actor,complaintId,orderSnMain,whId,whName,productIds,content,creatTime,userName,mobile,department,complaintType,compensationType,money,handleStatus);
 		return res;
 	}
 }

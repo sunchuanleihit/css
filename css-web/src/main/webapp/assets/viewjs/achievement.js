@@ -42,10 +42,10 @@ function initDatePicker(){
 function initTable(){
 	$('#table').bootstrapTable({
 		url: '/achievement/caculate',
+		queryParams:queryParams,
 	    columns: [{
 	        field: 'name',
-	        title: '姓名',
-	        queryParams:queryParams
+	        title: '姓名'
 	    },{
 	        field: 'changeOrderNum',
 	        title: '改单数'
@@ -90,11 +90,11 @@ function queryParams(){
 	var endDate = $("#endDate").datepicker("getDate");
 	if(startDate){
 		startDate = startDate.format("yyyy-MM-dd");
-		param['startDate'] = startDate;
+		params['startDate'] = startDate;
 	}
 	if(endDate){
 		endDate = endDate.format("yyyy-MM-dd");
-		param['endDate'] = endDate;
+		params['endDate'] = endDate;
 	}
-	return param;
+	return params;
 }

@@ -65,6 +65,12 @@ public class LkComplaint {
 	@Column(name = "product_id")
 	private String productId;
 	
+	@Column(name = "compensation_type")
+	private int compensationType;//补偿方式1:退货,2退款,3补券,4换货,5其他
+	
+	@Column(name = "money")
+	private double money;//涉及金额 
+	
 	public String getProductId() {
 		return productId;
 	}
@@ -200,4 +206,21 @@ public class LkComplaint {
 	public void setActor(String actor) {
 		this.actor = actor;
 	}
+
+	public int getCompensationType() {
+		return compensationType;
+	}
+
+	public void setCompensationType(int compensationType) {
+		this.compensationType = compensationType;
+	}
+
+	public double getMoney() {
+		return money;
+	}
+
+	public void setMoney(double money) {
+		this.money = money;
+	}
+	
 }
