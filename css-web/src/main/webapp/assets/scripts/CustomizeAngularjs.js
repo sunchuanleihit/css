@@ -112,3 +112,6 @@ $(function () {
 function addTab(code, url, text) {
     top.addTab(code, url, text );
 }
+function closeTab(code){
+	top.closeTab(code);
+}

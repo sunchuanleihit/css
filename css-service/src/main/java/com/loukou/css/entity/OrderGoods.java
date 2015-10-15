@@ -24,12 +24,6 @@ public class OrderGoods {
 	private int orderId = 0;
 	
 	/*
-	 * 产品号，goods表goods_id字段
-	 */
-	@Column(name = "goods_id")
-	private int goodsId = 0;
-	
-	/*
 	 * 产品名，goods表goods_name字段
 	 */
 	@Column(name = "goods_name")
@@ -176,6 +170,12 @@ public class OrderGoods {
 	 */
 	@Column(name = "del_flag")
 	private int delFlag = 0;
+	
+	@Column(name = "product_id")
+	private int productId = 0;
+
+	@Column(name = "sitesku_id")
+	private int siteskuId = 0;
 
 	public int getRecId() {
 		return recId;
@@ -191,14 +191,6 @@ public class OrderGoods {
 
 	public void setOrderId(int orderId) {
 		this.orderId = orderId;
-	}
-
-	public int getGoodsId() {
-		return goodsId;
-	}
-
-	public void setGoodsId(int goodsId) {
-		this.goodsId = goodsId;
 	}
 
 	public String getGoodsName() {
@@ -384,4 +376,21 @@ public class OrderGoods {
 	public void setDelFlag(int delFlag) {
 		this.delFlag = delFlag;
 	}
+
+	public int getProductId() {
+		return productId;
+	}
+
+	public void setProductId(int productId) {
+		this.productId = productId;
+	}
+
+	public int getSiteskuId() {
+		return siteskuId;
+	}
+
+	public void setSiteskuId(int siteskuId) {
+		this.siteskuId = siteskuId;
+	}
+	
 }

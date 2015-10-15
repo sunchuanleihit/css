@@ -15,7 +15,7 @@ public class ComplaintRespDto implements Serializable{
 	
 	private String whName;
 	
-	private String goodsId;
+	private String productId;
 	
 	private String goodsName;
 	
@@ -42,6 +42,10 @@ public class ComplaintRespDto implements Serializable{
 	private String actor;
 	
 	private Integer whId;
+	
+	private int compensationType;
+	
+	private double money;
 
 	public Integer getId() {
 		return id;
@@ -49,6 +53,22 @@ public class ComplaintRespDto implements Serializable{
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public int getCompensationType() {
+		return compensationType;
+	}
+
+	public void setCompensationType(int compensationType) {
+		this.compensationType = compensationType;
+	}
+
+	public double getMoney() {
+		return money;
+	}
+
+	public void setMoney(double money) {
+		this.money = money;
 	}
 
 	public String getUserName() {
@@ -81,14 +101,6 @@ public class ComplaintRespDto implements Serializable{
 
 	public void setWhName(String whName) {
 		this.whName = whName;
-	}
-
-	public String getGoodsId() {
-		return goodsId;
-	}
-
-	public void setGoodsId(String goodsId) {
-		this.goodsId = goodsId;
 	}
 
 	public String getGoodsName() {
@@ -194,4 +206,13 @@ public class ComplaintRespDto implements Serializable{
 	public void setWhId(Integer whId) {
 		this.whId = whId;
 	}
+
+	public String getProductId() {
+		return productId;
+	}
+
+	public void setProductId(String productId) {
+		this.productId = productId;
+	}
+	
 }

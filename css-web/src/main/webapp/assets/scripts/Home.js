@@ -102,9 +102,11 @@ function HomeController($scope, $http) {
 
 var tab;
 function addTab(code, url, text, update) {
-
     if (tab.exists(code)) {
         tab.closeTab(code);
     }
     tab.addTab({ tabId: code, title: text, href: url });
+}
+function closeTab(tabId){
+	tab._closeTab(tabId);
 }

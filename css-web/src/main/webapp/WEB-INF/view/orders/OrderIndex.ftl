@@ -39,6 +39,9 @@
               	  		<option value="consignee">收货人姓名</option>
               	  		<option value="phoneMob">收货人手机</option>
               	  		<option value="phoneTel">收货人电话</option>
+              	  		<option value="address">收货人地址</option>
+              	  		<option value="goodsName">商品名称</option>
+              	  		<option value="useCouponNo">优惠券码</option>
               	  		<option value="city">城市</option>
               	  	</select>
               	  	<input type="text" id="queryContent">

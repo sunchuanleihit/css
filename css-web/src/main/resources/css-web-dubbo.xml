@@ -17,4 +17,9 @@
     <!-- 声明引用的服务接口 -->
     <dubbo:reference id="bkOrderService" interface="com.loukou.order.service.api.BkOrderService" retries="0" timeout="10000" />
     <dubbo:reference id="orderService" interface="com.loukou.order.service.api.OrderService" retries="0" timeout="10000" />
+    <dubbo:reference id="productService" interface="com.serverstarted.product.service.api.ProductService" retries="0" timeout="10000" />
+    <dubbo:reference id="spuService" interface="com.serverstarted.product.service.api.SpuService" retries="0" timeout="10000" />
+    <dubbo:reference id="coupService" interface="com.loukou.order.service.api.CoupService" retries="0" timeout="10000" />
+    <dubbo:reference id="categoryService" interface="com.serverstarted.product.service.api.CategoryService" retries="0" timeout="10000" />
+    
 </beans>

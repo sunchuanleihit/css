@@ -3,7 +3,6 @@ package com.loukou.css.web;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletOutputStream;
@@ -76,12 +75,40 @@ public class OrderController extends  BaseController{
 			List<BkOrderListDto> orderDetailMsgs = orderDetail.getResult().getOrderList();
 			mv.addObject("orderDetailMsgs", orderDetailMsgs);
 			int finished=0;
+			double allGoodsAmount = 0;
+			double allShippingFee = 0;
+			double allDiscount = 0;
+			double allShoudPay = 0;
+			double allPaid = 0;
+			double allNotPaid = 0;
+			String allUseCouponNo = "";
 			for(BkOrderListDto od:orderDetailMsgs){
 				if(od.getBase().getStatus()==15){
 					finished=1;
 				}
+				BkOrderListBaseDto base = od.getBase();
+				if(base !=null){
+					allGoodsAmount += base.getGoodsAmount();
+					allShippingFee += base.getShippingFee();
+					allDiscount += base.getDiscount();
+					if(!allUseCouponNo.contains(","+base.getUseCouponNo())){
+						allUseCouponNo += ","+base.getUseCouponNo();
+					}
+					allShoudPay += base.getGoodsAmount() + base.getShippingFee();
+					allPaid += base.getOrderPaid();
+				}
 			}
+			allNotPaid = allShoudPay - allPaid;
+			mv.addObject("allGoodsAmount", allGoodsAmount);
+			mv.addObject("allShippingFee", allShippingFee);
+			mv.addObject("allDiscount", allDiscount);
+			mv.addObject("allShoudPay", allShoudPay);
+			mv.addObject("allPaid", allPaid);
+			mv.addObject("allNotPaid", allNotPaid);
 			mv.addObject("finished", finished);
+			if(StringUtils.isNotBlank(allUseCouponNo)){
+				mv.addObject("allUseCouponNo", allUseCouponNo.substring(1));
+			}
 		}
 		
 		String checker="";
@@ -108,14 +135,20 @@ public class OrderController extends  BaseController{
 		
 		mv.addObject("timeList", timeList);
 		
-		//判断订单下是否有留言
+		
+		
+		int remarkCount = 0;
+		//查找订单下留言
 		List<BkOrderRemarkDto> remarkList = bkOrderService.queryOrderRemark(orderSnMain, 0);
 		if(remarkList!=null && remarkList.size()>0){
-			mv.addObject("remarkCount", remarkList.size());
-		}else{
-			mv.addObject("remarkCount",	0);
+			remarkCount +=  remarkList.size();
 		}
-		
+		//查找订单下交接
+		remarkList = bkOrderService.queryOrderRemark(orderSnMain, 1);
+		if(remarkList!=null && remarkList.size()>0){
+			remarkCount +=  remarkList.size();
+		}
+		mv.addObject("remarkCount",	remarkCount);
 		return mv;
 	}
 	
@@ -129,7 +162,10 @@ public class OrderController extends  BaseController{
 			@RequestParam(value = "invoiceHeader", required = false, defaultValue = "") String invoiceHeader,
 			@RequestParam(value = "phoneMob", required = false, defaultValue = "") String phoneMob
 			){
-		BaseRes<String> res=bkOrderService.changeOrder(orderSnMain,needShiptime,needShiptimeSlot,invoiceHeader,phoneMob);
+		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
+		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
+		
+		BaseRes<String> res=bkOrderService.changeOrder(orderSnMain,needShiptime,needShiptimeSlot,invoiceHeader,phoneMob,actor);
 		return res;
 	}
 	
@@ -145,8 +181,6 @@ public class OrderController extends  BaseController{
 	@ResponseBody
 	public DataGrid queryOrder(HttpServletRequest request,int page, int rows, CssOrderReqDto cssOrderReqDto){
 		cssOrderReqDto.setIsDel(0);
-		Integer timeLimit = (int)(new Date().getTime()/1000) - 10368000;
-		cssOrderReqDto.setTimeLimit(timeLimit);
 		BkOrderListRespDto bkOrderListRespDto = bkOrderService.queryBkOrderList(page, rows, cssOrderReqDto);
 		DataGrid grid = new DataGrid();
 		grid.setTotal(bkOrderListRespDto.getResult().getOrderCount());
@@ -391,9 +425,9 @@ public class OrderController extends  BaseController{
 			@RequestParam(value = "returnType", required = false, defaultValue = "") int returnType,
 			@RequestParam(value = "payId", required = false, defaultValue = "") int payId,
 			@RequestParam(value = "shippingFee", required = false, defaultValue = "") double shippingFee,
-			@RequestParam(value = "checkedGoods", required = false, defaultValue = "") int[] checkedGoodsList,
-			@RequestParam(value = "goodsId", required = false, defaultValue = "") int[] goodsIdList,
-			@RequestParam(value = "specId", required = false, defaultValue = "") int[] specIdList,
+			@RequestParam(value = "checkedProduct", required = false, defaultValue = "") int[] checkedProductList,
+			@RequestParam(value = "productId", required = false, defaultValue = "") int[] productIdList,
+			@RequestParam(value = "siteskuId", required = false, defaultValue = "") int[] siteskuIdList,
 			@RequestParam(value = "proType", required = false, defaultValue = "") int[] proTypeList,
 			@RequestParam(value = "recId", required = false, defaultValue = "") int[] recIdList,
 			@RequestParam(value = "goodsReturnNum", required = false, defaultValue = "") int[] goodsReturnNumList,
@@ -407,7 +441,7 @@ public class OrderController extends  BaseController{
 		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
 		
 		BaseRes<String> res=bkOrderService.generateReturn(actor,orderId, postScript, orderSnMain, returnType, payId, shippingFee, 
-		checkedGoodsList,goodsIdList, specIdList, proTypeList, recIdList, goodsReturnNumList, goodsReturnAmountList, goodsReasonList, goodsNameList,
+		checkedProductList,productIdList, siteskuIdList, proTypeList, recIdList, goodsReturnNumList, goodsReturnAmountList, goodsReasonList, goodsNameList,
 		paymentIdList,returnAmountList);
 		return res;
 	}
@@ -609,7 +643,6 @@ public class OrderController extends  BaseController{
 	public BaseRes<String> cancelSubOrder(@RequestParam int orderId){
 		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
 		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
-		
 		BaseRes<String> res=bkOrderService.cancelSubOrder(orderId,actor);
 		return res;
 	}
@@ -663,8 +696,13 @@ public class OrderController extends  BaseController{
 	public CssBaseRes<String> sendBillNotice(@RequestParam String orderSnMain){
 		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
 		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
-		
-		CssBaseRes<String> res=cssService.sendBillNotice(orderSnMain,actor);
+		CssBaseRes<String> res = new CssBaseRes<String>();
+		if(StringUtils.isBlank(actor)){
+			res.setCode("error");
+			res.setMessage("请重新登陆");
+		}else{
+			res = cssService.sendBillNotice(orderSnMain,actor);
+		}
 		return res;
 	}
 	

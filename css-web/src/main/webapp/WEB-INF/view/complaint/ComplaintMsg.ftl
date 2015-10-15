@@ -50,10 +50,10 @@
 									</#if>
 							
 									<td width="12%">
-									<#if (gidList?exists && gidList?size>0)>
-										<input id="goods_name" style="width: 50px;" type="checkbox" value="${goods.goodsId}" name="goodsId" <#list gidList as g><#if g?default(0)==goods.goodsId>checked</#if></#list>>${goods.goodsId}
+									<#if (pidList?exists && pidList?size>0)>
+										<input style="width: 50px;" type="checkbox" value="${goods.productId}" name="productIds" <#list pidList as p><#if p?default(0)==goods.productId>checked</#if></#list>>${goods.productId}
 									<#else>
-										<input id="goods_name" style="width: 50px;" type="checkbox" value="${goods.goodsId}" name="goodsId" >${goods.goodsId}
+										<input style="width: 50px;" type="checkbox" value="${goods.productId}" name="productIds" >${goods.productId}
 									</#if>
 									</td>
 									<td width="28%">${goods.goodsName}</td>
@@ -72,20 +72,20 @@
 		</div>
 
 		<div style="padding:10px;" id="order_tosu_main">
-			<table width="100%" style="padding:10px;">
+			<table style="padding:10px;" class="table">
 			<tbody>
 			<tr>
-				<td width="10%">情况说明：</td>
-				<td width="93%"><textarea name="content" style="width:520px;height:60px;">${complaintMsg.content?default("")}</textarea></td>
+				<td width="15%">情况说明：</td>
+				<td width="85%"><textarea name="content" style="width:520px;height:60px;">${complaintMsg.content?default("")}</textarea></td>
 			</tr>
 			<tr>
-				<td height="30">投诉日期：</td>
+				<td>投诉日期：</td>
 				<td>
 					<input type="text" name="creatTime" class="form-control" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="${complaintMsg.createTime?default("")}" style="width:120px">
 				</td>
 			</tr>
 			<tr>
-				<td height="30">顾客姓名：</td>
+				<td>顾客姓名：</td>
 				<td><input width="100" type="text" name="userName" value="${complaintMsg.userName?default("")}"></td>
 			</tr>
 			<tr>
@@ -133,6 +133,20 @@
 				</td>
 			</tr>
 			<tr>
+				<td>补偿方式：</td>
+				<td><select id="compensationType" name="compensationType" >
+						<option value=1 <#if complaintMsg.compensationType?default(0) == 1>selected</#if> >退货</option>
+						<option value=2 <#if complaintMsg.compensationType?default(0) == 2>selected</#if>>退款</option>
+						<option value=3 <#if complaintMsg.compensationType?default(0) == 3>selected</#if>>补券</option>
+						<option value=4 <#if complaintMsg.compensationType?default(0) == 4>selected</#if>>换货</option>
+						<option value=5 <#if complaintMsg.compensationType?default(0) == 5>selected</#if>>其他</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>涉及金额：</td><td><input type="text" name="money" id="money" value="${complaintMsg.money?default("")}"></td>
+			</tr>
+			<tr>
 				<td height="30">状态：</td>
 				<td>
 				<input type="radio" checked="" value="1" name="handleStatus" <#if (complaintId==0 || complaintMsg.handleStatus?default(0)==1)>checked</#if>>处理中
@@ -140,7 +154,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td height="30" align="center" colspan="2"><input type="button" size="5" value="提交" ng-click="generateComplaint();"></td>
+				<td colspan="2"><input type="button" class="btn btn-primary" size="5" value="提交" ng-click="generateComplaint();"></td>
 			</tr>
 			</tbody>
 			</table>

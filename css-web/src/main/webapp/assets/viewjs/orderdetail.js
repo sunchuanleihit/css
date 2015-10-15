@@ -34,6 +34,7 @@ function selectDepartment(){
 function OrderDetailController($scope, $http) {
 	//获取包裹商品列表
 	$scope.getordergoodslist = function(orderId) {
+		$("#orderTr_"+orderId).addClass("error");
 		$("#subOrderId").val(orderId);
 		$http.get('/order/getOrderGoodsList', {
 			params : {
@@ -54,15 +55,15 @@ function OrderDetailController($scope, $http) {
 	//退货
 	$scope.generateReturn = function() {
 		var radioChks = $("input[type=radio][name='orderId']:checked");
-		var selectChks = $("input[type=checkbox][name=checkedGoods]:checked");
-		if(!radioChks){
+		var selectChks = $("input[type=checkbox][name=checkedProduct]:checked");
+		if(!radioChks || radioChks.length==0){
 			jAlert("请选择退货订单");
-		}else if(!selectChks){
+		}else if(!selectChks || selectChks.length==0){
 			jAlert("请选择退货商品");
 		}else{
 			jConfirm('确认要退货吗？', '退货确认', function(r) {
 				if (r) {
-					$.ajax( {   
+					$.ajax({  
 						type : "POST",
 						url : "/order/generateReturn", 
 						data : $('#returnForm').serializeArray(),
@@ -256,6 +257,11 @@ function OrderDetailController($scope, $http) {
 	
 	//提交投诉
 	$scope.generateComplaint = function() {
+		var money = $("#money").val();
+		if(!/^\d+(.\d+)?$/.test(money)){
+			alert("请输入正确的金额");
+			return false;
+		}
 		jConfirm('确认要提交吗？', '提交确认', function(r) {
 			if (r) {
 			$.ajax( {
@@ -271,7 +277,7 @@ function OrderDetailController($scope, $http) {
 					}
 				},   
 				error :function(data){
-					jAlert("系统错误");
+					jAlert("录入内容有误");
 				}
 			});
 			}
@@ -281,6 +287,10 @@ function OrderDetailController($scope, $http) {
 	//子订单作废
 	$scope.cancelSubOrder = function() {
 		var orderId=$("#subOrderId").val();
+		if(!orderId){
+			alert("未选择子订单");
+			return false;
+		}
 		jConfirm('确认要作废子订单吗？', '作废子订单确认', function(r) {
 			if (r) {
 				$http.get("/order/cancelSubOrder", {
@@ -301,6 +311,10 @@ function OrderDetailController($scope, $http) {
 	//子订单取消作废
 	$scope.resetCancelSubOrder = function() {
 		var orderId=$("#subOrderId").val();
+		if(!orderId){
+			alert("为选择子订单");
+			return false;
+		}
 		jConfirm('确认要取消作废子订单吗？', '取消作废子订单确认', function(r) {
 			if (r) {
 				$http.get("/order/resetCancelSubOrder", {
@@ -320,23 +334,29 @@ function OrderDetailController($scope, $http) {
 	
 	//子订单支付页面
 	$scope.paySubOrderHtml = function(orderSnMain) {
+		var payId= $("#payId").val();
+		if(!payId){
+			alert("未选支付方式");
+			return false;
+		}
 		$http.get("/order/paySubOrder", {
 			params : {
 				orderSnMain : orderSnMain,
-				payId : 0
+				payId : payId
 			}
 		}).success(function(data) {
 			if(data.code==200){
-				$.colorbox({
-		            href: "/order/orderPayList?orderSnMain=" + orderSnMain,
-		            iframe: true,
-		            width: "800px",
-		            height: "420px",
-		            top: "100px",
-		            opacity: 0,
-		            overlayClose: false,
-		            scrolling: true
-		        });
+				alert("支付成功");
+//				$.colorbox({
+//		            href: "/order/orderPayList?orderSnMain=" + orderSnMain,
+//		            iframe: true,
+//		            width: "800px",
+//		            height: "420px",
+//		            top: "100px",
+//		            opacity: 0,
+//		            overlayClose: false,
+//		            scrolling: true
+//		        });
 			}else{
 				jAlert(data.message);
 			}
