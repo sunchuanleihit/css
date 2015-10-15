@@ -59,15 +59,15 @@
 					</tr>
 					<tr><td class="text-right">收货地址：</td><td class="text-left" colspan=7>${orderDetailMsgs[0].extmMsg.address?default("")}</td></tr>
 					<tr>
-					   <td class="text-right">商品总额:</td><td class="text-left" id="allGoodsAmount"></td>
-					   <td class="text-right">邮费:</td><td class="text-left">${orderDetailMsgs[0].base.shippingFee?string.number}</td>
-					   <td class="text-right">优惠金额:</td><td class="text-left">${orderDetailMsgs[0].base.discount?string.number}</td>
-					   <td class="text-right">优惠券码：</td><td class="text-left">${orderDetailMsgs[0].base.useCouponNo?default("")}</td>
+					   <td class="text-right">商品总额:</td><td class="text-left" id="allGoodsAmount">${allGoodsAmount?default(0)}</td>
+					   <td class="text-right">邮费:</td><td class="text-left" id="allShippingFee">${allShippingFee?default(0)}</td>
+					   <td class="text-right">优惠金额:</td><td class="text-left" id="allDiscount">${allDiscount?default(0)}</td>
+					   <td class="text-right">优惠券码：</td><td class="text-left" id="allUseCouponNo">${allUseCouponNo?default("")}</td>
 					</tr>
 					<tr>
-					   <td class="text-right">应付:</td><td class="text-left">${(orderDetailMsgs[0].base.goodsAmount+orderDetailMsgs[0].base.shippingFee)?string.number}</td>
-					   <td class="text-right">已付:</td><td class="text-left">${orderDetailMsgs[0].base.orderPaid?string.number}</td>
-					   <td class="text-right">未付:</td><td class="text-left">${(orderDetailMsgs[0].base.goodsAmount+orderDetailMsgs[0].base.shippingFee-orderDetailMsgs[0].base.orderPaid)?string.number}</td>
+					   <td class="text-right">应付:</td><td class="text-left" id="">${allShoudPay?default(0)}</td>
+					   <td class="text-right">已付:</td><td class="text-left">${allPaid?default(0)}</td>
+					   <td class="text-right">未付:</td><td class="text-left">${allNotPaid?default(0)}</td>
 					   <td class="text-right">付款方式：</td><td class="text-left">
 					     <select id="payId" default='${orderDetailMsgs[0].base.payId?default("")}'>
 					     		<option value="">请选择</option>
@@ -220,13 +220,6 @@
 				$(options[i]).attr("selected",true);
 			}			
 		}
-		var allGoodsAmount = 0;
-		<#if orderDetailMsgs?exists>
-			<#list orderDetailMsgs as orderDetail>
-				allGoodsAmount += ${orderDetail.base.goodsAmount?string.number}
-			</#list>
-		</#if>
-		$("#allGoodsAmount").text(allGoodsAmount);
 	});
 </script>
 

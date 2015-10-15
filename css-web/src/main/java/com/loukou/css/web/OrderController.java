@@ -75,12 +75,40 @@ public class OrderController extends  BaseController{
 			List<BkOrderListDto> orderDetailMsgs = orderDetail.getResult().getOrderList();
 			mv.addObject("orderDetailMsgs", orderDetailMsgs);
 			int finished=0;
+			double allGoodsAmount = 0;
+			double allShippingFee = 0;
+			double allDiscount = 0;
+			double allShoudPay = 0;
+			double allPaid = 0;
+			double allNotPaid = 0;
+			String allUseCouponNo = "";
 			for(BkOrderListDto od:orderDetailMsgs){
 				if(od.getBase().getStatus()==15){
 					finished=1;
 				}
+				BkOrderListBaseDto base = od.getBase();
+				if(base !=null){
+					allGoodsAmount += base.getGoodsAmount();
+					allShippingFee += base.getShippingFee();
+					allDiscount += base.getDiscount();
+					if(!allUseCouponNo.contains(","+base.getUseCouponNo())){
+						allUseCouponNo += ","+base.getUseCouponNo();
+					}
+					allShoudPay += base.getGoodsAmount() + base.getShippingFee();
+					allPaid += base.getOrderPaid();
+				}
 			}
+			allNotPaid = allShoudPay - allPaid;
+			mv.addObject("allGoodsAmount", allGoodsAmount);
+			mv.addObject("allShippingFee", allShippingFee);
+			mv.addObject("allDiscount", allDiscount);
+			mv.addObject("allShoudPay", allShoudPay);
+			mv.addObject("allPaid", allPaid);
+			mv.addObject("allNotPaid", allNotPaid);
 			mv.addObject("finished", finished);
+			if(StringUtils.isNotBlank(allUseCouponNo)){
+				mv.addObject("allUseCouponNo", allUseCouponNo.substring(1));
+			}
 		}
 		
 		String checker="";
@@ -106,6 +134,8 @@ public class OrderController extends  BaseController{
 		}
 		
 		mv.addObject("timeList", timeList);
+		
+		
 		
 		int remarkCount = 0;
 		//查找订单下留言
