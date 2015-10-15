@@ -59,7 +59,7 @@
 					</tr>
 					<tr><td class="text-right">收货地址：</td><td class="text-left" colspan=7>${orderDetailMsgs[0].extmMsg.address?default("")}</td></tr>
 					<tr>
-					   <td class="text-right">商品总额:</td><td class="text-left">${orderDetailMsgs[0].base.goodsAmount?string.number}</td>
+					   <td class="text-right">商品总额:</td><td class="text-left" id="allGoodsAmount"></td>
 					   <td class="text-right">邮费:</td><td class="text-left">${orderDetailMsgs[0].base.shippingFee?string.number}</td>
 					   <td class="text-right">优惠金额:</td><td class="text-left">${orderDetailMsgs[0].base.discount?string.number}</td>
 					   <td class="text-right">优惠券码：</td><td class="text-left">${orderDetailMsgs[0].base.useCouponNo?default("")}</td>
@@ -220,6 +220,13 @@
 				$(options[i]).attr("selected",true);
 			}			
 		}
+		var allGoodsAmount = 0;
+		<#if orderDetailMsgs?exists>
+			<#list orderDetailMsgs as orderDetail>
+				allGoodsAmount += ${orderDetail.base.goodsAmount?string.number}
+			</#list>
+		</#if>
+		$("#allGoodsAmount").text(allGoodsAmount);
 	});
 </script>
 
