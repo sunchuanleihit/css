@@ -9,4 +9,5 @@ import com.loukou.css.entity.MenuEntity;
 public interface MenuDao extends CrudRepository<MenuEntity, Integer> {
 List<MenuEntity> findByMenuIdInAndIsUseOrderByShowIndexDesc(List<Integer> menuIds,int isUse);
 List<MenuEntity> findByParentIdAndIsUseOrderByShowIndexDesc(int parentId,int isUse);
+List<MenuEntity> findByIsUseOrderByShowIndexDesc(int isUse);
 }

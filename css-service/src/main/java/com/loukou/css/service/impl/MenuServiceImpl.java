@@ -38,4 +38,9 @@ public class MenuServiceImpl implements MenuService {
 		return menuDao.findByParentIdAndIsUseOrderByShowIndexDesc(parentId, 0);
 	}
 
+	@Override
+	public List<MenuEntity> getAllMenus() {
+		return menuDao.findByIsUseOrderByShowIndexDesc(0);
+	}
+
 }

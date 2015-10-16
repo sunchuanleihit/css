@@ -50,18 +50,6 @@
 						<i class="fa fa-bars" data-icon1="fa fa-bars" data-icon2="fa fa-bars" ></i>
 					</div>
 				</div>
-				
-				<!--
-				<ul class="nav navbar-nav pull-left">
-					<li ng-click="menuClick($event,$index,menu)" ng-class=" {'dropdown open gusuqi':true,'dropdown open gusuqi active':selectedMenuID==menu.menuId}" ng-repeat-start="menu in Menus">
-						<a href="#" class="dropdown-toggle">
-							<i class="{{menu.remarks}}"></i>
-							<span class="name">{{menu.menuName}}</span>
-						</a>
-					</li>
-                    <span ng-repeat-end ng-show>&nbsp;</span>
-				</ul>
-				-->
 
 				<!-- BEGIN TOP NAVIGATION MENU -->					
 				<ul class="nav navbar-nav pull-right">
@@ -94,13 +82,14 @@
                     <div class="sidebar-menu nav-collapse">
                         <!-- SIDEBAR MENU -->
                         <ul>
-                            <li class="has-sub open">
-                                <a href="javascript:;" class="">
-                                    <i class="{{selectedMenuNameClass}}"></i> <span class="menu-text">{{selectedMenuName}}</span>
-                                    <span class="arrow open"></span>
+                            <li class="has-sub open" ng-repeat="menu in Menus">
+                                <a href="javascript:;" ng-click="menuParentClick($event,$index,menu)">
+                                    <span class="menu-text">{{menu.menuName}}</span>
+                                    <span class="arrow open" ng-if="menu.open"></span>
+                                    <span class="arrow close" ng-if="!menu.open"></span>
                                 </a>
-                                <ul class="sub" style="display:block">
-                                    <li ng-click="menuItemClick($event,$index,menuitem)" ng-href="{{menuitem.menuUrl}}" ng-class="{on:menuitem.menuId==selectedMenuItemID}" target="right" ng-repeat-start="menuitem in MenuItems">
+                                <ul class="sub" style="display:block" ng-show="menu.open">
+                                    <li ng-click="menuItemClick($event,$index,menuitem)" ng-repeat="menuitem in menu.childMenus">
                                         <a class="" href="#">
                                             <span class="sub-menu-text">{{menuitem.menuName}}</span>
                                         </a>

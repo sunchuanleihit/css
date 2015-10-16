@@ -25,4 +25,6 @@ public interface MenuService {
      * parentId:父菜单id
      * */
     public List<MenuEntity> getMenusByParent(int parentId);
+
+	public List<MenuEntity> getAllMenus();
 }
