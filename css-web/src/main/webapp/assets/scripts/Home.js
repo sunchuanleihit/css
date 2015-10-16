@@ -8,7 +8,9 @@ $(function () {
 
 function HomeController($scope, $http) {
     $http.get('/menu/getAllMenus').success(function (data) {
-    	data[0].open = true;
+    	for(var i=0; i<data.length; i++){
+    		data[i].open = true;
+    	}
         $scope.Menus = data;
     });
 
