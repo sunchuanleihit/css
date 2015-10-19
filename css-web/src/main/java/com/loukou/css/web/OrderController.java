@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.loukou.css.annotation.AuthPassport;
 import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.entity.Store;
+import com.loukou.css.enums.OrderReturnOrderType;
 import com.loukou.css.processor.UserProcessor;
 import com.loukou.css.resp.CssOrderShow;
 import com.loukou.css.service.CssService;
@@ -49,7 +49,6 @@ import com.loukou.order.service.resp.dto.GoodsListDto;
 
 @Controller
 @RequestMapping("/order")
-@AuthPassport
 public class OrderController extends  BaseController{
 	@Autowired
 	private BkOrderService bkOrderService;
@@ -91,7 +90,7 @@ public class OrderController extends  BaseController{
 					allGoodsAmount += base.getGoodsAmount();
 					allShippingFee += base.getShippingFee();
 					allDiscount += base.getDiscount();
-					if(!allUseCouponNo.contains(","+base.getUseCouponNo())){
+					if(StringUtils.isNotBlank(base.getUseCouponNo()) && !allUseCouponNo.contains(","+base.getUseCouponNo())){
 						allUseCouponNo += ","+base.getUseCouponNo();
 					}
 					allShoudPay += base.getGoodsAmount() + base.getShippingFee();
@@ -149,6 +148,16 @@ public class OrderController extends  BaseController{
 			remarkCount +=  remarkList.size();
 		}
 		mv.addObject("remarkCount",	remarkCount);
+		
+		//是否有退货、退款信息
+		String returnStr = "";
+		List<BkOrderReturnDto> bkOrderReturnList = bkOrderService.getOrderReturnByOrderSnMain(orderSnMain);
+		for(BkOrderReturnDto orderReturn : bkOrderReturnList){
+			String type = OrderReturnOrderType.parseType(orderReturn.getOrderType()).getType();
+			returnStr += "<font color=red>*</font>"+orderReturn.getActor()+"于"+orderReturn.getAddTime()+"申请了"+
+					type+",金额"+orderReturn.getReturnAmount()+"元，备注："+orderReturn.getPostscript()+"<br/>";
+		}
+		mv.addObject("returnStr", returnStr);
 		return mv;
 	}
 	

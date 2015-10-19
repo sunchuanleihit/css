@@ -35,76 +35,23 @@ $(document).ready(function(){
 		var orderSnMain = $("#orderSnMain").val();
 		var buyerName = $("#buyerName").val();
 		var sellerName = $("#sellerName").val();
-		var startTime = $("#startTime").datebox("getValue");
-		var endTime = $("#endTime").datebox("getValue");
+		var orderDate = $("#orderDate").datebox("getValue");
 		var storeType = $("#storeType").val();
 		var params = {
 				"orderSnMain":orderSnMain,
 				"buyerName":buyerName,
 				"sellerName":sellerName,
-				"startTime":startTime,
-				"endTime":endTime,
+				"orderDate":orderDate,
 				"storeType":storeType
 		};
 		$("#table").datagrid("load", params);
 	});
-	//修改订单
-	function edit_order1(){
-		var rs=$("#table").datagrid("getSelections");
-		var size=(rs.length);
-		if(!!size==false){
-			__alert("未选中任何订单");
-			return false;
-		}
-		else if(size>1){
-			__alert("一次只能修改一个订单！");
-			return false;
-		}
-		var i=0;
-		var ids=new Array();
-		$.each(rs,function(index,value){
-			ids[i]=value.order_sn_main;
-			i++;	
-		
-		});
-		var order_id=ids[0]+"";
-		
-		var flag=$("#tabs").tabs("exists","订单详情");
-		if(!flag){
 
-			$.get("index.php?app=callcenter.check_order&act=change_order_form",{"order_id":order_id},function(rs){
-				$("#tabs").tabs("add",{
-					title:"订单详情",
-					content:rs,
-					closable:true
-				});
-				
-			});
-			
-		}
-		else{
-			$("#tabs").tabs("select","订单详情");
-			var stab=$("#tabs").tabs("getSelected");
-			$.get("index.php?app=callcenter.check_order&act=change_order_form",{"order_id":order_id},function(rs){
-				$("#tabs").tabs("update",{
-					tab:stab,
-					options:{
-						title:"订单详情",
-						content:rs,
-						closable:true
-					}
-				});
-			});
-		}
-	}
 	//刷新订单列表
 	function refresh_orders(){
 		$("#table").datagrid("reload");
 	}
-	$("#startTime").datebox({
-		formatter:formatDate
-	});
-	$("#endTime").datebox({
+	$("#orderDate").datebox({
 		formatter:formatDate
 	});
 	//将日期格式化成YY-MM-dd
@@ -114,6 +61,8 @@ $(document).ready(function(){
 		var d = date.getDate();
 		return y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d);
 	}
+	var today = formatDate(new Date());
+	$("#orderDate").datebox("setValue", today);
    $(".detail_link").click(function(){
 		$(this).parent().parent().next().toggle();
    });

@@ -191,6 +191,7 @@
 	</div>
 	</#if>
 	<div class="row">
+		<div>${returnStr}</div>
 		<table class="table table-bordered">
 			<tr>
 			  <td class="text-right" style="width:100px;">审核人姓名:</td>
