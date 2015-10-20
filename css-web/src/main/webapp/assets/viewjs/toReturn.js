@@ -205,7 +205,7 @@ $(document).ready(function(){
 		num=parseInt(num);
 		switch(num){
 			case 0:
-				return "初始状态";
+				return "正常";
 				break;
 			case 1:
 				return "取消";

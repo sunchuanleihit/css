@@ -361,7 +361,7 @@ public class OrderController extends  BaseController{
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet();
 		HSSFRow header = sheet.createRow(0);
-		String[] titleArr = {"原淘常州订单号","原订单号","客户ID","商家ID","退款金额","添加时间","商家类型","订单类型","订单状态","商品状态","退款状态","退账状态","备注"};
+		String[] titleArr = {"原淘常州订单号","原订单号","客户ID","商家ID","商家名","退款金额","添加时间","商家类型","订单类型","订单状态","商品状态","退款状态","退账状态","备注"};
 		for(int i=0; i<titleArr.length; i++){
 			header.createCell(i).setCellValue(titleArr[i]);
 		}
@@ -373,22 +373,23 @@ public class OrderController extends  BaseController{
 			row.createCell(1).setCellValue(dto.getOrderId()==null?"":""+dto.getOrderId());
 			row.createCell(2).setCellValue(dto.getBuyerId()==null?"":""+dto.getBuyerId());
 			row.createCell(3).setCellValue(dto.getSellerId()==null?"":""+dto.getSellerId());
-			row.createCell(4).setCellValue(dto.getReturnAmount()==null?"":""+dto.getReturnAmount());
-			row.createCell(5).setCellValue(dto.getAddTime()==null?"":dto.getAddTime());
+			row.createCell(4).setCellValue(dto.getSellerName());
+			row.createCell(5).setCellValue(dto.getReturnAmount()==null?"":""+dto.getReturnAmount());
+			row.createCell(6).setCellValue(dto.getAddTime()==null?"":dto.getAddTime());
 			String goodsType = "普通商家";
 			if(dto.getGoodsType()!=null && dto.getGoodsType()!=0){
 				goodsType = "服务商家";
 			}
-			row.createCell(6).setCellValue(goodsType);
-			row.createCell(7).setCellValue(dto.getOrderTypeStr());
-			row.createCell(8).setCellValue(dto.getOrderStatusStr());
-			row.createCell(9).setCellValue(dto.getGoodsStatusStr());
+			row.createCell(7).setCellValue(goodsType);
+			row.createCell(8).setCellValue(dto.getOrderTypeStr());
+			row.createCell(9).setCellValue(dto.getOrderStatusStr());
+			row.createCell(10).setCellValue(dto.getGoodsStatusStr());
 			String statementStatus = "已退款";
 			if(dto.getStatementStatus() == 0){
 				statementStatus = "未退款";
 			}
-			row.createCell(10).setCellValue(statementStatus);
-			row.createCell(11).setCellValue(dto.getPostscript()==null?"":""+dto.getPostscript());
+			row.createCell(11).setCellValue(statementStatus);
+			row.createCell(12).setCellValue(dto.getPostscript()==null?"":""+dto.getPostscript());
 		}
 		response.setContentType("application/vnd.ms-excel");     
 		response.setCharacterEncoding("UTF-8");
