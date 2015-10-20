@@ -42,10 +42,11 @@ $(document).ready(function(){
 	$("#startTime").datebox({
 		formatter:formatDate
 	});
+	var today = formatDate(new Date());
+	$("#startTime").datebox('setValue', today);
 	$("#endTime").datebox({
 		formatter:formatDate
 	});
-	
 	$("#search_submit").bind({
 		click: function(){
 			var orderSnMain = $("#orderSnMain").val();

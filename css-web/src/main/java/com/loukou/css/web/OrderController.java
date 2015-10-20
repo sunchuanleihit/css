@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.loukou.css.annotation.AuthPassport;
 import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.entity.Store;
+import com.loukou.css.enums.OrderReturnOrderType;
 import com.loukou.css.processor.UserProcessor;
 import com.loukou.css.resp.CssOrderShow;
 import com.loukou.css.service.CssService;
@@ -49,7 +49,6 @@ import com.loukou.order.service.resp.dto.GoodsListDto;
 
 @Controller
 @RequestMapping("/order")
-@AuthPassport
 public class OrderController extends  BaseController{
 	@Autowired
 	private BkOrderService bkOrderService;
@@ -82,6 +81,9 @@ public class OrderController extends  BaseController{
 			double allPaid = 0;
 			double allNotPaid = 0;
 			String allUseCouponNo = "";
+			boolean multiplePaymentRefund = false;
+			boolean cancel = true;
+			boolean resetCancel = true;
 			for(BkOrderListDto od:orderDetailMsgs){
 				if(od.getBase().getStatus()==15){
 					finished=1;
@@ -91,11 +93,20 @@ public class OrderController extends  BaseController{
 					allGoodsAmount += base.getGoodsAmount();
 					allShippingFee += base.getShippingFee();
 					allDiscount += base.getDiscount();
-					if(!allUseCouponNo.contains(","+base.getUseCouponNo())){
+					if(StringUtils.isNotBlank(base.getUseCouponNo()) && !allUseCouponNo.contains(","+base.getUseCouponNo())){
 						allUseCouponNo += ","+base.getUseCouponNo();
 					}
 					allShoudPay += base.getGoodsAmount() + base.getShippingFee();
 					allPaid += base.getOrderPaid();
+					if(base.getStatus() == 2 || (base.getStatus() ==1 && base.getOrderPaid() > 0)){
+						multiplePaymentRefund = true;
+					}
+					if(base.getStatus() >= 8 || base.getStatus() == 2){//已打包或已作废则不能作废订单
+						cancel = false;
+					}
+					if(base.getStatus() !=2 && base.getStatus() !=1){//所有订单
+						resetCancel = false;
+					}
 				}
 			}
 			allNotPaid = allShoudPay - allPaid;
@@ -106,6 +117,9 @@ public class OrderController extends  BaseController{
 			mv.addObject("allPaid", allPaid);
 			mv.addObject("allNotPaid", allNotPaid);
 			mv.addObject("finished", finished);
+			mv.addObject("multiplePaymentRefund", multiplePaymentRefund );
+			mv.addObject("cancel", cancel);
+			mv.addObject("resetCancel", resetCancel);
 			if(StringUtils.isNotBlank(allUseCouponNo)){
 				mv.addObject("allUseCouponNo", allUseCouponNo.substring(1));
 			}
@@ -135,8 +149,6 @@ public class OrderController extends  BaseController{
 		
 		mv.addObject("timeList", timeList);
 		
-		
-		
 		int remarkCount = 0;
 		//查找订单下留言
 		List<BkOrderRemarkDto> remarkList = bkOrderService.queryOrderRemark(orderSnMain, 0);
@@ -149,6 +161,20 @@ public class OrderController extends  BaseController{
 			remarkCount +=  remarkList.size();
 		}
 		mv.addObject("remarkCount",	remarkCount);
+		
+		//是否有退货、退款信息
+		String returnStr = "";
+		List<BkOrderReturnDto> bkOrderReturnList = bkOrderService.getOrderReturnByOrderSnMain(orderSnMain);
+		for(BkOrderReturnDto orderReturn : bkOrderReturnList){
+			String type = OrderReturnOrderType.parseType(orderReturn.getOrderType()).getType();
+			returnStr += "<font color=red>*</font>"+orderReturn.getActor()+"于"+orderReturn.getAddTime()+"申请了"+
+					type+",金额"+orderReturn.getReturnAmount()+"元，备注："+orderReturn.getPostscript()+"<br/>";
+		}
+		mv.addObject("returnStr", returnStr);
+		
+		//获取全部支付方式
+		List<BkOrderPayDto> paymentList = bkOrderService.getPaymentList();
+		mv.addObject("paymentList", paymentList);
 		return mv;
 	}
 	
@@ -335,7 +361,7 @@ public class OrderController extends  BaseController{
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet();
 		HSSFRow header = sheet.createRow(0);
-		String[] titleArr = {"原淘常州订单号","原订单号","客户ID","商家ID","退款金额","添加时间","商家类型","订单类型","订单状态","商品状态","退款状态","退账状态","备注"};
+		String[] titleArr = {"原淘常州订单号","原订单号","客户ID","商家ID","商家名","退款金额","添加时间","商家类型","订单类型","订单状态","商品状态","退款状态","退账状态","备注"};
 		for(int i=0; i<titleArr.length; i++){
 			header.createCell(i).setCellValue(titleArr[i]);
 		}
@@ -347,22 +373,23 @@ public class OrderController extends  BaseController{
 			row.createCell(1).setCellValue(dto.getOrderId()==null?"":""+dto.getOrderId());
 			row.createCell(2).setCellValue(dto.getBuyerId()==null?"":""+dto.getBuyerId());
 			row.createCell(3).setCellValue(dto.getSellerId()==null?"":""+dto.getSellerId());
-			row.createCell(4).setCellValue(dto.getReturnAmount()==null?"":""+dto.getReturnAmount());
-			row.createCell(5).setCellValue(dto.getAddTime()==null?"":dto.getAddTime());
+			row.createCell(4).setCellValue(dto.getSellerName());
+			row.createCell(5).setCellValue(dto.getReturnAmount()==null?"":""+dto.getReturnAmount());
+			row.createCell(6).setCellValue(dto.getAddTime()==null?"":dto.getAddTime());
 			String goodsType = "普通商家";
 			if(dto.getGoodsType()!=null && dto.getGoodsType()!=0){
 				goodsType = "服务商家";
 			}
-			row.createCell(6).setCellValue(goodsType);
-			row.createCell(7).setCellValue(dto.getOrderTypeStr());
-			row.createCell(8).setCellValue(dto.getOrderStatusStr());
-			row.createCell(9).setCellValue(dto.getGoodsStatusStr());
+			row.createCell(7).setCellValue(goodsType);
+			row.createCell(8).setCellValue(dto.getOrderTypeStr());
+			row.createCell(9).setCellValue(dto.getOrderStatusStr());
+			row.createCell(10).setCellValue(dto.getGoodsStatusStr());
 			String statementStatus = "已退款";
 			if(dto.getStatementStatus() == 0){
 				statementStatus = "未退款";
 			}
-			row.createCell(10).setCellValue(statementStatus);
-			row.createCell(11).setCellValue(dto.getPostscript()==null?"":""+dto.getPostscript());
+			row.createCell(11).setCellValue(statementStatus);
+			row.createCell(12).setCellValue(dto.getPostscript()==null?"":""+dto.getPostscript());
 		}
 		response.setContentType("application/vnd.ms-excel");     
 		response.setCharacterEncoding("UTF-8");

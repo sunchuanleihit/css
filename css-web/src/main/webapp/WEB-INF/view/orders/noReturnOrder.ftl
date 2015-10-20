@@ -13,7 +13,7 @@
 					<form id="no_return_search_form">
 						<span class="inputspan">订单号<input type="text" id="orderSnMain" /></span>
 						<span class="inputspan">用户名<input type="text" id="buyerName"/></span>
-						<span class="inputspan">单据日期<input type="text" id="startTime"/>--<input type="text" id="endTime"/></span>
+						<span class="inputspan">单据日期<input type="text" id="orderDate"/></span>
 						<span class="inputspan">商家类型<select id="storeType"><option value="">所有</option><option value="wei_wh">微仓</option></select></span>
 						<span class="inputspan">&nbsp;&nbsp;
 							<input type="button" id="no_return_search_submit" value="查询" class="formbtn"/>&nbsp;&nbsp;

@@ -16,4 +16,7 @@ public class MenuProcessor {
 	public List<MenuEntity> getMenuListByParentId(int parentId){
 		return menuService.getMenusByParent(parentId);
 	}
+	public List<MenuEntity> getAllMenus() {
+		return menuService.getAllMenus();
+	}
 }

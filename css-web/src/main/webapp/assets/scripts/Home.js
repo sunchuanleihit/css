@@ -3,67 +3,26 @@ $(function () {
     var layout = new stone.Layout($('#layout'), {
         fit: true
     });
-
     tab = new stone.Tab($('#tab'));
 });
 
-
 function HomeController($scope, $http) {
-    $http.get('/menu/getMenus', { params: {  parentId: 0} }).success(function (data) {
+    $http.get('/menu/getAllMenus').success(function (data) {
+    	for(var i=0; i<data.length; i++){
+    		data[i].open = true;
+    	}
         $scope.Menus = data;
-        $scope.selectedMenuID = data[0].menuId;
-        $scope.selectedMenuName = data[0].menuName;
-        $scope.selectedMenuNameClass = data[0].remarks;
-    }).error(function (data) {
     });
 
-    function InitMenuItem(parentId, parentMenu) {        
-
-        if (parentMenu && parentMenu.Children && parentMenu.Children.length > 0) {
-            if (!parentMenu.ParentID) {
-                $scope.MenuItems = parentMenu.Children;
-            }
-            return;
-        }
-        $http.get('/menu/getMenus', { params: { parentId: parentId} }).success(function (data) {
-            parentMenu.Children = data;
-
-            if (parentMenu && !parentMenu.ParentID) {
-                $scope.MenuItems = data;
-            }
-        }).error(function (data) {
-        });
-    }
-
-    function GetMenuChildren() {
-        if ($scope.Menus && $scope.Menus.length > 0) {
-            InitMenuItem($scope.Menus[0].menuId, $scope.Menus[0]);
-        }
-    }
-    
-    $scope.menuClick = function ($event, index, menu) {
-        var id = menu.menuId;
-        InitMenuItem(id, menu);
-        $scope.selectedMenuID = id;
-        $scope.selectedMenuName = menu.menuName;
-        $scope.selectedMenuNameClass = menu.remarks;
+    $scope.menuParentClick = function ($event, index, menu) {
+    	menu.open = !menu.open;
         $event.preventDefault();
     }
 
     $scope.menuItemClick = function ($event, index, menu) {
-        //alert(menuID);
-        $scope.selectedMenuItemID = menu.menuId;
-        menu.showChildren = !menu.showChildren;
         $event.preventDefault();
-        if (menu.Url == "#") {
-            InitMenuItem(menu.menuId, menu);
-        } else {
-            addTab(menu.menuId, menu.menuUrl, menu.menuName, true);
-        }
+        addTab(menu.menuId, menu.menuUrl, menu.menuName, true);
     }
-
-    $scope.$watch('Menus', GetMenuChildren);
-
     $scope.OperatorWareHouse = top.CurrentUser.WareHouseName;
     $scope.OperatorName = top.CurrentUser.UserName;
 
