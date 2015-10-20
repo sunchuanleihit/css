@@ -4,17 +4,17 @@
 	<div class="row">
 		<div class="panel panel-default"  class="text-center">
 		  <div class="panel-heading">
-			<#if finished==1>
+			<#if finished == 1>
 			<button type="button" class="btn btn-primary" ng-click="returnGoods(${orderDetailMsgs[0].base.orderSnMain});">退货</button>
 			</#if>
-			<#if orderDetailMsgs[0].base.status==2>
+			<#if multiplePaymentRefund >
 			<button type="button" class="btn btn-primary" ng-click="multiplePaymentRefund(${orderDetailMsgs[0].base.orderSnMain});">多付款退款</button>
 			</#if>
 			<button type="button" class="btn btn-primary" ng-click="showOrderAction(${orderDetailMsgs[0].base.orderSnMain});">详细</button>
-			<#if orderDetailMsgs[0].base.status!=1 && orderDetailMsgs[0].base.status!=2>
+			<#if cancel >
 			<button type="button" class="btn btn-primary" ng-click="cancel(${orderDetailMsgs[0].base.orderSnMain});">作废[操作优惠券]</button>
 			</#if>
-			<#if orderDetailMsgs[0].base.status==1 || orderDetailMsgs[0].base.status==2>
+			<#if resetCancel >
 			<button type="button" class="btn btn-primary" ng-click="resetCancel(${orderDetailMsgs[0].base.orderSnMain});">取消作废[操作优惠券]</button>
 			</#if>
 			<button type="button" class="btn btn-primary" ng-click="showCustomInfo(${orderDetailMsgs[0].base.buyerId});">客户信息</button>
@@ -71,10 +71,9 @@
 					   <td class="text-right">付款方式：</td><td class="text-left">
 					     <select id="payId" default='${orderDetailMsgs[0].base.payId?default("")}'>
 					     		<option value="">请选择</option>
-					     		<option value="33">微信支付</option>
-								<option value="4">支付宝支付</option>
-								<option value="2">虚拟账号</option>
-					     		<option value="6">淘心卡</option>
+					     		<#list paymentList as payment >
+									<option value="${payment.paymentId}">${payment.paymentName}</option>
+								</#list>
 					     </select>
 					   </td>
 					</tr>

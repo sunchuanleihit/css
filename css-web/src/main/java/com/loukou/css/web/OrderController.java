@@ -81,6 +81,9 @@ public class OrderController extends  BaseController{
 			double allPaid = 0;
 			double allNotPaid = 0;
 			String allUseCouponNo = "";
+			boolean multiplePaymentRefund = false;
+			boolean cancel = true;
+			boolean resetCancel = true;
 			for(BkOrderListDto od:orderDetailMsgs){
 				if(od.getBase().getStatus()==15){
 					finished=1;
@@ -95,6 +98,15 @@ public class OrderController extends  BaseController{
 					}
 					allShoudPay += base.getGoodsAmount() + base.getShippingFee();
 					allPaid += base.getOrderPaid();
+					if(base.getStatus() == 2 || (base.getStatus() ==1 && base.getOrderPaid() > 0)){
+						multiplePaymentRefund = true;
+					}
+					if(base.getStatus() >= 8 || base.getStatus() == 2){//已打包或已作废则不能作废订单
+						cancel = false;
+					}
+					if(base.getStatus() !=2 && base.getStatus() !=1){//所有订单
+						resetCancel = false;
+					}
 				}
 			}
 			allNotPaid = allShoudPay - allPaid;
@@ -105,6 +117,9 @@ public class OrderController extends  BaseController{
 			mv.addObject("allPaid", allPaid);
 			mv.addObject("allNotPaid", allNotPaid);
 			mv.addObject("finished", finished);
+			mv.addObject("multiplePaymentRefund", multiplePaymentRefund );
+			mv.addObject("cancel", cancel);
+			mv.addObject("resetCancel", resetCancel);
 			if(StringUtils.isNotBlank(allUseCouponNo)){
 				mv.addObject("allUseCouponNo", allUseCouponNo.substring(1));
 			}
@@ -134,8 +149,6 @@ public class OrderController extends  BaseController{
 		
 		mv.addObject("timeList", timeList);
 		
-		
-		
 		int remarkCount = 0;
 		//查找订单下留言
 		List<BkOrderRemarkDto> remarkList = bkOrderService.queryOrderRemark(orderSnMain, 0);
@@ -158,6 +171,10 @@ public class OrderController extends  BaseController{
 					type+",金额"+orderReturn.getReturnAmount()+"元，备注："+orderReturn.getPostscript()+"<br/>";
 		}
 		mv.addObject("returnStr", returnStr);
+		
+		//获取全部支付方式
+		List<BkOrderPayDto> paymentList = bkOrderService.getPaymentList();
+		mv.addObject("paymentList", paymentList);
 		return mv;
 	}
 	

@@ -49,6 +49,11 @@ $(document).ready(function(){
 					iconCls:'icon-cancel',
 					handler:cancelOrderReturn
 				},{
+					id:'printView',
+					text:'打印预览',
+					iconCls:'icon-print',
+					handler:printView
+				},{
 					id:'exportReturn',
 					text:'导出',
 					iconCls:'icon-save',
@@ -56,6 +61,22 @@ $(document).ready(function(){
 				}
 			]
 	});
+	function printView(){
+		var selections=$("#table").datagrid("getSelections");
+		var size=selections.length;
+		var ids = "";
+		if(size==0 || size > 1){
+			alert("请选择一项进行预览");
+			return false;
+		}
+		var orderIdR=selections[0].orderIdR;
+		var orderType = selections[0].orderType;
+		var url = "http://lkbackend.loukou.com/taoczbackend/index.php?app=callcenter.check_order&act=print_repay_view&order_id_r="+orderIdR;
+		if(orderType ==2){
+			url += "&order_type="+orderType;
+		}
+		window.parent.addTab("printview", url, "退款申请单", true);
+	}
 	//取消退款订单
 	function cancelOrderReturn(){
 		var selections=$("#table").datagrid("getSelections");
