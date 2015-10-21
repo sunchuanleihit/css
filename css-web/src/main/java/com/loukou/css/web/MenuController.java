@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.loukou.auth.core.annotation.AuthCheck;
 import com.loukou.css.entity.MenuEntity;
 import com.loukou.css.processor.MenuProcessor;
 import com.loukou.css.resp.MenuRespDto;
 
 @Controller
 @RequestMapping("/menu")
+@AuthCheck(privileges = {"css.login"}, isRedirect = true)
 public class MenuController {
 	@Autowired
 	private MenuProcessor menuProcessor;

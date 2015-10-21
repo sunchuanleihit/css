@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.loukou.auth.core.annotation.AuthCheck;
 import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.entity.Site;
 import com.loukou.css.entity.Store;
@@ -40,6 +41,7 @@ import com.loukou.order.service.resp.dto.BkOrderListRespDto;
 
 @Controller
 @RequestMapping("/complaint")
+@AuthCheck(privileges = {"css.login"}, isRedirect = true)
 public class ComplaintController extends  BaseController{
 	@Autowired
 	private CssService cssService;
@@ -206,9 +208,7 @@ public class ComplaintController extends  BaseController{
 			@RequestParam(value = "handleStatus", required = false, defaultValue = "") int handleStatus
 			){
 		
-		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
-		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
-		
+		String actor = this.getAuthInfo().getUserName();
 		CssBaseRes<String> res=cssService.generateComplaint(actor,complaintId,orderSnMain,whId,whName,productIds,content,creatTime,userName,mobile,department,complaintType,compensationType,money,handleStatus);
 		return res;
 	}
