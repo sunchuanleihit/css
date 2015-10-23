@@ -17,7 +17,7 @@
 						<span class="inputspan">商家类型<select id="storeType"><option value="">所有</option><option value="wei_wh">微仓</option></select></span>
 						<span class="inputspan">&nbsp;&nbsp;
 							<input type="button" id="no_return_search_submit" value="查询" class="formbtn"/>&nbsp;&nbsp;
-							<input type="reset" value="重置" class="formbtn"/>
+							<input type="button" onclick="resetForm()" value="重置" class="formbtn"/>
 						</span>
 					</form>
 				</div>

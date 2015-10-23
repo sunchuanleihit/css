@@ -248,7 +248,11 @@ $(document).ready(function(){
 		$("#exportExcelForm").submit();
 	}
 });
-
+function resetForm(){
+	$("#form")[0].reset();
+	$("#startTime").datebox("setValue","");
+	$("#endTime").datebox("setValue","");
+}
 function OrderToReturnController($scope, $http) {
 	//跳转退货页面
 	$scope.orderDetail = function(index) {
