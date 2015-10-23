@@ -42,8 +42,6 @@ $(document).ready(function(){
 	$("#startTime").datebox({
 		formatter:formatDate
 	});
-	var today = formatDate(new Date());
-	$("#startTime").datebox('setValue', today);
 	$("#endTime").datebox({
 		formatter:formatDate
 	});
@@ -105,6 +103,12 @@ function f_pay_status(vari){
 		return "已支付";
 	}
 	return "未支付"
+}
+
+function resetForm(){
+	$("#form")[0].reset();
+	$("#startTime").datebox("setValue","");
+	$("#endTime").datebox("setValue","");
 }
 
 function OrderIndexController($scope, $http) {

@@ -464,9 +464,14 @@ public class OrderController extends  BaseController{
 			@RequestParam(value = "paymentId", required = false, defaultValue = "") int[] paymentIdList,
 			@RequestParam(value = "returnAmount", required = false, defaultValue = "") double[] returnAmountList
 			){
-		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
-		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
-		
+		SessionEntity sessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
+		if(sessionEntity == null){
+			BaseRes<String> result = new BaseRes<String>();
+			result.setCode("400");
+			result.setMessage("登陆失效，请重新登陆");
+			return result;
+		}
+		String actor = userProcessor.getUser(sessionEntity.getUserId()).getUserName();
 		BaseRes<String> res=bkOrderService.generateReturn(actor,orderId, postScript, orderSnMain, returnType, payId, shippingFee, 
 		checkedProductList,productIdList, siteskuIdList, proTypeList, recIdList, goodsReturnNumList, goodsReturnAmountList, goodsReasonList, goodsNameList,
 		paymentIdList,returnAmountList);

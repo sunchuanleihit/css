@@ -10,7 +10,7 @@
   	<div id="order_return_manage">
 		<div title="待退款订单" closable="true" style="padding:20px;">  
 			<div id="order_return_search" style="padding:20px;border:1px solid #dadada;">
-				<form>
+				<form id="form">
 					<span class="inputspan">订单号</td><td><input type="text" id="orderSnMain" /></span>
 					<span class="inputspan">单据日期</td><td><input type="text" id="startTime" />--</span>
 					<span class="inputspan"><input type="text" id="endTime" /></span>
@@ -35,7 +35,7 @@
 					<span class="inputspan">
 						&nbsp;&nbsp;
 						<input type="button" id="search_submit" value="查询" class="formbtn"/>&nbsp;&nbsp;&nbsp;
-						<input type="reset" value="重置" class="formbtn" onclick="order_return_reset()"/>&nbsp;&nbsp;
+						<input type="button" value="重置" class="formbtn" onclick="resetForm()"/>&nbsp;&nbsp;
 					</span>
 				</form>
 			</div>

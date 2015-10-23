@@ -8,7 +8,7 @@
   </head>
   <body ng-app="myapp">
 		<div id="panel" style="padding:20px;border:1px solid #dadada;" ng-controller="OrderIndexController">
-			<form>
+			<form id="form">
 				<span class="inputspan">订单号<input type="text" id="orderSnMain"/></span>
 				<span class="inputspan">会员用户名<input type="text" id="buyerName"/></span>
 				<span class="inputspan">单据日期<input type="text" id="startTime"/>--<input type="text" id="endTime"/></span>
@@ -47,7 +47,7 @@
               	  	<input type="text" id="queryContent">
               	  </span>
               	  <span class="inputspan">&nbsp;&nbsp;
-              	  	<input type="button" id="search_submit" value="查询" class="btn"/>&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="formbtn"/>
+              	  	<input type="button" id="search_submit" value="查询" class="btn"/>&nbsp;&nbsp;&nbsp;<input type="button" onclick="resetForm()" value="重置" class="formbtn"/>
               	  </span> 
 			</form>
 		</div>

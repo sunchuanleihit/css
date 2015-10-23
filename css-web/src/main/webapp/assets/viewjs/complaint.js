@@ -51,7 +51,7 @@ app.controller('IndexCtrl', ['$scope','$http', function ($scope, $http) {
              },
              {
              	"id":3,
-             	"name":"商品皮损"
+             	"name":"商品破损"
              },
              {
              	"id": 4,
