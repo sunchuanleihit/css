@@ -82,6 +82,10 @@ $(document).ready(function(){
 	}
 });
 
+function resetForm(){
+	$("#no_return_search_form")[0].reset();
+	$("#orderDate").datebox("setValue","");
+}
 function OrderReturnController($scope, $http) {
 	//跳转退货页面
 	$scope.orderDetail = function(index) {

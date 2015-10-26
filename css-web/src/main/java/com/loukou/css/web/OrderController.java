@@ -27,10 +27,8 @@ import com.loukou.auth.core.annotation.AuthCheck;
 import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.entity.Store;
 import com.loukou.css.enums.OrderReturnOrderType;
-import com.loukou.css.processor.UserProcessor;
 import com.loukou.css.resp.CssOrderShow;
 import com.loukou.css.service.CssService;
-import com.loukou.css.service.redis.entity.SessionEntity;
 import com.loukou.css.util.DataGrid;
 import com.loukou.order.service.api.BkOrderService;
 import com.loukou.order.service.bo.BaseRes;
@@ -57,9 +55,6 @@ public class OrderController extends  BaseController{
 	
 	@Autowired
 	private CssService cssService;
-	
-	@Autowired 
-    private UserProcessor userProcessor;
 	
 	@RequestMapping("/allOrder")
 	public String allOrder(){
