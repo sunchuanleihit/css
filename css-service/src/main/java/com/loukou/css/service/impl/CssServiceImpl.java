@@ -22,9 +22,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.loukou.auth.resp.dto.base.RespPageDto;
-import com.loukou.auth.service.UserService;
-import com.loukou.auth.service.bo.UserBo;
+import com.loukou.auth.api.AuthService;
+import com.loukou.auth.resp.dto.UserRespDto;
+import com.loukou.auth.resp.dto.base.RespListDto;
 import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.dao.InvoiceActionDao;
 import com.loukou.css.dao.InvoiceDao;
@@ -38,7 +38,6 @@ import com.loukou.css.dao.OrderPayDao;
 import com.loukou.css.dao.OrderReturnDao;
 import com.loukou.css.dao.SiteDao;
 import com.loukou.css.dao.StoreDao;
-import com.loukou.css.dao.TczAdminDao;
 import com.loukou.css.entity.Invoice;
 import com.loukou.css.entity.InvoiceAction;
 import com.loukou.css.entity.InvoiceGoods;
@@ -51,7 +50,6 @@ import com.loukou.css.entity.OrderPay;
 import com.loukou.css.entity.OrderReturn;
 import com.loukou.css.entity.Site;
 import com.loukou.css.entity.Store;
-import com.loukou.css.entity.TczAdmin;
 import com.loukou.css.enums.ComplaintTypeEnum;
 import com.loukou.css.enums.DeptEnum;
 import com.loukou.css.req.ComplaintReqDto;
@@ -108,13 +106,10 @@ public class CssServiceImpl implements CssService {
 	private SpuService spuService;
 	
 	@Autowired
-	private TczAdminDao tczAdminDao;
-	
-	@Autowired
 	private OrderActionDao orderActionDao;
 	
 	@Autowired
-	private UserService userService;
+	private AuthService authService;
 	
 	//发送开票提醒
 	public CssBaseRes<String> sendBillNotice(String orderSnMain,String actor){
@@ -557,12 +552,13 @@ public class CssServiceImpl implements CssService {
 	public List<AchievementRespDto> getAchievement(String startDate, String endDate) {
 		Map<String, AchievementRespDto> resultMap = new HashMap<String, AchievementRespDto>();
 		List<AchievementRespDto> achievementList = new ArrayList<AchievementRespDto>();
-		List<UserBo> userList = this.getCallCenterMember();
-		for(UserBo admin: userList){
+		RespListDto<UserRespDto> userListDto = authService.getUsersByAppId(1);
+		List<UserRespDto> userList = userListDto.getResult().getList();
+		for(UserRespDto user: userList){
 			AchievementRespDto respDto = new AchievementRespDto();
 			achievementList.add(respDto);
-			respDto.setName(admin.getName());
-			resultMap.put(admin.getName(), respDto);
+			respDto.setName(user.getName());
+			resultMap.put(user.getName(), respDto);
 		}
 		if(StringUtils.isBlank(startDate) || StringUtils.isBlank(endDate)){
 			return achievementList;
@@ -612,12 +608,4 @@ public class CssServiceImpl implements CssService {
 		}
 		return achievementList;
 	}
-	
-	private List<UserBo> getCallCenterMember(){
-//		Integer callCenterManager = 220;// 客服老大 雍燕
-//		List<TczAdmin> tczAdminList = tczAdminDao.getAllCallCenterAdmin(callCenterManager);
-		RespPageDto<UserBo> userPage = userService.getUsersWithRole(1, 1, 200);
-		List<UserBo> userList = userPage.getRows();
-		return userList;
-	} 
 }
