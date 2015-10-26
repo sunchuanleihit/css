@@ -27,14 +27,15 @@ public class AchievementController {
 	@Autowired
 	private CssService cssService;
 	
-	
 	@RequestMapping("/index")
+	@AuthCheck(privileges = {"css.achievement"}, isRedirect = true)
 	public ModelAndView index(){
 		ModelAndView mv = new ModelAndView("achievement/index");
 		return mv;
 	}
 	
 	@RequestMapping("/caculate")
+	@AuthCheck(privileges = {"css.achievement"}, isRedirect = true)
 	@ResponseBody
 	public List<AchievementRespDto> caculate(HttpServletRequest request){
 		String startDate = request.getParameter("startDate");

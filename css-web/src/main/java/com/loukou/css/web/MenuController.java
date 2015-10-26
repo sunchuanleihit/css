@@ -1,6 +1,5 @@
 package com.loukou.css.web;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,16 +19,9 @@ import com.loukou.css.resp.MenuRespDto;
 @Controller
 @RequestMapping("/menu")
 @AuthCheck(privileges = {"css.login"}, isRedirect = true)
-public class MenuController {
+public class MenuController extends BaseController{
 	@Autowired
 	private MenuProcessor menuProcessor;
-	
-	@RequestMapping(value = "/getMenus",method = RequestMethod.GET)
-	@ResponseBody
-	public List<MenuEntity> GetMenus(int parentId) {
-		//根据父菜单获取菜单列表
-		return menuProcessor.getMenuListByParentId(parentId);
-	}
 	
 	@RequestMapping(value = "/getAllMenus")
 	@ResponseBody
@@ -42,7 +34,13 @@ public class MenuController {
 			BeanUtils.copyProperties(menu, respDto);
 			menuMap.put(respDto.getMenuId(), respDto);
 		}
+		
 		for(MenuEntity menu: menuList){
+			if("绩效考核".equals(menu.getMenuName())){
+				if(!hasAchievementRight()){
+					continue;
+				}
+			}
 			MenuRespDto respDto = menuMap.get(menu.getMenuId());
 			MenuRespDto parent = menuMap.get(menu.getParentId());
 			if(parent != null){
@@ -50,5 +48,13 @@ public class MenuController {
 			}
 		}
 		return menuMap.get(0).getChildMenus();
+	}
+	
+	private boolean hasAchievementRight(){
+		List<String> privilegeList = this.getAuthInfo().getPrivileges();
+		if(privilegeList!=null && privilegeList.contains("css.achievement")){
+			return true;
+		}
+		return false;
 	}
 }

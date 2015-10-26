@@ -22,6 +22,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.loukou.auth.resp.dto.base.RespPageDto;
+import com.loukou.auth.service.UserService;
+import com.loukou.auth.service.bo.UserBo;
 import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.dao.InvoiceActionDao;
 import com.loukou.css.dao.InvoiceDao;
@@ -109,6 +112,9 @@ public class CssServiceImpl implements CssService {
 	
 	@Autowired
 	private OrderActionDao orderActionDao;
+	
+	@Autowired
+	private UserService userService;
 	
 	//发送开票提醒
 	public CssBaseRes<String> sendBillNotice(String orderSnMain,String actor){
@@ -551,12 +557,12 @@ public class CssServiceImpl implements CssService {
 	public List<AchievementRespDto> getAchievement(String startDate, String endDate) {
 		Map<String, AchievementRespDto> resultMap = new HashMap<String, AchievementRespDto>();
 		List<AchievementRespDto> achievementList = new ArrayList<AchievementRespDto>();
-		List<TczAdmin> adminList = this.getCallCenterMember();
-		for(TczAdmin admin: adminList){
+		List<UserBo> userList = this.getCallCenterMember();
+		for(UserBo admin: userList){
 			AchievementRespDto respDto = new AchievementRespDto();
 			achievementList.add(respDto);
-			respDto.setName(admin.getRealname());
-			resultMap.put(admin.getRealname(), respDto);
+			respDto.setName(admin.getName());
+			resultMap.put(admin.getName(), respDto);
 		}
 		if(StringUtils.isBlank(startDate) || StringUtils.isBlank(endDate)){
 			return achievementList;
@@ -607,10 +613,11 @@ public class CssServiceImpl implements CssService {
 		return achievementList;
 	}
 	
-	private List<TczAdmin> getCallCenterMember(){
-		Integer callCenterManager = 220;// 客服老大 雍燕
-		List<TczAdmin> tczAdminList = tczAdminDao.getAllCallCenterAdmin(callCenterManager);
-		return tczAdminList;
+	private List<UserBo> getCallCenterMember(){
+//		Integer callCenterManager = 220;// 客服老大 雍燕
+//		List<TczAdmin> tczAdminList = tczAdminDao.getAllCallCenterAdmin(callCenterManager);
+		RespPageDto<UserBo> userPage = userService.getUsersWithRole(1, 1, 200);
+		List<UserBo> userList = userPage.getRows();
+		return userList;
 	} 
-	
 }

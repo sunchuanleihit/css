@@ -27,12 +27,10 @@ import com.loukou.auth.core.annotation.AuthCheck;
 import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.entity.Site;
 import com.loukou.css.entity.Store;
-import com.loukou.css.processor.UserProcessor;
 import com.loukou.css.req.ComplaintReqDto;
 import com.loukou.css.resp.ComplaintRespDto;
 import com.loukou.css.resp.ComplaintRespListDto;
 import com.loukou.css.service.CssService;
-import com.loukou.css.service.redis.entity.SessionEntity;
 import com.loukou.css.util.DataGrid;
 import com.loukou.css.utils.DateUtils;
 import com.loukou.order.service.api.BkOrderService;
@@ -48,9 +46,6 @@ public class ComplaintController extends  BaseController{
 	
 	@Autowired
 	private BkOrderService bkOrderService;
-	
-	@Autowired 
-    private UserProcessor userProcessor;
 	
 	@RequestMapping(value="/complaintList")
 	public ModelAndView complaintList(HttpServletRequest request,HttpServletResponse response){

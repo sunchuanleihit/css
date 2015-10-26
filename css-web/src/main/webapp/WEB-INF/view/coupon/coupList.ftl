@@ -11,6 +11,15 @@
 	<script src="<@s.url '/assets/scripts/bootstrap-table-zh-cn.js'/>" ></script>
 	<link href="<@s.url '/assets/css/searchform.css' />" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="<@s.url '/assets/css/artDialog.css' />">
+	<script>
+		function isCoupmanager(){
+			<#if privileges?seq_contains("css.sendCoupon") >
+				return true;
+			<#else>
+				return false;
+			</#if>
+		}
+	</script>
 </head>
 <body>
 <div style="margin-top:5px;margin-left:5px;">

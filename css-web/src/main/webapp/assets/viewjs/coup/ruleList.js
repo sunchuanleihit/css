@@ -69,7 +69,7 @@ function operateFormatter(value, row, index){
 	var exportCoup = '<a href="/coupon/exportCoup?ruleId='+id+'">导出券码</a>';
 	var str = '';
 	str += getRuleDetail +" | ";
-	if(title == "客服专用"){
+	if(title == "客服专用" && isCoupmanager()){
 		var stopUseCoupRule = '<a href="javascript:void(0)" onclick="changeRuleIsuse('+id+',\''+name+'\', 2)">停用规则</a>';
 		var startUseCoupRule = '<a href="javascript:void(0)" onclick="changeRuleIsuse('+id+',\''+name+'\', 1)">启用规则</a>';
 		if(isuse == "停用"){
@@ -80,7 +80,7 @@ function operateFormatter(value, row, index){
 		str += " | ";
 	}
 	str += dataStatistic+"<br/>";
-	if(!commoncode && isuse == "启用" && title == "客服专用"){
+	if(!commoncode && isuse == "启用" && title == "客服专用" && isCoupmanager()){
 		var addCoupon = '<a href="javascript:void(0)" onclick="addCoupon('+id+',\''+name+'\')">增加券码</a>';
 		str += addCoupon +" | ";
 	}

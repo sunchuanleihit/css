@@ -92,10 +92,10 @@ function actFormatter(index, row){
 	var title = row.title;
 	var commoncode = row.commoncode;
 	if(title == "客服专用"){
-		if(row.userId == 0){
+		if(row.userId == 0 && isCoupmanager()){
 			str += '<a href="javascript:void(0)" onclick="sendCoup('+id+')">发放</a>';
 		}
-		if(row.ischecked == "未使用" && row.issue !=2 && row.canuse != "停用"){
+		if(row.ischecked == "未使用" && row.issue !=2 && row.canuse != "停用" && isCoupmanager()){
 			if(str){
 				str += ' | ';
 			}

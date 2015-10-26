@@ -23,15 +23,13 @@ function HomeController($scope, $http) {
         $event.preventDefault();
         addTab(menu.menuId, menu.menuUrl, menu.menuName, true);
     }
-    $scope.OperatorWareHouse = top.CurrentUser.WareHouseName;
-    $scope.OperatorName = top.CurrentUser.UserName;
 
     $scope.logout = function (event) {
         var ctr = this;
         jConfirm("确认退出？", "退出", function (r) {
             if (r) {
-                $.get("/login/logout").success(function (restr) {
-                    window.location.href = "/login";
+                $.get("/dologout").success(function (restr) {
+                    window.location.href = "/main";
                 }).error(function (data) {
                 });
             }
@@ -41,22 +39,7 @@ function HomeController($scope, $http) {
     $scope.SetPageWidth = function () {
         document.getElementById("containerh").style.width = document.getElementById("main-content").style.width;
     };
-    //修改密码
-    $scope.ModifyUser = function () {
-        $.colorbox({
-            href: "/user/updateUser?userId="+top.CurrentUser.UserId+"&userName="+top.CurrentUser.UserName,
-            iframe: true,
-            width: "480px",
-            height: "400px",
-            top: "100px",
-            opacity: 0,
-            overlayClose: false,
-            scrolling: false,
-            onClosed: function () {
-            	window.location.href = "/main";
-            }
-        });
-    };
+
 }
 
 var tab;

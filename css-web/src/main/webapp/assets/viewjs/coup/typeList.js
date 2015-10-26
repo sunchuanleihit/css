@@ -6,7 +6,7 @@ function initTable(){
 		var str = '';
 		str += '<a href="javascript:void(0);" title="getDescription" class="getDescription">查看描述</a>';
 		var title = row.title;
-		if(title == "客服专用"){
+		if(title == "客服专用" && isCoupmanager()){
 			str += ' | <a href="javascript:void(0);" title="creatRule" class="creatRule">增加规则</a>';
 		}
 	    return str;

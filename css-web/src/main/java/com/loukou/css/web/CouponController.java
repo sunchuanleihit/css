@@ -40,7 +40,7 @@ import com.serverstarted.product.service.resp.dto.CategoryRespDto;
 @Controller
 @RequestMapping("/coupon")
 @AuthCheck(privileges = {"css.login"}, isRedirect = true)
-public class CouponController {
+public class CouponController extends  BaseController{
 	
 	@Autowired
 	private CoupService coupService;
@@ -66,7 +66,7 @@ public class CouponController {
 		return mv;
 	}
 	
-	@AuthCheck(privileges = {"css.manageCoupon"}, isRedirect = true)
+	@AuthCheck(privileges = {"css.sendCoupon"}, isRedirect = true)
 	@RequestMapping("/addCoupRulePage")
 	public ModelAndView addCoupRulePage(HttpServletRequest request){
 		ModelAndView mv = new ModelAndView("/coupon/addCoupRule");
@@ -85,7 +85,7 @@ public class CouponController {
 		return mv;
 	}
 	
-	@AuthCheck(privileges = {"css.manageCoupon"}, isRedirect = true)
+	@AuthCheck(privileges = {"css.sendCoupon"}, isRedirect = true)
 	@RequestMapping("/addCoupRule")
 	@ResponseBody
 	public Map<String, String> addCoupRule(CoupRuleAddReqDto dto){
@@ -139,7 +139,7 @@ public class CouponController {
 		return mv;
 	}
 	
-	@AuthCheck(privileges = {"css.manageCoupon"}, isRedirect = true)
+	@AuthCheck(privileges = {"css.sendCoupon"}, isRedirect = true)
 	@RequestMapping("/updateCoupUse")
 	@ResponseBody
 	public String updateCoupUse(HttpServletRequest request){
@@ -154,7 +154,7 @@ public class CouponController {
 		return "success";
 	}
 	
-	@AuthCheck(privileges = {"css.manageCoupon"}, isRedirect = true)
+	@AuthCheck(privileges = {"css.sendCoupon"}, isRedirect = true)
 	@RequestMapping("/addCouponNumber")
 	@ResponseBody
 	public Map<String, String> addCouponNumber(HttpServletRequest request){
@@ -262,7 +262,7 @@ public class CouponController {
 		return grid;
 	}
 	
-	@AuthCheck(privileges = {"css.manageCoupon"}, isRedirect = true)
+	@AuthCheck(privileges = {"css.sendCoupon"}, isRedirect = true)
 	@RequestMapping("/sendCoupon")
 	@ResponseBody
 	public Map<String, String> sendCoupon(HttpServletRequest request){
@@ -284,7 +284,7 @@ public class CouponController {
 		return result;
 	}
 	
-	@AuthCheck(privileges = {"css.manageCoupon"}, isRedirect = true)
+	@AuthCheck(privileges = {"css.sendCoupon"}, isRedirect = true)
 	@RequestMapping("/stopCoup")
 	@ResponseBody
 	public Map<String, String> stopCoup(HttpServletRequest request){
