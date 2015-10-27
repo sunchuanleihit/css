@@ -23,7 +23,7 @@ import com.loukou.css.service.CssService;
 @Controller
 @RequestMapping("/achievement")
 @AuthCheck(privileges = {"css.login"}, isRedirect = true)
-public class AchievementController {
+public class AchievementController extends  BaseController{
 	@Autowired
 	private CssService cssService;
 	

@@ -30,7 +30,7 @@ import com.loukou.order.service.resp.dto.BkVaccountListResultRespDto;
 @Controller
 @RequestMapping("/customer")
 @AuthCheck(privileges = {"css.login"}, isRedirect = true)
-public class CustomerController {
+public class CustomerController extends  BaseController{
 	@Autowired
 	private BkOrderService bkOrderService;
 	
