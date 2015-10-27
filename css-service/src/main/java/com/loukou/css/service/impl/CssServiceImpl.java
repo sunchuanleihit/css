@@ -131,7 +131,7 @@ public class CssServiceImpl implements CssService {
 		int needInvoice=orderList.get(0).getNeedInvoice();
 		if(needInvoice==2){
 			List<Invoice> invoiceList=invoiceDao.findByOrderSnMain(orderSnMain);
-			if (CollectionUtils.isEmpty(invoiceList)) {
+			if (!CollectionUtils.isEmpty(invoiceList)) {
 				needInvoice=1;
 			}else{
 				needInvoice=3;
@@ -151,44 +151,42 @@ public class CssServiceImpl implements CssService {
 			
 			double invoiceAmount=0;
 			Store storeMsg=storeDao.findOne(orderList.get(0).getSellerId());
-			if(storeMsg.getTaxApply()!=1){
-				invoiceAmount=0;
-			}
-			
-			double goodsAmount=0;
-			double orderAmount=0;
-			double orderPayed=0;
-			List<Integer> orderIds= new ArrayList<Integer>();
-			for(Order o:orderList){
-				goodsAmount+=o.getGoodsAmount();
-				orderAmount+=o.getOrderAmount();
-				orderPayed+=o.getOrderPayed();
-				orderIds.add(o.getOrderId());
-			}
-			List<Integer> paymentIds = new ArrayList<Integer>();
-			paymentIds.add(6);
-			paymentIds.add(13);
-			paymentIds.add(14);
-			paymentIds.add(21);
-			paymentIds.add(15);
-			paymentIds.add(2);
-			paymentIds.add(150);
-			List<OrderPay> orderPay=orderPayDao.getByOrderIdsAndNotPaymentId(orderIds, paymentIds);
-			double orderInvoiceAmount=0;
-			for(OrderPay op:orderPay){
-				orderInvoiceAmount+=op.getMoney();
-			}
-			
-			if(orderInvoiceAmount>0){
-				if(orderInvoiceAmount>=orderAmount){
-					invoiceAmount=orderAmount;
-				}else{
-					invoiceAmount=orderInvoiceAmount+(goodsAmount-orderPayed);
+			if(storeMsg.getTaxApply()==1){
+				double goodsAmount=0;
+				double orderAmount=0;
+				double orderPayed=0;
+				List<Integer> orderIds= new ArrayList<Integer>();
+				for(Order o:orderList){
+					goodsAmount+=o.getGoodsAmount();
+					orderAmount+=o.getOrderAmount();
+					orderPayed+=o.getOrderPayed();
+					orderIds.add(o.getOrderId());
 				}
-			}else{
-				invoiceAmount=goodsAmount-orderPayed;
-				if(invoiceAmount<0){
-					invoiceAmount=0;
+				List<Integer> paymentIds = new ArrayList<Integer>();
+				paymentIds.add(6);
+				paymentIds.add(13);
+				paymentIds.add(14);
+				paymentIds.add(21);
+				paymentIds.add(15);
+				paymentIds.add(2);
+				paymentIds.add(150);
+				List<OrderPay> orderPay=orderPayDao.getByOrderIdsAndNotPaymentId(orderIds, paymentIds);
+				double orderInvoiceAmount=0;
+				for(OrderPay op:orderPay){
+					orderInvoiceAmount+=op.getMoney();
+				}
+				
+				if(orderInvoiceAmount>0){
+					if(orderInvoiceAmount>=orderAmount){
+						invoiceAmount=orderAmount;
+					}else{
+						invoiceAmount=orderInvoiceAmount+(goodsAmount-orderPayed);
+					}
+				}else{
+					invoiceAmount=goodsAmount-orderPayed;
+					if(invoiceAmount<0){
+						invoiceAmount=0;
+					}
 				}
 			}
 			
