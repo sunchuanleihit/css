@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.loukou.auth.core.annotation.AuthCheck;
 import com.loukou.css.util.DataGrid;
 import com.loukou.order.service.api.CoupService;
 import com.loukou.order.service.req.dto.CoupRuleAddReqDto;
 import com.loukou.order.service.req.dto.CoupRuleReqDto;
-import com.loukou.order.service.req.dto.CoupTypeReqDto;
 import com.loukou.order.service.resp.dto.BkCouponTypeListDto;
 import com.loukou.order.service.resp.dto.BkRespDto;
 import com.loukou.order.service.resp.dto.CoupRuleDto;
@@ -39,7 +39,8 @@ import com.serverstarted.product.service.resp.dto.CategoryRespDto;
 
 @Controller
 @RequestMapping("/coupon")
-public class CouponController {
+@AuthCheck(privileges = {"css.login"}, isRedirect = true)
+public class CouponController extends  BaseController{
 	
 	@Autowired
 	private CoupService coupService;
@@ -65,6 +66,7 @@ public class CouponController {
 		return mv;
 	}
 	
+	@AuthCheck(privileges = {"css.sendCoupon"}, isRedirect = true)
 	@RequestMapping("/addCoupRulePage")
 	public ModelAndView addCoupRulePage(HttpServletRequest request){
 		ModelAndView mv = new ModelAndView("/coupon/addCoupRule");
@@ -83,6 +85,7 @@ public class CouponController {
 		return mv;
 	}
 	
+	@AuthCheck(privileges = {"css.sendCoupon"}, isRedirect = true)
 	@RequestMapping("/addCoupRule")
 	@ResponseBody
 	public Map<String, String> addCoupRule(CoupRuleAddReqDto dto){
@@ -136,6 +139,7 @@ public class CouponController {
 		return mv;
 	}
 	
+	@AuthCheck(privileges = {"css.sendCoupon"}, isRedirect = true)
 	@RequestMapping("/updateCoupUse")
 	@ResponseBody
 	public String updateCoupUse(HttpServletRequest request){
@@ -150,6 +154,7 @@ public class CouponController {
 		return "success";
 	}
 	
+	@AuthCheck(privileges = {"css.sendCoupon"}, isRedirect = true)
 	@RequestMapping("/addCouponNumber")
 	@ResponseBody
 	public Map<String, String> addCouponNumber(HttpServletRequest request){
@@ -230,27 +235,6 @@ public class CouponController {
 		return grid;
 	}
 	
-	@RequestMapping("/addCoupType")
-	@ResponseBody
-	public Map<String, String> addCoupType(CoupTypeReqDto typeDto){
-		String result = coupService.addOrUpdateCoupType(typeDto);
-		Map<String, String> resultMap = new HashMap<String, String>();
-		resultMap.put("info", result);
-		return resultMap;
-	}
-	
-	@RequestMapping("/deleteType")
-	@ResponseBody
-	public String deleteType(HttpServletRequest request){
-		String idStr = request.getParameter("id");
-		if(StringUtils.isBlank(idStr)){
-			return "error";
-		}
-		Integer id = Integer.parseInt(idStr);
-		coupService.deleteCoupType(id);
-		return "success";
-	}
-
 	@RequestMapping("/coupList")
 	public ModelAndView coupListPage(HttpServletRequest request){
 		ModelAndView mv = new ModelAndView("/coupon/coupList");
@@ -278,6 +262,7 @@ public class CouponController {
 		return grid;
 	}
 	
+	@AuthCheck(privileges = {"css.sendCoupon"}, isRedirect = true)
 	@RequestMapping("/sendCoupon")
 	@ResponseBody
 	public Map<String, String> sendCoupon(HttpServletRequest request){
@@ -299,6 +284,7 @@ public class CouponController {
 		return result;
 	}
 	
+	@AuthCheck(privileges = {"css.sendCoupon"}, isRedirect = true)
 	@RequestMapping("/stopCoup")
 	@ResponseBody
 	public Map<String, String> stopCoup(HttpServletRequest request){

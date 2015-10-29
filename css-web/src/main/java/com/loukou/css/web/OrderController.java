@@ -23,13 +23,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.loukou.auth.core.annotation.AuthCheck;
 import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.entity.Store;
 import com.loukou.css.enums.OrderReturnOrderType;
-import com.loukou.css.processor.UserProcessor;
 import com.loukou.css.resp.CssOrderShow;
 import com.loukou.css.service.CssService;
-import com.loukou.css.service.redis.entity.SessionEntity;
 import com.loukou.css.util.DataGrid;
 import com.loukou.order.service.api.BkOrderService;
 import com.loukou.order.service.bo.BaseRes;
@@ -49,15 +48,13 @@ import com.loukou.order.service.resp.dto.GoodsListDto;
 
 @Controller
 @RequestMapping("/order")
+@AuthCheck(privileges = {"css.login"}, isRedirect = true)
 public class OrderController extends  BaseController{
 	@Autowired
 	private BkOrderService bkOrderService;
 	
 	@Autowired
 	private CssService cssService;
-	
-	@Autowired 
-    private UserProcessor userProcessor;
 	
 	@RequestMapping("/allOrder")
 	public String allOrder(){
@@ -188,8 +185,7 @@ public class OrderController extends  BaseController{
 			@RequestParam(value = "invoiceHeader", required = false, defaultValue = "") String invoiceHeader,
 			@RequestParam(value = "phoneMob", required = false, defaultValue = "") String phoneMob
 			){
-		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
-		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
+		String actor = this.getAuthInfo().getUserName();
 		
 		BaseRes<String> res=bkOrderService.changeOrder(orderSnMain,needShiptime,needShiptimeSlot,invoiceHeader,phoneMob,actor);
 		return res;
@@ -464,14 +460,7 @@ public class OrderController extends  BaseController{
 			@RequestParam(value = "paymentId", required = false, defaultValue = "") int[] paymentIdList,
 			@RequestParam(value = "returnAmount", required = false, defaultValue = "") double[] returnAmountList
 			){
-		SessionEntity sessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
-		if(sessionEntity == null){
-			BaseRes<String> result = new BaseRes<String>();
-			result.setCode("400");
-			result.setMessage("登陆失效，请重新登陆");
-			return result;
-		}
-		String actor = userProcessor.getUser(sessionEntity.getUserId()).getUserName();
+		String actor = this.getAuthInfo().getUserName();
 		BaseRes<String> res=bkOrderService.generateReturn(actor,orderId, postScript, orderSnMain, returnType, payId, shippingFee, 
 		checkedProductList,productIdList, siteskuIdList, proTypeList, recIdList, goodsReturnNumList, goodsReturnAmountList, goodsReasonList, goodsNameList,
 		paymentIdList,returnAmountList);
@@ -482,8 +471,7 @@ public class OrderController extends  BaseController{
 	@RequestMapping(value = "/cancelOrder", method = RequestMethod.GET)
 	@ResponseBody
 	public BaseRes<String> cancelOrder(@RequestParam String orderSnMain){
-		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
-		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
+		String actor = this.getAuthInfo().getUserName();
 		
 		BaseRes<String> res=bkOrderService.cancelOrder(orderSnMain,actor);
 		return res;
@@ -493,8 +481,7 @@ public class OrderController extends  BaseController{
 	@RequestMapping(value = "/resetCancelOrder", method = RequestMethod.GET)
 	@ResponseBody
 	public BaseRes<String> resetCancelOrder(@RequestParam String orderSnMain){
-		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
-		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
+		String actor = this.getAuthInfo().getUserName();
 		
 		BaseRes<String> res=bkOrderService.resetCancelOrder(orderSnMain,actor);
 		return res;
@@ -535,8 +522,7 @@ public class OrderController extends  BaseController{
 			@RequestParam(value = "returnAmount", required = false, defaultValue = "") double[] returnAmountList
 			){
 		
-		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
-		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
+		String actor = this.getAuthInfo().getUserName();
 		
 		BaseRes<String> res=bkOrderService.generatePaymentRefund(reason,actor,orderSnMain,postScript,paymentIdList,hasPaid,returnAmountList);
 		return res;
@@ -588,8 +574,7 @@ public class OrderController extends  BaseController{
 			@RequestParam(value = "returnAmount", required = false, defaultValue = "") double[] returnAmountList
 			){
 		
-		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
-		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
+		String actor = this.getAuthInfo().getUserName();
 		
 		BaseRes<String> res=bkOrderService.generateSpecialPaymentRefund(reason,actor,orderSnMain,postScript,paymentIdList,returnAmountList);
 		return res;
@@ -617,11 +602,8 @@ public class OrderController extends  BaseController{
 		if(StringUtils.isBlank(ids)){
 			return "none";
 		}
-		SessionEntity sessionEntity= this.getWhSessionEntity();
-		if(sessionEntity == null){
-			return "login";
-		}
-		String userName = sessionEntity.getUserName();
+		String userName = this.getAuthInfo().getUserName();
+		
 		if(StringUtils.isBlank(userName)){
 			return "login";
 		}
@@ -637,11 +619,7 @@ public class OrderController extends  BaseController{
 	@RequestMapping("/addOrderRemark")
 	@ResponseBody
 	public String addOrderRemark(HttpServletRequest request, HttpServletResponse response){
-		SessionEntity sessionEntity= this.getWhSessionEntity();
-		if(sessionEntity == null){
-			return "login";
-		}
-		String userName = sessionEntity.getUserName();
+		String userName = this.getAuthInfo().getUserName();
 		if(StringUtils.isBlank(userName)){
 			return "login";
 		}
@@ -673,8 +651,7 @@ public class OrderController extends  BaseController{
 	@RequestMapping(value = "/cancelSubOrder", method = RequestMethod.GET)
 	@ResponseBody
 	public BaseRes<String> cancelSubOrder(@RequestParam int orderId){
-		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
-		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
+		String actor = this.getAuthInfo().getUserName();
 		BaseRes<String> res=bkOrderService.cancelSubOrder(orderId,actor);
 		return res;
 	}
@@ -683,8 +660,7 @@ public class OrderController extends  BaseController{
 	@RequestMapping(value = "/resetCancelSubOrder", method = RequestMethod.GET)
 	@ResponseBody
 	public BaseRes<String> resetCancelSubOrder(@RequestParam int orderId){
-		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
-		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
+		String actor = this.getAuthInfo().getUserName();
 		
 		BaseRes<String> res=bkOrderService.resetCancelSubOrder(orderId,actor);
 		return res;
@@ -694,8 +670,7 @@ public class OrderController extends  BaseController{
 	@RequestMapping(value = "/paySubOrder", method = RequestMethod.GET)
 	@ResponseBody
 	public BaseRes<String> paySubOrder(@RequestParam String orderSnMain,@RequestParam int payId){
-		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
-		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
+		String actor = this.getAuthInfo().getUserName();
 		
 		BaseRes<String> res=bkOrderService.paySubOrder(orderSnMain,actor,payId);
 		return res;
@@ -726,8 +701,7 @@ public class OrderController extends  BaseController{
 	@RequestMapping(value = "/sendBillNotice", method = RequestMethod.GET)
 	@ResponseBody
 	public CssBaseRes<String> sendBillNotice(@RequestParam String orderSnMain){
-		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
-		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
+		String actor = this.getAuthInfo().getUserName();
 		CssBaseRes<String> res = new CssBaseRes<String>();
 		if(StringUtils.isBlank(actor)){
 			res.setCode("error");

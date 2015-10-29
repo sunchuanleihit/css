@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.loukou.auth.core.annotation.AuthCheck;
 import com.loukou.css.resp.CssOrderShow;
 import com.loukou.css.util.DataGrid;
 import com.loukou.order.service.api.BkOrderService;
@@ -28,7 +29,8 @@ import com.loukou.order.service.resp.dto.BkVaccountListResultRespDto;
 
 @Controller
 @RequestMapping("/customer")
-public class CustomerController {
+@AuthCheck(privileges = {"css.login"}, isRedirect = true)
+public class CustomerController extends  BaseController{
 	@Autowired
 	private BkOrderService bkOrderService;
 	

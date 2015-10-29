@@ -23,15 +23,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.loukou.auth.core.annotation.AuthCheck;
 import com.loukou.css.bo.CssBaseRes;
 import com.loukou.css.entity.Site;
 import com.loukou.css.entity.Store;
-import com.loukou.css.processor.UserProcessor;
 import com.loukou.css.req.ComplaintReqDto;
 import com.loukou.css.resp.ComplaintRespDto;
 import com.loukou.css.resp.ComplaintRespListDto;
 import com.loukou.css.service.CssService;
-import com.loukou.css.service.redis.entity.SessionEntity;
 import com.loukou.css.util.DataGrid;
 import com.loukou.css.utils.DateUtils;
 import com.loukou.order.service.api.BkOrderService;
@@ -40,15 +39,13 @@ import com.loukou.order.service.resp.dto.BkOrderListRespDto;
 
 @Controller
 @RequestMapping("/complaint")
+@AuthCheck(privileges = {"css.login"}, isRedirect = true)
 public class ComplaintController extends  BaseController{
 	@Autowired
 	private CssService cssService;
 	
 	@Autowired
 	private BkOrderService bkOrderService;
-	
-	@Autowired 
-    private UserProcessor userProcessor;
 	
 	@RequestMapping(value="/complaintList")
 	public ModelAndView complaintList(HttpServletRequest request,HttpServletResponse response){
@@ -206,9 +203,7 @@ public class ComplaintController extends  BaseController{
 			@RequestParam(value = "handleStatus", required = false, defaultValue = "") int handleStatus
 			){
 		
-		SessionEntity SessionEntity = sessionRedisService.getWhSessionEntity(getSessionId());
-		String actor = userProcessor.getUser(SessionEntity.getUserId()).getUserName();
-		
+		String actor = this.getAuthInfo().getUserName();
 		CssBaseRes<String> res=cssService.generateComplaint(actor,complaintId,orderSnMain,whId,whName,productIds,content,creatTime,userName,mobile,department,complaintType,compensationType,money,handleStatus);
 		return res;
 	}

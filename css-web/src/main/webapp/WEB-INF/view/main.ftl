@@ -57,11 +57,10 @@
 					<li class="dropdown user pull-right" id="header-user">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<img alt="" src="<@s.url '/assets/main/img/avatars/default.png' />" />
-							<span class="username">{{OperatorName}}</span>
+							<span class="username">${userName}</span>
 							<i class="fa fa-angle-down"></i>
 						</a>
                         <ul class="dropdown-menu">
-                            <li><a href=""  ng-click="ModifyUser()"><i class="fa fa-pencil"></i> 修改信息</a></li>
                             <li><a href="/login" ng-click="logout($event)"><i class="fa fa-power-off"></i> 注销</a></li>
                         </ul>
 					</li>
@@ -179,7 +178,6 @@
     <script src="<@s.url '/assets/scripts/jquery.confirm/jquery.confirm.js' />"></script>
     <script type="text/javascript">
         var app = angular.module("myapp", []);
-        var CurrentUser={"UserId":"${userId}","UserName":"${userName}"};
         document.getElementById("containerh").style.height = window.screen.availHeight*0.89 + 'px';
         </script>
      

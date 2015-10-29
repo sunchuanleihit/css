@@ -1,34 +1,46 @@
 package com.loukou.css.web;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
-import com.loukou.css.service.redis.entity.SessionEntity;
-import com.loukou.css.service.SessionRedisService;
-import com.loukou.css.util.SessionUtil;
+import com.loukou.auth.core.config.AuthConfigLoader;
+import com.loukou.auth.core.entity.AuthInfo;
 
 public class BaseController {
-
-	protected final Logger logger = Logger.getLogger(this.getClass());
-
-	@Autowired
-	protected SessionRedisService sessionRedisService;
-	
-	@Autowired
-	protected HttpServletRequest request;
 
 	@Autowired
 	protected HttpSession session;
 
-	protected String getSessionId(){
-		return SessionUtil.getSessionKey(request,session);
+	@Autowired
+	private AuthConfigLoader loader;
+	
+	public AuthInfo getAuthInfo(){
+		AuthInfo info = (AuthInfo) session.getAttribute(loader.getSessionKey());
+		return info;
 	}
 	
-	protected SessionEntity getWhSessionEntity(){
-		return sessionRedisService.getWhSessionEntity(getSessionId());
-	}
-	
+	@ModelAttribute
+	public void autoRun(Model model,HttpServletRequest request) {
+        
+        //privilege
+        List<String> privileges = new ArrayList<String>();
+        
+        HttpSession session = request.getSession();
+		if (session != null) {
+			AuthInfo info = (AuthInfo) session.getAttribute(loader
+					.getSessionKey());
+			if (!CollectionUtils.isEmpty(info.getPrivileges())) {
+				privileges.addAll(info.getPrivileges());
+			}
+		}
+		model.addAttribute("privileges",privileges);
+    }
 }

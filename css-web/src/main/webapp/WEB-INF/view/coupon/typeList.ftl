@@ -9,6 +9,15 @@
 	<script src="<@s.url '/assets/scripts/bootstrap.min.js' />" ></script>
 	<script src="<@s.url '/assets/scripts/bootstrap-table.js'/>"   ></script>
 	<script src="<@s.url '/assets/scripts/bootstrap-table-zh-cn.js'/>"   ></script>
+	<script>
+		function isCoupmanager(){
+			<#if privileges?seq_contains("css.sendCoupon") >
+				return true;
+			<#else>
+				return false;
+			</#if>
+		}
+	</script>
 </head>
 <body>
 	<div style="margin-left:10px;margin-top:10px;margin-right:10px;">
