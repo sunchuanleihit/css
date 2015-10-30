@@ -50,7 +50,9 @@
 							<input type="hidden" name="proType" value="${goods.proType}">
 							<input type="hidden" name="recId" value="${goods.recId}">
 						</td>
-						<td>${goods.goodsName}<input type="hidden" name="goodsName" value="${goods.goodsName}"></td>
+						<td>${goods.goodsName}<#if goods.packageName?exists && goods.packageName!="" >【组合购：${goods.packageName}】</#if>
+							<input type="hidden" name="goodsName" value="${goods.goodsName}">
+						</td>
 						<td>${goods.quantity}</td>
 						<td><input style="width: 50px;" type="text" name="goodsReturnNum" value="${goods.returnQuantity}"></td>
 						<td>${goods.pricePurchase}</td>
